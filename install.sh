@@ -5,8 +5,8 @@
 # @author Adam Eivy
 ###########################
 
-DEFAULT_EMAIL="atomantic@gmail.com"
-DEFAULT_GITHUBUSER="atomantic"
+DEFAULT_EMAIL="jfloff@gmail.com"
+DEFAULT_GITHUBUSER="jfloff"
 
 
 # include my library helpers for colorized echo and require_brew, etc
@@ -17,7 +17,7 @@ if [[ ! -e ~/.dotfiles_backup ]]; then
     mkdir ~/.dotfiles_backup
 fi
 
-bot "Hi. I'm going to make your OSX system better. But first, I need to configure this project based on your info so you don't check in files to github as Adam Eivy from here on out :)"
+bot "Hi. I'm going to make your OSX system better. But first, I need to configure this project based on your info so you don't check in files to github as João Loff from here on out :)"
 
 fullname=`osascript -e "long user name of (system info)"`
 
@@ -65,7 +65,7 @@ if [[ $response =~ ^(no|n|N) ]];then
   fi
 fi
 
-grep 'user = atomantic' .gitconfig
+grep 'user = jfloff' .gitconfig
 if [[ $? = 0 ]]; then
     read -r -p "What is your github.com username? [$DEFAULT_GITHUBUSER]" githubuser
 fi
@@ -77,20 +77,20 @@ running "replacing items in .gitconfig with your info ($COL_YELLOW$fullname, $em
 
 # test if gnu-sed or osx sed
 
-sed -i 's/Adam Eivy/'$firstname' '$lastname'/' .gitconfig > /dev/null 2>&1 | true
+sed -i 's/Joao Loff/'$firstname' '$lastname'/' .gitconfig > /dev/null 2>&1 | true
 if [[ ${PIPESTATUS[0]} != 0 ]]; then
   echo
   running "looks like you are using OSX sed rather than gnu-sed, accommodating"
-  sed -i '' 's/Adam Eivy/'$firstname' '$lastname'/' .gitconfig;
-  sed -i '' 's/adam.eivy@disney.com/'$email'/' .gitconfig;
-  sed -i '' 's/atomantic/'$githubuser'/' .gitconfig;
-  sed -i '' 's/antic/'$(whoami)'/g' .zshrc;ok
+  sed -i '' 's/Joao Loff/'$firstname' '$lastname'/' .gitconfig;
+  sed -i '' 's/jfloff@gmail.com/'$email'/' .gitconfig;
+  sed -i '' 's/jfloff/'$githubuser'/' .gitconfig;
+  sed -i '' 's/jfloff/'$(whoami)'/g' .zshrc;ok
 else
   echo
   bot "looks like you are already using gnu-sed. woot!"
-  sed -i 's/adam.eivy@disney.com/'$email'/' .gitconfig;
-  sed -i 's/atomantic/'$githubuser'/' .gitconfig;
-  sed -i 's/antic/'$(whoami)'/g' .zshrc;ok
+  sed -i 's/jfloff@gmail.com/'$email'/' .gitconfig;
+  sed -i 's/jfloff/'$githubuser'/' .gitconfig;
+  sed -i 's/jfloff/'$(whoami)'/g' .zshrc;ok
 fi
 
 # read -r -p "OK? [Y/n] " response
@@ -112,19 +112,23 @@ pushd ~ > /dev/null 2>&1
 
 bot "creating symlinks for project dotfiles..."
 
+# adds nighlty crontabs
 symlinkifne .crontab
-symlinkifne .gemrc
+
+# adds git configuations
 symlinkifne .gitconfig
 symlinkifne .gitignore
+read -r -p "Please input your github command line token: " token
+git config --global github.token "$token"
+
+# common to all shells
 symlinkifne .profile
-symlinkifne .ruby-version
-symlinkifne .screenrc
-symlinkifne .shellaliases
+symlinkifne .aliases
 symlinkifne .shellfn
 symlinkifne .shellpaths
 symlinkifne .shellvars
-symlinkifne .vim
-symlinkifne .vimrc
+
+# zsh shell
 symlinkifne .zlogout
 symlinkifne .zprofile
 symlinkifne .zshenv

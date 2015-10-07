@@ -1,15 +1,14 @@
 # Path to your oh-my-zsh configuration.
 export ZSH=$HOME/.dotfiles/oh-my-zsh
 
-# Set name of the theme to load.
-# Look in $ZSH/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-export ZSH_THEME="pygmalion"
-#export ZSH_THEME="random"
-
 # Set to this to use case-sensitive completion
 export CASE_SENSITIVE="true"
+
+# Set CLICOLOR if you want Ansi Colors in iTerm2
+export CLICOLOR=1
+
+# Set colors to match iTerm2 Terminal Colors
+export TERM=xterm-256color
 
 # Comment this out to disable weekly auto-update checks
 # export DISABLE_AUTO_UPDATE="true"
@@ -22,22 +21,52 @@ export CASE_SENSITIVE="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.dotfiles/oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(brew cloudapp colorize compleat dirpersist gem git git-flow github osx mvn node npm nvm rvm ssh-agent)
 
 source $ZSH/oh-my-zsh.sh
 
-export NVM_DIR=~/.nvm
-source /usr/local/opt/nvm/nvm.sh
+# Using hub feels best when it's aliased as git.
+# Your normal git commands will all work, hub merely adds some sugar.
+eval "$(hub alias -s)"
 
-# Customize to your needs...
-unsetopt correct
+# load antigen
+source $HOME/.dotfiles/.antigen/antigen.zsh
 
-if which rbevenv > /dev/null; then eval "$(rbenv init -)"; fi
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
 
-export PATH="/Users/"$(whoami)"/.rbenv/shims:${PATH}"
-source "/usr/local/Cellar/rbenv/0.4.0/libexec/../completions/rbenv.zsh"
-rbenv rehash 2>/dev/null
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle atom
+antigen bundle aws
+antigen bundle bundler
+antigen bundle common-aliases
+antigen bundle gem
+antigen bundle git
+antigen bundle git-extras
+antigen bundle github
+antigen bundle httpie
+antigen bundle jsontools
+antigen bundle last-working-dir
+antigen bundle osx
+antigen bundle ruby
+antigen bundle rvm
+antigen bundle wd
+antigen bundle colored-man
+antigen bundle colorize
+antigen bundle cp
+antigen bundle extract
+antigen bundle brew
+antigen bundle brew-cask
+antigen bundle unixorn/autoupdate-antigen.zshplugin
+antigen bundle command-not-found
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-completions src
+antigen bundle zsh-users/zsh-history-substring-search
 
-nvm use stable
+# Load the theme.
+antigen theme pygmalion
+
+# Tell antigen that you're done.
+antigen apply
+
 # run fortune on new terminal :)
 fortune

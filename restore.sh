@@ -42,7 +42,7 @@ updatedotfile .gitignore
 updatedotfile .profile
 updatedotfile .rvmrc
 updatedotfile .screenrc
-updatedotfile .shellaliases
+updatedotfile .aliases
 updatedotfile .shellfn
 updatedotfile .shellpaths
 updatedotfile .shellvars
