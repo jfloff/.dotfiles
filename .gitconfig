@@ -1,11 +1,12 @@
 [user]
   name = João Loff
   email = jfloff@gmail.com
+  
 [github]
-    # https://github.com/blog/180-local-github-config
-    user = atomantic
-    # in a few months, look into the include directive (after bug fixes)
-	token = MOVEALONG
+  # https://github.com/blog/180-local-github-config
+  user = jfloff
+  # in a few months, look into the include directive (after bug fixes)
+  token = movealong
 
 [color]
   # ui = true is a superset of all the more specific color options
@@ -37,7 +38,7 @@
   excludesfile = ~/.gitignore
   # line endings
   # force LF during add
-  autocrlf = true
+  autocrlf = false
   # prevent crlf (then you will have to deal with the problem -- dos2unix, etc)
   #safecrlf = true
   #editor = vim
