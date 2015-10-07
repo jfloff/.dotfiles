@@ -147,8 +147,8 @@ function symlinkifne {
         # file exists
         if [[ -L $1 ]]; then
             # it's already a simlink (could have come from this project)
-            echo -en '\tsimlink exists, skipped\t';ok
-            return
+            echo -en '\tsimlink exists, replacing\t';ok
+            # return
         fi
         # backup file does not exist yet
         if [[ ! -e ~/.dotfiles_backup/$1 ]];then

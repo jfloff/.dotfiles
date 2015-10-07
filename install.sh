@@ -123,7 +123,7 @@ git config --global github.token "$token"
 
 # common to all shells
 symlinkifne .profile
-symlinkifne .aliases
+symlinkifne .shellaliases
 symlinkifne .shellfn
 symlinkifne .shellpaths
 symlinkifne .shellvars

@@ -36,13 +36,11 @@ function updatedotfile {
 }
 
 updatedotfile .crontab
-updatedotfile .gemrc
 updatedotfile .gitconfig
 updatedotfile .gitignore
 updatedotfile .profile
-updatedotfile .rvmrc
 updatedotfile .screenrc
-updatedotfile .aliases
+updatedotfile .shellaliases
 updatedotfile .shellfn
 updatedotfile .shellpaths
 updatedotfile .shellvars

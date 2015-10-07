@@ -29,17 +29,15 @@ source $ZSH/oh-my-zsh.sh
 eval "$(hub alias -s)"
 
 # load antigen
-source $HOME/.dotfiles/.antigen/antigen.zsh
+source $HOME/.dotfiles/antigen/antigen.zsh
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle atom
-antigen bundle aws
 antigen bundle bundler
 antigen bundle common-aliases
-antigen bundle gem
 antigen bundle git
 antigen bundle git-extras
 antigen bundle github
@@ -47,8 +45,6 @@ antigen bundle httpie
 antigen bundle jsontools
 antigen bundle last-working-dir
 antigen bundle osx
-antigen bundle ruby
-antigen bundle rvm
 antigen bundle wd
 antigen bundle colored-man
 antigen bundle colorize
@@ -67,6 +63,9 @@ antigen theme pygmalion
 
 # Tell antigen that you're done.
 antigen apply
+
+# dunno
+cd $HOME
 
 # run fortune on new terminal :)
 fortune

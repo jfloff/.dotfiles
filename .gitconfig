@@ -5,7 +5,7 @@
     # https://github.com/blog/180-local-github-config
     user = atomantic
     # in a few months, look into the include directive (after bug fixes)
-    token = MOVEALONG
+	token = MOVEALONG
 
 [color]
   # ui = true is a superset of all the more specific color options

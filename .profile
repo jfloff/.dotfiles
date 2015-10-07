@@ -5,4 +5,4 @@
 source ~/.shellvars
 source ~/.shellfn
 source ~/.shellpaths
-source ~/.aliases
+source ~/.shellaliases
