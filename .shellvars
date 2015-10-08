@@ -1,7 +1,3 @@
-# Set Sublime Text as our default command line editor (vi is the default otherwise)
-export EDITOR='atom --wait'
-
-
 #########################################################################
 # Temporary aliases useful for demos, other current projects
 #########################################################################
@@ -15,5 +11,5 @@ export MYDOWNLOADS=~/Downloads
 #########################################################################
 # Tool settings
 #########################################################################
-
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+export HOMEBREW_CASK_OPTS='--appdir=/Applications'
+export EDITOR='atom --wait'

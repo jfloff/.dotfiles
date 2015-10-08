@@ -2,6 +2,8 @@
 
 # include my library helpers for colorized echo and require_brew, etc
 source ./lib.sh
+# sourcing shellvars so we can get tools specific pre-loaded settings
+source ~/.shellvars
 
 # Ask for the administrator password upfront
 
@@ -100,7 +102,8 @@ bot "Configuring General System UI/UX..."
 running "Fix for the ancient UTF-8 bug in QuickLook (http://mths.be/bbo)"
 # # Commented out, as this is known to cause problems in various Adobe apps :(
 # # See https://github.com/mathiasbynens/dotfiles/issues/237
-sudo echo "0x08000100:0" > ~/.CFUserTextEncoding;ok
+# echo "0x08000100:0" | sudo tee ~/.CFUserTextEncoding 2> /dev/null;ok
+sudo sh -c 'echo "0x08000100:0" > ~/.CFUserTextEncoding' 2> /dev/null;ok
 
 running "Stop iTunes from responding to the keyboard media keys"
 launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null;ok
@@ -224,11 +227,7 @@ running "Wipe all (default) app icons from the Dock"
 # # the Dock to launch apps.
 defaults write com.apple.dock persistent-apps -array "";ok
 
-<<<<<<< HEAD
-running "Set the icon size of Dock items to 36 pixels"
-=======
 running "Set the icon size of Dock items to 45 pixels"
->>>>>>> fix
 defaults write com.apple.dock tilesize -int 45;ok
 
 running "Disable Dock icon magnification"
@@ -637,7 +636,7 @@ running "Installing the Solarized Dark theme for iTerm (opening file)"
 open "./configs/Solarized Dark.itermcolors";ok
 
 running "Copying pre-set definitions"
-cp "./configs/iterm2.plist" "~/Library/Preferences/com.googlecode.iterm2.plist"
+yes | cp -rf ./configs/iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
 
 running "Don’t display the annoying prompt when quitting iTerm"
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false;ok
@@ -730,23 +729,43 @@ running "Expand the print dialog by default"
 defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
 
 ###############################################################################
-# Transmission.app                                                            #
+bot "Atom"
 ###############################################################################
 
-# Use `~/Documents/Torrents` to store incomplete downloads
-defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
-defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads"
+# emulate the 'install shell commands' from inside atom
+running "Installing Atom Shell Tools"
+sudo rm /usr/local/bin/apm
+ln -s /Applications/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm /usr/local/bin/apm
+sudo rm /usr/local/bin/atom
+ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom;ok
 
-# Don’t prompt for confirmation before downloading
-defaults write org.m0k.transmission DownloadAsk -bool false
+running "Installing packages"
+# strip packages of versions
+sed -i 's/@.*//' ./configs/atom-packages.txt
+apm install --packages-file ./configs/atom-packages.txt;ok
+# require_apm linter
+# require_apm linter-eslint
+# require_apm atom-beautify
 
-# Trash original torrent files
-defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
+###############################################################################
+bot "Transmission"
+###############################################################################
 
-# Hide the donate message
-defaults write org.m0k.transmission WarningDonate -bool false
-# Hide the legal disclaimer
-defaults write org.m0k.transmission WarningLegal -bool false
+running "Use `~/Documents/Torrents` to store incomplete downloads"
+defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true;ok
+defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads";ok
+
+running "Don’t prompt for confirmation before downloading"
+defaults write org.m0k.transmission DownloadAsk -bool false;ok
+
+running "Trash original torrent files"
+defaults write org.m0k.transmission DeleteOriginalTorrent -bool true;ok
+
+running "Hide the donate message"
+defaults write org.m0k.transmission WarningDonate -bool false;ok
+
+running "Hide the legal disclaimer"
+defaults write org.m0k.transmission WarningLegal -bool false;ok
 
 ###############################################################################
 # Kill affected applications                                                  #
@@ -754,6 +773,6 @@ defaults write org.m0k.transmission WarningLegal -bool false
 bot "OK. Note that some of these changes require a logout/restart to take effect. Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
-  "iCal" "Terminal" "Transmission"; do
+  "iCal" "Terminal" "Transmission" "Atom"; do
   killall "${app}" > /dev/null 2>&1
 done

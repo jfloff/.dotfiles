@@ -1,0 +1,14 @@
+atom-beautify
+atom-jinja2
+change-case
+clipboard-history
+color-picker
+emmet
+git-plus
+highlight-line
+linter
+merge-conflicts
+minimap
+project-manager
+tabs-to-spaces
+

@@ -25,7 +25,6 @@ output=$(brew tap | grep cask)
 if [[ $? != 0 ]]; then
   action "installing brew-cask"
   require_brew caskroom/cask/brew-cask
-  export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 fi
 ok
 
@@ -54,6 +53,7 @@ bot "installing homebrew command-line tools"
 # Install GNU core utilities (those that come with OS X are outdated)
 # Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
 require_brew coreutils
+sudo rm /usr/local/bin/sha256sum
 sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
 # Install some other useful utilities like `sponge`
 require_brew moreutils
@@ -65,17 +65,8 @@ require_brew findutils
 #install bash
 #install bash-completion
 
-# Install RingoJS and Narwhal
-# Note that the order in which these are installed is important; see http://git.io/brew-narwhal-ringo.
-#install ringojs
-#install narwhal
-
 # Install other useful binaries
 require_brew ack
-# Beanstalk http://kr.github.io/beanstalkd/
-#require_brew beanstalkd
-# ln -sfv /usr/local/opt/beanstalk/*.plist ~/Library/LaunchAgents
-# launchctl load ~/Library/LaunchAgents/homebrew.mxcl.beanstalk.plist
 
 # dos2unix converts windows newlines to unix newlines
 require_brew dos2unix
@@ -106,19 +97,14 @@ require_brew rename
 ###############################################################################
 # Native Apps (via brew cask)                                                 #
 ###############################################################################
-bot "installing GUI tools via homebrew casks..."
+bot "Installing homebrew casks..."
 brew tap caskroom/versions > /dev/null 2>&1
 
 # cloud storage
-#require_cask amazon-cloud-drive
-#require_cask box-sync
 require_cask dropbox
 
 # communication
 #require_cask slack
-
-# im replacing caffeine with caffeinate from alfred
-#require_cask caffeine
 
 # tools
 #require_cask diffmerge
@@ -126,14 +112,9 @@ require_cask iterm2
 #require_cask sizeup
 
 require_cask atom
-# require_apm linter
-# require_apm linter-eslint
-# require_apm atom-beautify
-
 require_cask the-unarchiver
 require_cask transmission
 require_cask vlc
-#require_cask xquartz
 
 # development browsers
 #require_cask breach
@@ -144,7 +125,7 @@ require_cask google-chrome
 #require_cask torbrowser
 
 # virtal machines
-#require_cask virtualbox
+require_cask virtualbox
 # chef-dk, berkshelf, etc
 #require_cask chefdk
 # vagrant for running dev environments using docker images
@@ -164,7 +145,6 @@ require_cask sqlitebrowser
 require_cask dockertoolbox
 require_cask kext-utility
 require_cask teamviewer
-require_cask virtualbox
 
 # Cracked applications - I've yet to find a solution
 # $ brew cask install alfred

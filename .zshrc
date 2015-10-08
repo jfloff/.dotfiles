@@ -39,6 +39,7 @@ antigen use oh-my-zsh
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview
 # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
+# https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 antigen bundle colored-man
 antigen bundle colorize
 antigen bundle command-not-found
@@ -52,7 +53,8 @@ antigen bundle git
 antigen bundle git-extras
 antigen bundle git-flow
 antigen bundle github
-antigen bundle gnu-utils
+# causing ls to not color
+# antigen bundle gnu-utils
 antigen bundle brew
 antigen bundle brew-cask
 antigen bundle osx

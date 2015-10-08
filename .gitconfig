@@ -5,8 +5,7 @@
 [github]
   # https://github.com/blog/180-local-github-config
   user = jfloff
-  # in a few months, look into the include directive (after bug fixes)
-  token = !bash -c '"echo \"Value: $GITHUB_TOKEN\";"'
+	token = asddfff
 
 [color]
   # ui = true is a superset of all the more specific color options

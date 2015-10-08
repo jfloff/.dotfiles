@@ -1,0 +1,11 @@
+"*":
+  "exception-reporting":
+    userId: "7114340b-7dd6-a445-9644-56690075480c"
+  welcome:
+    showOnStartup: false
+  core: {}
+  editor:
+    tabType: "soft"
+    invisibles: {}
+  "tabs-to-spaces":
+    onSave: "untabify"

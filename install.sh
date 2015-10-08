@@ -4,7 +4,7 @@
 # This script installs the dotfiles and runs all other system configuration scripts
 # @author Adam Eivy
 ###########################
-
+DEFAULT_FULLNAME="João Loff"
 DEFAULT_EMAIL="jfloff@gmail.com"
 DEFAULT_GITHUBUSER="jfloff"
 
@@ -65,8 +65,7 @@ if [[ $response =~ ^(no|n|N) ]];then
   fi
 fi
 
-grep 'user = jfloff' .gitconfig
-if [[ $? = 0 ]]; then
+if grep -Fxq 'user = jfloff' .gitconfig; then
     read -r -p "What is your github.com username? [$DEFAULT_GITHUBUSER]" githubuser
 fi
 if [[ ! $githubuser ]];then
@@ -105,18 +104,15 @@ if [[ ${PIPESTATUS[0]} != 0 ]]; then
   running "changing your login shell to zsh"
   chsh -s $(which zsh);ok
 else
-  bot "looks like you are already using zsh. woot!"
-fi
-
-bot "checking your oauth shell variables"
-if [ -z "$GITHUB_TOKEN" ];
-  read -r -p "Please input your github command line token: " token
-  then echo -e "export GITHUB_TOKEN=$token"  >> .shelloauth;
+  bot "looks like you are already using zsh. woot!";ok
 fi
 
 pushd ~ > /dev/null 2>&1
 
-bot "creating symlinks for project dotfiles..."
+bot "Creating symlinks for project dotfiles..."
+
+# replace oauth tokens
+symlinkifne .shelloauth
 
 # adds nighlty crontabs
 symlinkifne .crontab
@@ -138,7 +134,22 @@ symlinkifne .zprofile
 symlinkifne .zshenv
 symlinkifne .zshrc
 
+# atom files
+symlinkifne .atom/config.cson
+symlinkifne .atom/init.coffee
+symlinkifne .atom/keymap.cson
+symlinkifne .atom/snippets.cson
+symlinkifne .atom/styles.less
+
 popd > /dev/null 2>&1
+
+bot "OAuth tokens"
+if ! grep -Fxq '$GITHUB_TOKEN' .shelloauth; then
+  if [ -z "$GITHUB_TOKEN" ]; then
+    read -r -p "Please input your github command line token: " token
+    git config --global github.token $token
+  fi
+fi
 
 ./osx.sh
 
