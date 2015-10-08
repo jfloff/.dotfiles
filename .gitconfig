@@ -6,7 +6,7 @@
   # https://github.com/blog/180-local-github-config
   user = jfloff
   # in a few months, look into the include directive (after bug fixes)
-  token = movealong
+  token = !bash -c '"echo \"Value: $GITHUB_TOKEN\";"'
 
 [color]
   # ui = true is a superset of all the more specific color options
@@ -63,6 +63,9 @@
 [merge]
   # Always show a diffstat at the end of a merge
   stat = true
+
+[push]
+  default = matching
 
 [credential]
   helper = osxkeychain

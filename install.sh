@@ -108,6 +108,12 @@ else
   bot "looks like you are already using zsh. woot!"
 fi
 
+bot "checking your oauth shell variables"
+if [ -z "$GITHUB_TOKEN" ];
+  read -r -p "Please input your github command line token: " token
+  then echo -e "export GITHUB_TOKEN=$token"  >> .shelloauth;
+fi
+
 pushd ~ > /dev/null 2>&1
 
 bot "creating symlinks for project dotfiles..."
@@ -118,8 +124,6 @@ symlinkifne .crontab
 # adds git configuations
 symlinkifne .gitconfig
 symlinkifne .gitignore
-read -r -p "Please input your github command line token: " token
-git config --global github.token "$token"
 
 # common to all shells
 symlinkifne .profile

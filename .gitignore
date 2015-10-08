@@ -23,6 +23,7 @@ Temporary Items
 # Security #
 ############
 id_rsa
+.shellauth
 
 ###########
 # Tooling #
