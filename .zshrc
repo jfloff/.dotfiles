@@ -28,44 +28,45 @@ source $ZSH/oh-my-zsh.sh
 # Your normal git commands will all work, hub merely adds some sugar.
 eval "$(hub alias -s)"
 
-# load antigen
-source $HOME/.dotfiles/antigen/antigen.zsh
-
-# Load the oh-my-zsh's library.
-antigen use oh-my-zsh
-
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle atom
-antigen bundle bundler
-antigen bundle common-aliases
-antigen bundle git
-antigen bundle git-extras
-antigen bundle github
-antigen bundle httpie
-antigen bundle jsontools
-antigen bundle last-working-dir
-antigen bundle osx
-antigen bundle wd
-antigen bundle colored-man
-antigen bundle colorize
-antigen bundle cp
-antigen bundle extract
-antigen bundle brew
-antigen bundle brew-cask
-antigen bundle unixorn/autoupdate-antigen.zshplugin
-antigen bundle command-not-found
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-completions src
-antigen bundle zsh-users/zsh-history-substring-search
-
-# Load the theme.
-antigen theme pygmalion
-
-# Tell antigen that you're done.
-antigen apply
-
-# dunno
-cd $HOME
+# # load antigen
+# source $HOME/.dotfiles/antigen/antigen.zsh
+#
+# # Load the oh-my-zsh's library.
+# antigen use oh-my-zsh
+#
+# # Bundles from the default repo (robbyrussell's oh-my-zsh).
+# antigen bundle atom
+# antigen bundle aws
+# antigen bundle bundler
+# antigen bundle common-aliases
+# antigen bundle gem
+# antigen bundle git
+# antigen bundle git-extras
+# antigen bundle github
+# antigen bundle httpie
+# antigen bundle jsontools
+# antigen bundle last-working-dir
+# antigen bundle osx
+# antigen bundle ruby
+# antigen bundle rvm
+# antigen bundle wd
+# antigen bundle colored-man
+# antigen bundle colorize
+# antigen bundle cp
+# antigen bundle extract
+# antigen bundle brew
+# antigen bundle brew-cask
+# antigen bundle unixorn/autoupdate-antigen.zshplugin
+# antigen bundle command-not-found
+# antigen bundle zsh-users/zsh-syntax-highlighting
+# antigen bundle zsh-users/zsh-completions src
+# antigen bundle zsh-users/zsh-history-substring-search
+#
+# # Load the theme.
+# antigen theme pygmalion
+#
+# # Tell antigen that you're done.
+# antigen apply
 
 # run fortune on new terminal :)
 fortune

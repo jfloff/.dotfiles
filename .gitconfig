@@ -1,7 +1,7 @@
 [user]
   name = João Loff
   email = jfloff@gmail.com
-  
+
 [github]
   # https://github.com/blog/180-local-github-config
   user = jfloff
@@ -40,7 +40,7 @@
   # force LF during add
   autocrlf = false
   # prevent crlf (then you will have to deal with the problem -- dos2unix, etc)
-  #safecrlf = true
+  safecrlf = true
   #editor = vim
   editor = atom --wait
 

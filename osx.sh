@@ -224,7 +224,11 @@ running "Wipe all (default) app icons from the Dock"
 # # the Dock to launch apps.
 defaults write com.apple.dock persistent-apps -array "";ok
 
+<<<<<<< HEAD
 running "Set the icon size of Dock items to 36 pixels"
+=======
+running "Set the icon size of Dock items to 45 pixels"
+>>>>>>> fix
 defaults write com.apple.dock tilesize -int 45;ok
 
 running "Disable Dock icon magnification"
@@ -352,6 +356,7 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false;ok
 
 running "Enable firewall ... better safe than sorry"
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1;ok
+
 
 
 ###############################################################################
