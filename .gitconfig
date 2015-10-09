@@ -1,3 +1,7 @@
+[include]
+  # For username / creds / etc
+  path = .gitconfig.local
+
 [user]
   name = João Loff
   email = jfloff@gmail.com
@@ -5,7 +9,6 @@
 [github]
   # https://github.com/blog/180-local-github-config
   user = jfloff
-	token = asddfff
 
 [color]
   # ui = true is a superset of all the more specific color options

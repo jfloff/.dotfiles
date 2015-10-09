@@ -1,47 +1,26 @@
 #!/usr/bin/env bash
 
-# include my library helpers for colorized echo and require_brew, etc
-source ./lib.sh
-# sourcing shellvars so we can get tools specific pre-loaded settings
-source ~/.shellvars
 
-# Ask for the administrator password upfront
+################################################
+bot "Setting >Standard System Changes<"
+################################################
+promptSudo
 
-bot "checking sudo state..."
-if sudo grep -q "# %wheel\tALL=(ALL) NOPASSWD: ALL" "/etc/sudoers"; then
-
-  promptSudo
-
-  bot "Do you want me to setup this machine to allow you to run sudo without a password?\nPlease read here to see what I am doing:\nhttp://wiki.summercode.com/sudo_without_a_password_in_mac_os_x \n"
-
-  read -r -p "Make sudo passwordless? [y|N] " response
-
-  if [[ $response =~ (yes|y|Y) ]];then
-      sed --version
-      if [[ $? == 0 ]];then
-          sudo sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\+NOPASSWD:\s\+ALL\)/\1/' /etc/sudoers
-      else
-          sudo sed -i '' 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\+NOPASSWD:\s\+ALL\)/\1/' /etc/sudoers
-      fi
-      sudo dscl . append /Groups/wheel GroupMembership $(whoami)
-      bot "You can now run sudo commands without password!"
-  fi
+################################################
+# Computer Name
+################################################
+DEFAULT_PCNAME=`sudo scutil --get ComputerName`
+question "Which name you want to give you Mac? [$DEFAULT_PCNAME] " pcname
+if [[ ! $pcname ]];then
+  pcname=$DEFAULT_PCNAME
 fi
-ok
-
-source ./brew.sh
-
-################################################
-bot "Standard System Changes"
-################################################
-
 # running "Set computer name (as done via System Preferences → Sharing)"
-running "Set computer name to: jfloff"
-sudo scutil --set ComputerName "jfloff"
-sudo scutil --set HostName "jfloff"
-sudo scutil --set LocalHostName "jfloff"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "jfloff"
-dscacheutil -flushcache
+running "Set computer name to: $pcname"
+sudo scutil --set ComputerName "$pcname"
+sudo scutil --set HostName "$pcname"
+sudo scutil --set LocalHostName "$pcname"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$pcname"
+dscacheutil -flushcache;ok
 
 #running "always boot in verbose mode (not OSX GUI mode)"
 #sudo nvram boot-args="-v";ok
@@ -66,10 +45,10 @@ running "Disable hibernation (speeds up entering sleep mode)"
 sudo pmset -a hibernatemode 0;ok
 
 running "Remove the sleep image file to save disk space"
-sudo rm -rf /Private/var/vm/sleepimage;ok
-running "Create a zero-byte file instead"
-sudo touch /Private/var/vm/sleepimage;ok
-running "…and make sure it can’t be rewritten"
+sudo rm -rf /Private/var/vm/sleepimage
+# Create a zero-byte file instead
+sudo touch /Private/var/vm/sleepimage
+# and make sure it can’t be rewritten
 sudo chflags uchg /Private/var/vm/sleepimage;ok
 
 running "Disable the sudden motion sensor as it’s not useful for SSDs"
@@ -89,6 +68,8 @@ defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true;ok
 
 running "Disable the crash reporter"
 defaults write com.apple.CrashReporter DialogType -string "none";ok
+
+botdone
 
 
 ###############################################################################
@@ -192,11 +173,14 @@ defaults write com.apple.screencapture disable-shadow -bool true;ok
 #running "Enable HiDPI display modes (requires restart)"
 #sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true;ok
 
+botdone
+
+
 ################################################
 bot "System Preferences > General"
 ################################################
 
-# Set highlight color to green
+running "Set highlight color to green"
 defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600";ok
 
 running "Set sidebar icon size to medium"
@@ -216,6 +200,8 @@ defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false;ok
 
 running "Set recent itens number to 5"
 defaults write NSGlobalDomain NSRecentDocumentsLimit 5;ok
+
+botdone
 
 
 ################################################
@@ -324,6 +310,9 @@ defaults write com.apple.dock expose-animation-duration -float 0.1;ok
 running "Reset Launchpad, but keep the desktop wallpaper intact"
 find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete;ok
 
+botdone
+
+
 ################################################
 bot "System Preferences > Language & Region"
 ################################################
@@ -342,6 +331,9 @@ sudo systemsetup -settimezone "Europe/Lisbon" > /dev/null
 running "Disable auto-correct"
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false;ok
 
+botdone
+
+
 ################################################
 bot "System Preferences > Security & Privacy"
 ################################################
@@ -356,6 +348,7 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false;ok
 running "Enable firewall ... better safe than sorry"
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1;ok
 
+botdone
 
 
 ###############################################################################
@@ -403,8 +396,10 @@ killall mds > /dev/null 2>&1;ok
 running "Make sure indexing is enabled for the main volume"
 sudo mdutil -i on / > /dev/null;ok
 
-#running "Rebuild the index from scratch"
+running "Rebuild the index from scratch"
 sudo mdutil -E / > /dev/null;ok
+
+botdone
 
 ################################################
 bot "System Preferences > Keyboard"
@@ -428,6 +423,9 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false;ok
 
 running "Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300;ok
+
+botdone
+
 
 ################################################
 bot "System Preferences > Trackpad"
@@ -491,6 +489,7 @@ defaults write com.apple.dock showLaunchpadGestureEnabled -int 0;ok
 running "Enable Show Desktop"
 defaults write com.apple.dock showDesktopGestureEnabled -bool true;ok
 
+botdone
 
 
 ################################################
@@ -499,6 +498,9 @@ bot "System Preferences > Sound"
 
 #running "Increase sound quality for Bluetooth headphones/headsets"
 #defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40;ok
+
+botdone
+
 
 ################################################
 bot "Finder Preferences"
@@ -593,6 +595,8 @@ running "Remove Dropbox’s green checkmark icons in Finder"
 file=/Applications/Dropbox.app/Contents/Resources/emblem-dropbox-uptodate.icns
 [ -e "${file}" ] && mv -f "${file}" "${file}.bak";ok
 
+botdone
+
 
 ###############################################################################
 bot "Calendar"
@@ -609,6 +613,8 @@ defaults write com.apple.iCal "first day of week" -int 1;ok
 
 running "Show event times"
 defaults write com.apple.iCal "Show time in Month View" -bool true;ok
+
+botdone
 
 
 ###############################################################################
@@ -627,33 +633,7 @@ running "Set the 'Pro' as the default"
 defaults write com.apple.Terminal "Startup Window Settings" -string "Pro"
 defaults write com.apple.Terminal "Default Window Settings" -string "Pro";ok
 
-
-###############################################################################
-bot "iTerm2"
-###############################################################################
-
-running "Installing the Solarized Dark theme for iTerm (opening file)"
-open "./configs/Solarized Dark.itermcolors";ok
-
-running "Copying pre-set definitions"
-yes | cp -rf ./configs/iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
-
-running "Don’t display the annoying prompt when quitting iTerm"
-defaults write com.googlecode.iterm2 PromptOnQuit -bool false;ok
-
-running "hide tab title bars"
-defaults write com.googlecode.iterm2 HideTab -bool true;ok
-
-# running "set system-wide hotkey to show/hide iterm with ^\`"
-# defaults write com.googlecode.iterm2 Hotkey -bool true;
-# defaults write com.googlecode.iterm2 HotkeyChar -int 96;
-# defaults write com.googlecode.iterm2 HotkeyCode -int 50;
-# defaults write com.googlecode.iterm2 HotkeyModifiers -int 262401;ok
-
-# running "Make iTerm2 load new tabs in the same directory"
-# defaults export com.googlecode.iterm2 /tmp/plist
-# /usr/libexec/PlistBuddy -c "set \"New Bookmarks\":0:\"Custom Directory\" Recycle" /tmp/plist
-# defaults import com.googlecode.iterm2 /tmp/plist;ok
+botdone
 
 
 ###############################################################################
@@ -665,6 +645,9 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true;ok
 
 running "Disable local Time Machine backups"
 hash tmutil &> /dev/null && sudo tmutil disablelocal;ok
+
+botdone
+
 
 ###############################################################################
 bot "Activity Monitor"
@@ -682,6 +665,8 @@ defaults write com.apple.ActivityMonitor ShowCategory -int 0;ok
 running "Sort Activity Monitor results by CPU usage"
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0;ok
+
+botdone
 
 
 ###############################################################################
@@ -705,6 +690,9 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4;ok
 #defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
 #defaults write com.apple.DiskUtility advanced-image-options -bool true;ok
 
+botdone
+
+
 ###############################################################################
 bot "Mac App Store"
 ###############################################################################
@@ -715,64 +703,4 @@ bot "Mac App Store"
 #running "Enable Debug Menu in the Mac App Store"
 #defaults write com.apple.appstore ShowDebugMenu -bool true;ok
 
-###############################################################################
-bot "Google Chrome"
-###############################################################################
-
-running "Allow installing user scripts via GitHub Gist or Userscripts.org"
-defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*"
-
-running "Use the system-native print preview dialog"
-defaults write com.google.Chrome DisablePrintPreview -bool true;ok
-
-running "Expand the print dialog by default"
-defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
-
-###############################################################################
-bot "Atom"
-###############################################################################
-
-# emulate the 'install shell commands' from inside atom
-running "Installing Atom Shell Tools"
-sudo rm /usr/local/bin/apm
-ln -s /Applications/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm /usr/local/bin/apm
-sudo rm /usr/local/bin/atom
-ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom;ok
-
-running "Installing packages"
-# strip packages of versions
-sed -i 's/@.*//' ./configs/atom-packages.txt
-apm install --packages-file ./configs/atom-packages.txt;ok
-# require_apm linter
-# require_apm linter-eslint
-# require_apm atom-beautify
-
-###############################################################################
-bot "Transmission"
-###############################################################################
-
-running "Use `~/Documents/Torrents` to store incomplete downloads"
-defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true;ok
-defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads";ok
-
-running "Don’t prompt for confirmation before downloading"
-defaults write org.m0k.transmission DownloadAsk -bool false;ok
-
-running "Trash original torrent files"
-defaults write org.m0k.transmission DeleteOriginalTorrent -bool true;ok
-
-running "Hide the donate message"
-defaults write org.m0k.transmission WarningDonate -bool false;ok
-
-running "Hide the legal disclaimer"
-defaults write org.m0k.transmission WarningLegal -bool false;ok
-
-###############################################################################
-# Kill affected applications                                                  #
-###############################################################################
-bot "OK. Note that some of these changes require a logout/restart to take effect. Killing affected applications (so they can reboot)...."
-for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
-  "iCal" "Terminal" "Transmission" "Atom"; do
-  killall "${app}" > /dev/null 2>&1
-done
+botdone

@@ -1,64 +1,111 @@
 #!/usr/bin/env bash
 
-#####
-# install homebrew
-#####
 
+################################################
+bot "Setting up >Homebrew<"
+################################################
+promptSudo
 running "checking homebrew install"
 brew_bin=$(which brew) 2>&1 > /dev/null
 if [[ $? != 0 ]]; then
   action "installing homebrew"
-    xcode-select --install
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    if [[ $? != 0 ]]; then
-      error "unable to install homebrew, script $0 abort!"
-      exit -1
+  xcode-select --install
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  if [[ $? != 0 ]]; then
+    error "unable to install homebrew, script $0 abort!"
+    exit -1
   fi
+else
+  echo -n "already installed "
 fi
 ok
 
-#####
-# install homebrew cask
-#####
-running "checking brew-cask install"
-output=$(brew tap | grep cask)
-if [[ $? != 0 ]]; then
-  action "installing brew-cask"
-  require_brew caskroom/cask/brew-cask
-fi
-ok
-
-###############################################################################
-#Install command-line tools using Homebrew                                    #
-###############################################################################
 # Make sure we’re using the latest Homebrew
 running "updating homebrew"
 brew update
 ok
 
-bot "before installing brew packages, we can upgrade any outdated packages."
-read -r -p "run brew upgrade? [y|N] " response
+question "Upgrade any existing outdated packages? [y|N] " response
 if [[ $response =~ ^(y|yes|Y) ]];then
     # Upgrade any already-installed formulae
-    action "upgrade brew packages..."
+    action "upgrade brew packages"
     brew upgrade
-    ok "brews updated..."
+fi
+ok
+botdone
+
+
+################################################
+bot "Setting up >Git<"
+################################################
+
+running "Replacing personal info in .gitconfig with your info ($COL_YELLOW$fullname, $email, $githubuser$COL_RESET)"
+# test if gnu-sed or osx sed
+sed -i 's/João Loff/'$firstname' '$lastname'/' .gitconfig > /dev/null 2>&1 | true
+if [[ ${PIPESTATUS[0]} != 0 ]]; then
+  sed -i '' 's/João Loff/'$firstname' '$lastname'/' .gitconfig;
+  sed -i '' 's/jfloff@gmail.com/'$email'/' .gitconfig;
+  sed -i '' 's/jfloff/'$githubuser'/' .gitconfig;
+  sed -i '' 's/jfloff/'$(whoami)'/g' .zshrc;ok
 else
-    ok "skipped brew package upgrades.";
+  sed -i 's/jfloff@gmail.com/'$email'/' .gitconfig;
+  sed -i 's/jfloff/'$githubuser'/' .gitconfig;
+  sed -i 's/jfloff/'$(whoami)'/g' .zshrc;ok
 fi
 
-bot "installing homebrew command-line tools"
+# ask sensible information
+question "Please input your github command line token: " githubtoken
 
+# build file
+running "Creating your .gitconfig.local file with sensible information"
+cat > .gitconfig.local <<EOL
+[github]
+  token = ${githubtoken}
+EOL
+ok
+
+running "symlinking git dotfiles"; filler
+pushd ~ > /dev/null 2>&1
+symlinkifne .gitconfig
+symlinkifne .gitignore
+popd > /dev/null 2>&1
+ok
+
+running "installing git brews"; fille
+# skip those GUI clients, git command-line all the way
+require_brew git
+# yes, yes, use git-flow, please :)
+require_brew git-flow
+# hub command line tools
+require_brew hub
+botdone
+
+################################################
+bot "Installing >homebrew command-line tools<"
+################################################
 
 # Install GNU core utilities (those that come with OS X are outdated)
-# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
-require_brew coreutils
-sudo rm /usr/local/bin/sha256sum
-sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
+require_brew coreutils --default-names
 # Install some other useful utilities like `sponge`
-require_brew moreutils
+require_brew moreutils --default-names
 # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed
-require_brew findutils
+require_brew findutils --default-names
+# Install GNU `sed`, overwriting the built-in `sed`
+# so we can do "sed -i 's/foo/bar/' file" instead of "sed -i '' 's/foo/bar/' file"
+require_brew gnu-sed --default-names
+
+# other tools per: http://apple.stackexchange.com/questions/69223/how-to-replace-mac-os-x-utilities-with-gnu-core-utilities
+require_brew gnu-indent --with-default-names
+require_brew gnutls --with-default-names
+require_brew grep --with-default-names
+require_brew gnu-tar --with-default-names
+require_brew gnu-getopt --with-default-names
+require_brew gawk
+
+# was missing --default-name it might fix the points below
+# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
+# sudo rm /usr/local/bin/sha256sum
+# sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
 
 # Install Bash 4
 # Note: don’t forget to add `/usr/local/bin/bash` to `/etc/shells` before running `chsh`.
@@ -67,22 +114,12 @@ require_brew findutils
 
 # Install other useful binaries
 require_brew ack
-
 # dos2unix converts windows newlines to unix newlines
 require_brew dos2unix
-# fortune command--I source this as a better motd :)
-require_brew fortune
-require_brew gawk
-# skip those GUI clients, git command-line all the way
-require_brew git
-# yes, yes, use git-flow, please :)
-require_brew git-flow
-# Install GNU `sed`, overwriting the built-in `sed`
-# so we can do "sed -i 's/foo/bar/' file" instead of "sed -i '' 's/foo/bar/' file"
-require_brew gnu-sed --default-names
 # better, more recent grep
 require_brew homebrew/dupes/grep
-require_brew hub
+# fortune command--I source this as a better motd :)
+require_brew fortune
 # jq is a JSON grep
 require_brew jq
 # better/more recent version of screen
@@ -93,75 +130,4 @@ require_brew watch
 # Install wget with IRI support
 require_brew wget --with-iri
 require_brew rename
-
-###############################################################################
-# Native Apps (via brew cask)                                                 #
-###############################################################################
-bot "Installing homebrew casks..."
-brew tap caskroom/versions > /dev/null 2>&1
-
-# cloud storage
-require_cask dropbox
-
-# communication
-#require_cask slack
-
-# tools
-#require_cask diffmerge
-require_cask iterm2
-#require_cask sizeup
-
-require_cask atom
-require_cask the-unarchiver
-require_cask transmission
-require_cask vlc
-
-# development browsers
-#require_cask breach
-#require_cask firefox
-#require_cask firefox-aurora
-require_cask google-chrome
-#require_cask google-chrome-canary
-#require_cask torbrowser
-
-# virtal machines
-require_cask virtualbox
-# chef-dk, berkshelf, etc
-#require_cask chefdk
-# vagrant for running dev environments using docker images
-#require_cask vagrant # # | grep Caskroom | sed "s/.*'\(.*\)'.*/open \1\/Vagrant.pkg/g" | sh
-
-require_cask cheatsheet
-require_cask atom
-require_cask apptrap
-require_cask asepsis
-require_cask smcfancontrol
-require_cask spotify
-require_cask basictex
-require_cask gimp
-require_cask mendeley-desktop
-require_cask skype
-require_cask sqlitebrowser
-require_cask dockertoolbox
-require_cask kext-utility
-require_cask teamviewer
-
-# Cracked applications - I've yet to find a solution
-# $ brew cask install alfred
-# brew cask alfred link
-
-bot "Installing Quicklook plugins"
-require_cask qlcolorcode
-require_cask qlstephen
-require_cask qlmarkdown
-require_cask quicklook-json
-require_cask qlprettypatch
-require_cask quicklook-csv
-require_cask betterzipql
-require_cask qlimagesize
-
-bot "Alright, cleaning up homebrew cache..."
-# Remove outdated versions from the cellar
-brew cleanup > /dev/null 2>&1
-brew cask cleanup > /dev/null 2>&1
-bot "All clean"
+botdone

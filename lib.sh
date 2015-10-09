@@ -19,8 +19,22 @@ function ok() {
     echo -e "$COL_GREEN[ok]$COL_RESET "$1
 }
 
+function botdone() {
+  echo -e "$COL_GREEN\[._.]/$COL_RESET - $COL_GREEN\xe2\x98\x85$COL_RESET Done!"
+}
+
+function filler() {
+  echo ""
+}
+
 function bot() {
     echo -e "\n$COL_GREEN\[._.]/$COL_RESET - "$1
+}
+
+function question() {
+  echo -en "$COL_MAGENTA ¿$COL_RESET" $1 " "
+  read -rp "" ret
+  eval "$2=$ret"
 }
 
 function running() {
@@ -40,7 +54,7 @@ function error() {
 }
 
 function require_cask() {
-    running "brew cask $1"
+    running "\xF0\x9f\x8d\xba   brew cask $1"
     brew cask list $1 > /dev/null 2>&1 | true
     if [[ ${PIPESTATUS[0]} != 0 ]]; then
         action "brew cask install $1 $2"
@@ -54,7 +68,7 @@ function require_cask() {
 }
 
 function require_brew() {
-    running "brew $1 $2"
+    running "\xF0\x9f\x8d\xba   brew $1 $2"
     brew list $1 > /dev/null 2>&1 | true
     if [[ ${PIPESTATUS[0]} != 0 ]]; then
         action "brew install $1 $2"
@@ -131,32 +145,37 @@ function require_nvm() {
 }
 
 function promptSudo(){
+  if sudo -n true 2>/dev/null; then
+    echo -en "$COL_CYAN ¡$COL_RESET Already has sudo ";filler
+  else
     # Ask for the administrator password upfront
-    bot "I need you to enter your sudo password so I can install some things:"
-    sudo -v
+    echo -en "$COL_CYAN ¡$COL_RESET Sudo is needed: "
 
     # Keep-alive: update existing sudo time stamp until the script has finished
+    sudo -p "" -v
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+    ok
+  fi
 }
 
 
 function symlinkifne {
-    running "$1"
+    echo -en "$1"
 
     if [[ -e $1 ]]; then
         # file exists
         if [[ -L $1 ]]; then
             # it's already a simlink (could have come from this project)
-            echo -en '\tsimlink exists, skipping\t';ok
+            echo -en 'simlink exists, skipping \n'
             return
         fi
         # backup file does not exist yet
         if [[ ! -e ~/.dotfiles_backup/$1 ]];then
             mv $1 ~/.dotfiles_backup/
-            echo -en 'backed up saved...';
+            echo -en 'backed up saved';
         fi
     fi
     # create the link
     ln -s ~/.dotfiles/$1 $1
-    echo -en '\tlinked';ok
+    echo -en ' linked \n'
 }

@@ -3,154 +3,199 @@
 ###########################
 # This script installs the dotfiles and runs all other system configuration scripts
 # @author Adam Eivy
+# @contributor João Loff
 ###########################
-DEFAULT_FULLNAME="João Loff"
 DEFAULT_EMAIL="jfloff@gmail.com"
 DEFAULT_GITHUBUSER="jfloff"
 
 
 # include my library helpers for colorized echo and require_brew, etc
 source ./lib.sh
+# sourcing shellvars so we can get tools specific pre-loaded settings
+source ~/.shellvars
 
 # make a backup directory for overwritten dotfiles
 if [[ ! -e ~/.dotfiles_backup ]]; then
     mkdir ~/.dotfiles_backup
 fi
 
-bot "Hi. I'm going to make your OSX system better. But first, I need to configure this project based on your info so you don't check in files to github as João Loff from here on out :)"
+################################################
+bot "Hi. I'm here to make your OSX a better system!"
+################################################
 
+
+################################################
+bot "Setting up personal info, so you don't check in files to github as João Loff :)"
+################################################
+
+################################################
+# Full name
+################################################
 fullname=`osascript -e "long user name of (system info)"`
-
 if [[ -n "$fullname" ]];then
   lastname=$(echo $fullname | awk '{print $2}');
   firstname=$(echo $fullname | awk '{print $1}');
 fi
 
-# me=`dscl . -read /Users/$(whoami)`
-
-if [[ -z $lastname ]]; then
-  lastname=`dscl . -read /Users/$(whoami) | grep LastName | sed "s/LastName: //"`
-fi
+fullname=`dscl . -read /Users/$(whoami)  | awk 'f {print; exit} /RealName/ {f=1}' | xargs`
 if [[ -z $firstname ]]; then
-  firstname=`dscl . -read /Users/$(whoami) | grep FirstName | sed "s/FirstName: //"`
+  firstname=$(echo $fullname | awk '{print $1}');
 fi
-email=`dscl . -read /Users/$(whoami)  | grep EMailAddress | sed "s/EMailAddress: //"`
+if [[ -z $lastname ]]; then
+  lastname=$(echo $fullname | awk '{print $2}');
+fi
 
 if [[ ! "$firstname" ]];then
   response='n'
 else
-  echo -e "I see that your full name is $COL_YELLOW$firstname $lastname$COL_RESET"
-  read -r -p "Is this correct? [Y|n] " response
+  question "Is this your full name '$COL_YELLOW$firstname $lastname$COL_RESET'? [Y|n]" response
 fi
 
 if [[ $response =~ ^(no|n|N) ]];then
-  read -r -p "What is your first name? " firstname
-  read -r -p "What is your last name? " lastname
+  question "What is your first name? " firstname
+  question "What is your last name? " lastname
 fi
 fullname="$firstname $lastname"
 
-bot "Great $fullname, "
+running "Full name set to '$COL_YELLOW$fullname$COL_RESET'";ok
 
+################################################
+# Email
+################################################
+email=`dscl . -read /Users/$(whoami) | grep RecordName | awk '{print $3}'`
 if [[ ! $email ]];then
   response='n'
 else
-  echo -e "The best I can make out, your email address is $COL_YELLOW$email$COL_RESET"
-  read -r -p "Is this correct? [Y|n] " response
+  question "Is this your email '$COL_YELLOW$email$COL_RESET'? [Y|n]" response
 fi
 
 if [[ $response =~ ^(no|n|N) ]];then
-  read -r -p "What is your email? [$DEFAULT_EMAIL] " email
+  question "What is your email then? [$DEFAULT_EMAIL] " email
   if [[ ! $email ]];then
     email=$DEFAULT_EMAIL
   fi
 fi
 
-if grep -Fxq 'user = jfloff' .gitconfig; then
-    read -r -p "What is your github.com username? [$DEFAULT_GITHUBUSER]" githubuser
-fi
+running "Email set to '$COL_YELLOW$fullname$COL_RESET'";ok
+
+################################################
+# github username
+################################################
+githubuser=`awk '/user = /{ print $3 }' .gitconfig`
 if [[ ! $githubuser ]];then
-  githubuser=$DEFAULT_GITHUBUSER
-fi
-
-running "replacing items in .gitconfig with your info ($COL_YELLOW$fullname, $email, $githubuser$COL_RESET)"
-
-# test if gnu-sed or osx sed
-
-sed -i 's/Joao Loff/'$firstname' '$lastname'/' .gitconfig > /dev/null 2>&1 | true
-if [[ ${PIPESTATUS[0]} != 0 ]]; then
-  echo
-  running "looks like you are using OSX sed rather than gnu-sed, accommodating"
-  sed -i '' 's/Joao Loff/'$firstname' '$lastname'/' .gitconfig;
-  sed -i '' 's/jfloff@gmail.com/'$email'/' .gitconfig;
-  sed -i '' 's/jfloff/'$githubuser'/' .gitconfig;
-  sed -i '' 's/jfloff/'$(whoami)'/g' .zshrc;ok
+  response='n'
 else
-  echo
-  bot "looks like you are already using gnu-sed. woot!"
-  sed -i 's/jfloff@gmail.com/'$email'/' .gitconfig;
-  sed -i 's/jfloff/'$githubuser'/' .gitconfig;
-  sed -i 's/jfloff/'$(whoami)'/g' .zshrc;ok
+  question "Is this your github username '$COL_YELLOW$githubuser$COL_RESET'? [Y|n]" response
 fi
 
-# read -r -p "OK? [Y/n] " response
-#  if [[ ! $response =~ ^(yes|y|Y| ) ]];then
-#     exit 1
-#  fi
+if [[ $response =~ ^(no|n|N) ]];then
+  question "What is your github username  then? [$DEFAULT_GITHUBUSER] " githubuser
+  if [[ ! $githubuser ]];then
+    githubuser=$DEFAULT_GITHUBUSER
+  fi
+fi
+running "Email set to '$COL_YELLOW$fullname$COL_RESET'";ok
 
-# bot "awesome. let's roll..."
+botdone
 
+################################################
+bot "Cheking sudo"
+################################################
+promptSudo
+
+################################################
+# check if user wants sudo passwordless
+################################################
+if sudo grep -q "# %wheel\tALL=(ALL) NOPASSWD: ALL" "/etc/sudoers"; then
+  question "Do you want me to setup this machine to allow you to run sudo without a password?\n
+      More infomation here: http://wiki.summercode.com/sudo_without_a_password_in_mac_os_x \n
+      [y|N]" response
+
+  if [[ $response =~ (yes|y|Y) ]];then
+      sed --version
+      if [[ $? == 0 ]];then
+          sudo sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\+NOPASSWD:\s\+ALL\)/\1/' /etc/sudoers
+      else
+          sudo sed -i '' 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\+NOPASSWD:\s\+ALL\)/\1/' /etc/sudoers
+      fi
+      sudo dscl . append /Groups/wheel GroupMembership $(whoami)
+      running "You can now run sudo commands without password!"
+  fi
+fi
+ok
+
+botdone
+
+################################################
+bot "Setting up >crontab nightly jobs<"
+################################################
+running "symlinking shell files"; filler
+pushd ~ > /dev/null 2>&1
+symlinkifne .crontab
+popd > /dev/null 2>&1
+
+botdone
+
+################################################
+bot "Setting up >ZSH<"
+################################################
+
+running "changing your login shell to zsh"
 echo $0 | grep zsh > /dev/null 2>&1 | true
 if [[ ${PIPESTATUS[0]} != 0 ]]; then
-  running "changing your login shell to zsh"
-  chsh -s $(which zsh);ok
-else
-  bot "looks like you are already using zsh. woot!";ok
+  chsh -s $(which zsh)
 fi
+ok
 
+running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
-
-bot "Creating symlinks for project dotfiles..."
-
-# replace oauth tokens
-symlinkifne .shelloauth
-
-# adds nighlty crontabs
-symlinkifne .crontab
-
-# adds git configuations
-symlinkifne .gitconfig
-symlinkifne .gitignore
-
 # common to all shells
 symlinkifne .profile
 symlinkifne .shellaliases
 symlinkifne .shellfn
 symlinkifne .shellpaths
 symlinkifne .shellvars
-
 # zsh shell
 symlinkifne .zlogout
 symlinkifne .zprofile
 symlinkifne .zshenv
 symlinkifne .zshrc
-
-# atom files
-symlinkifne .atom/config.cson
-symlinkifne .atom/init.coffee
-symlinkifne .atom/keymap.cson
-symlinkifne .atom/snippets.cson
-symlinkifne .atom/styles.less
-
 popd > /dev/null 2>&1
 
-bot "OAuth tokens"
-if ! grep -Fxq '$GITHUB_TOKEN' .shelloauth; then
-  if [ -z "$GITHUB_TOKEN" ]; then
-    read -r -p "Please input your github command line token: " token
-    git config --global github.token $token
-  fi
-fi
+ok; botdone
 
-./osx.sh
+################################################
+# homebrew
+################################################
+source ./brew.sh
 
+################################################
+# osx
+################################################
+source ./osx.sh
+
+################################################
+# brew-cask
+################################################
+source ./casks.sh
+
+################################################
+bot "Cleaning up the mess ..."
+################################################
+# Remove outdated versions from the cellar
+running "Cleaning up homebrew cache..."
+brew cleanup > /dev/null 2>&1
+brew cask cleanup > /dev/null 2>&1
+ok
+
+running "Note that some of these changes require a logout/restart to take effect.\n
+Killing affected applications (so they can reboot)...."
+for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
+  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
+  "iCal" "Terminal" "Transmission" "Atom"; do
+  killall "${app}" > /dev/null 2>&1
+done
+
+################################################
 bot "Woot! All done."
+################################################
