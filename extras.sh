@@ -18,7 +18,7 @@ question "Is Alfred correctly installed? [y|N]" response
 if [[ $response =~ ^(yes|y|Y) ]];then
   running "symlinking preferences"; filler
   pushd ~/Library/Application\ Support/Alfred\ 2/ > /dev/null 2>&1
-  symlinkifne "Alfred.alfredpreferences"
+  symlinkifne Alfred.alfredpreferences
   popd > /dev/null 2>&1
 
   # running "Installing Workflows"
