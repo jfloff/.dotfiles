@@ -180,6 +180,11 @@ source ./osx.sh
 source ./casks.sh
 
 ################################################
+# "extras"
+################################################
+source ./extras.sh
+
+################################################
 bot "Cleaning up the mess ..."
 ################################################
 # Remove outdated versions from the cellar
@@ -188,13 +193,60 @@ brew cleanup > /dev/null 2>&1
 brew cask cleanup > /dev/null 2>&1
 ok
 
+question "Can I clean up downloads directory? [y|N]" response
+if [[ $response =~ ^(yes|y|Y) ]];then
+  rm -rf ./downloads
+fi
+ok
+
 running "Note that some of these changes require a logout/restart to take effect.\n
 Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
-  "iCal" "Terminal" "Transmission" "Atom"; do
+  "iCal" "Terminal" "Transmission" "Atom" "Alfred"; do
   killall "${app}" > /dev/null 2>&1
 done
+
+botdone
+
+###############################################################################
+bot "Unfortunately I can't setup everything :( Heres a list of things you need to do manually"
+###############################################################################
+item 1 "Installing from App Store:"
+item 2 "Keynote"
+item 2 "Numbers"
+item 2 "Pages"
+filler
+item 1 "Set iCloud settings:"
+item 2 "Disable Safari and Mail sync"
+item 2 "Sign in for Facebook, Twitter, Linkedin, Google (Only select contacts)"
+filler
+item 1 "Set Dropbox configuration:"
+item 2 "Show desktop notifications"
+item 2 "Start dropbox on system startup"
+item 2 "Selective Sync folders"
+item 2 "Do not enable camera uploads"
+item 2 "Share screenshots using Dropbox"
+item 2 "Enable LAN sync"
+filler
+item 1 "Set Alfred configuration:"
+item 2 "General: set hotkey to CMD-Space"
+item 2 "Appearance: OSX Yosemite Dark"
+filler
+item 1 "Set AppTrap configuration:"
+item 2 "Start on login"
+filler
+item 1 "Set Mendeley configuration:"
+item 2 "Login with account"
+item 2 "File Organizer > Organize my files: ~/Dropbox/PhD Loff/rw"
+item 2 "File Organizer > Sort files into subfolders > Folder path: Year"
+item 2 "File Organizer > Rename document files > Filename: Author Year Title"
+filler
+item 1 "Set Texpad configuration:"
+item 2 "Import configuration file in ~/.dotfile/configs/texpad.settings.json"
+filler
+
+botdone
 
 ################################################
 bot "Woot! All done."

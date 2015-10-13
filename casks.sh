@@ -129,6 +129,46 @@ botdone
 
 
 ###############################################################################
+bot "Setting up >The Unarchiver<"
+###############################################################################
+require_cask the-unarchiver
+
+running "Set to extract archives to same folder as the archive"
+defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist extractionDestination -int 1;ok
+
+running "Set the modification date of the created folder to the modification date of the archive file"
+defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist folderModifiedDate -int 2;ok
+
+running "Delete archive after extraction"
+defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist deleteExtractedArchive -bool true;ok
+
+running "Do not open folder afer extraction"
+defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist openExtractedFolder -bool false;ok
+
+botdone
+
+###############################################################################
+bot "Installing >Mendeley<"
+###############################################################################
+require_cask mendeley-desktop
+
+running "Enabling Bibtex sync"
+defaults write com.mendeley.Mendeley\ Desktop BibtexSync.enabled -bool true;ok
+
+running "Escape special charts"
+defaults write com.mendeley.Mendeley\ Desktop Bibtex.escapeSpecialChars -bool true;ok
+
+running "Disable publication abbreviations"
+defaults write com.mendeley.Mendeley\ Desktop Bibtex.usePublicationAbbreviations -bool false;ok
+
+running "Setting Bibtex sync as a one-file type"
+defaults write com.mendeley.Mendeley\ Desktop BibtexSync.syncMode -string "SingleFile";ok
+
+running "Setting Bibtex sync folder"
+defaults write com.mendeley.Mendeley\ Desktop BibtexSync.path -string "~/Dropbox/PhD Loff/rw";ok
+botdone
+
+###############################################################################
 bot "Installing remaining casks"
 ###############################################################################
 
@@ -136,7 +176,6 @@ require_cask virtualbox
 require_cask sqlitebrowser
 require_cask dockertoolbox
 require_cask dropbox
-require_cask the-unarchiver
 require_cask vlc
 require_cask cheatsheet
 require_cask apptrap
@@ -144,11 +183,13 @@ require_cask asepsis
 require_cask smcfancontrol
 require_cask spotify
 require_cask basictex
-require_cask gimp
-require_cask mendeley-desktop
 require_cask skype
 require_cask kext-utility
 require_cask teamviewer
+require_cask gimp
+require_cask shapes
+require_cask alinof-timer
+
 
 # commented out casks
 #require_cask diffmerge
@@ -167,7 +208,6 @@ require_cask teamviewer
 # Cracked applications - I've yet to find a solution
 # $ brew cask install alfred
 # brew cask alfred link
-
 
 ################################################
 bot "Installing >Quicklook plugins<"

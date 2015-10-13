@@ -37,6 +37,11 @@ function question() {
   eval "$2=$ret"
 }
 
+function item() {
+  spaces=`printf '%*s\n' $((2*($1-1))) "" | tr ' ' ' '`
+  echo -en "$spaces$COL_MAGENTA \xE2\x9C\x93$COL_RESET" $2 "\n"
+}
+
 function running() {
     echo -en "$COL_YELLOW ⇒ $COL_RESET"$1": "
 }
@@ -54,10 +59,9 @@ function error() {
 }
 
 function require_cask() {
-    running "\xF0\x9f\x8d\xba   brew cask $1"
+    running "\xF0\x9f\x8d\xba \t brew cask $1"
     brew cask list $1 > /dev/null 2>&1 | true
     if [[ ${PIPESTATUS[0]} != 0 ]]; then
-        action "brew cask install $1 $2"
         brew cask install $1
         if [[ $? != 0 ]]; then
             error "failed to install $1! aborting..."
@@ -67,11 +71,26 @@ function require_cask() {
     ok
 }
 
+function required_alfred_workflow() {
+  wget_download $1
+  echo ${foo##*. }
+  open ${1##*/}
+}
+
+function wget_download() {
+  running "downloading $1"
+  action "wget $1 ./downloads"
+  wget -nc $1 ./downloads
+  if [[ $? != 0 ]]; then
+    error "failed to download $1!"
+  fi
+  ok
+}
+
 function require_brew() {
-    running "\xF0\x9f\x8d\xba   brew $1 $2"
+    running "\xF0\x9f\x8d\xba \t brew $1 $2"
     brew list $1 > /dev/null 2>&1 | true
     if [[ ${PIPESTATUS[0]} != 0 ]]; then
-        action "brew install $1 $2"
         brew install $1 $2
         if [[ $? != 0 ]]; then
             error "failed to install $1! aborting..."
@@ -166,13 +185,13 @@ function symlinkifne {
         # file exists
         if [[ -L $1 ]]; then
             # it's already a simlink (could have come from this project)
-            echo -en 'simlink exists, skipping \n'
+            echo -en ' simlink exists, skipping \n'
             return
         fi
         # backup file does not exist yet
         if [[ ! -e ~/.dotfiles_backup/$1 ]];then
             mv $1 ~/.dotfiles_backup/
-            echo -en 'backed up saved';
+            echo -en ' backed up saved';
         fi
     fi
     # create the link

@@ -53,7 +53,8 @@ pids
 .vim/temp/*
 .vim/.netrwhist
 
-################
+##########
 # script #
-################
+##########
 temp.iterm2.plist
+downloads

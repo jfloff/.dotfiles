@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>customSites</key>
+	<dict>
+		<key>C83EFE50-1323-40E9-A118-9FCA31694851</key>
+		<dict>
+			<key>enabled</key>
+			<false/>
+			<key>keyword</key>
+			<string>cask</string>
+			<key>plusSpaces</key>
+			<false/>
+			<key>text</key>
+			<string>Search Homebrew Cask for {query}</string>
+			<key>url</key>
+			<string>http://caskroom.io/search?q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
