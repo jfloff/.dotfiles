@@ -220,13 +220,13 @@ running "Disable Dock icon magnification"
 defaults write com.apple.dock magnification -bool false;ok
 
 running "Set Dock to appear on the right"
-defaults write com.apple.dock orientation -string right
+defaults write com.apple.dock orientation -string right;ok
 
 running "Change minimize/maximize window effect to genie"
 defaults write com.apple.dock mineffect -string "genie";ok
 
 running "Double-click a window's title bar to minimize"
-defaults write NSGlobalDomain AppleMiniaturizeOnDoubleClick -bool true
+defaults write NSGlobalDomain AppleMiniaturizeOnDoubleClick -bool true;ok
 
 running "Minimize windows into their application’s icon"
 defaults write com.apple.dock minimize-to-application -bool true;ok
@@ -235,7 +235,7 @@ running "Animate opening applications from the Dock"
 defaults write com.apple.dock launchanim -bool true;ok
 
 running "Autohide Dock"
-defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide -bool true;ok
 
 running "Show indicator lights for open applications in the Dock"
 defaults write com.apple.dock show-process-indicators -bool true;ok
@@ -244,7 +244,7 @@ running "Don’t automatically rearrange Spaces based on most recent use"
 defaults write com.apple.dock mru-spaces -bool false;ok
 
 running "Switch to space with open application"
-defaults write com.apple.dock workspaces-auto-swoosh -bool true
+defaults write com.apple.dock workspaces-auto-swoosh -bool true;ok
 
 running "Group windows by application in Mission Control"
 # (i.e. use the old Exposé behavior instead)
@@ -327,6 +327,7 @@ defaults write NSGlobalDomain AppleMetricUnits -bool true;ok
 running "Set the timezone for Lisbon"
 # see `sudo systemsetup -listtimezones` for other values
 sudo systemsetup -settimezone "Europe/Lisbon" > /dev/null
+ok
 
 running "Disable auto-correct"
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false;ok
@@ -356,7 +357,7 @@ bot "System Preferences > Spotlight"
 ###############################################################################
 
 running "Remove spotlight keyboard shortcut"
-sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 524288); type = 'standard'; }; }"
+sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 524288); type = 'standard'; }; }";ok
 
 running "Hide Spotlight tray-icon (and subsequent helper)"
 sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search;ok

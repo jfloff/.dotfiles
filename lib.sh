@@ -34,7 +34,7 @@ function bot() {
 function question() {
   echo -en "$COL_MAGENTA ¿$COL_RESET" $1 " "
   read -rp "" ret
-  eval "$2=$ret"
+  eval "$2=\$ret"
 }
 
 function item() {
@@ -65,8 +65,8 @@ function required_alfred_workflow() {
 }
 
 function download() {
-  running "curl -L -O $1"
-  curl -L -O "$1"
+  running "curl -L -O $1";filler
+  curl -# -L -O "$1"
   if [[ $? != 0 ]]; then
     error "failed to download $1!"
   fi

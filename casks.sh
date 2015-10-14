@@ -54,7 +54,7 @@ bot "Setting up >iTerm2<"
 require_cask iterm2
 
 running "Copying pre-set definitions"
-yes | cp -rf ./configs/iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
+yes | cp -rf ./configs/iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist;ok
 
 running "Installing the Solarized Dark theme for iTerm (opening file)"
 # copy preferences so we can convert to XML
@@ -63,8 +63,8 @@ plutil -convert xml1 temp.iterm2.plist
 if ! grep -F "Solarized" temp.iterm2.plist
 then
   open "./configs/Solarized Dark.itermcolors"
-fi
-rm temp.iterm2.plist
+fi > /dev/null 2>&1
+rm -f temp.iterm2.plist
 ok
 
 running "Don’t display the annoying prompt when quitting iTerm"

@@ -71,7 +71,7 @@ symlinkifne .gitignore
 popd > /dev/null 2>&1
 ok
 
-running "installing git brews"; fille
+running "installing git brews"; filler
 # skip those GUI clients, git command-line all the way
 require_brew git
 # yes, yes, use git-flow, please :)

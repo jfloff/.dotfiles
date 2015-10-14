@@ -135,9 +135,10 @@ running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
 symlinkifne .crontab
 popd > /dev/null 2>&1
-running "starting cron"
+ok
 
-cron ~/.crontab;ok
+running "starting cron"
+sudo cron ~/.crontab;ok
 
 botdone
 
