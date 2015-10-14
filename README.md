@@ -14,21 +14,20 @@ Don't you hate getting a new laptop or formatting yourr existing one and then sp
 
 \\[._.]/ - I'm so excited I just binaried in my pants!
 
-# Watch me run!
-[![asciicast](https://asciinema.org/a/cojgbj3kj4o0psbhy3kdm9mht.png)](https://asciinema.org/a/cojgbj3kj4o0psbhy3kdm9mht)
-
 # Running
 
 Note: I recommend forking this repo in case you don't like anything I do and want to set your own preferences (and pull request them!)
 ```bash
 curl -#LS https://raw.githubusercontent.com/jfloff/.dotfiles/master/bootstrap.sh | sh
 ```
-
 This will work even in a brand new Mac with no git installed. After installation you can either run `bootstrap.sh` or `install.sh` inside the `~/.dotfiles` dir.
 
 You can also fork the [original repo](https://github.com/atomantic/dotfiles) from @atomantic
 
 > Note: running install.sh is idempotent. You can run it again and again as you add new features or software to the scripts! I'll regularly add new configurations so keep an eye on this repo as it grows and optimizes.
+
+# Watch me run!
+[![asciicast](https://asciinema.org/a/cojgbj3kj4o0psbhy3kdm9mht.png)](https://asciinema.org/a/cojgbj3kj4o0psbhy3kdm9mht)
 
 # ¯\\_(ツ)_/¯ Warning / Liability
 > Warning:
