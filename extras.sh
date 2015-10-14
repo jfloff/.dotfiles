@@ -51,8 +51,8 @@ unzip -qo texpad-1716.zip
 download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip
 unzip -qo texpad-1716.zip
 # ms office
-#download https://www.dropbox.com/s/zr8fzj6ppp40ci9/msoffice-2016-15.14.0.zip
-#unzip -qof msoffice-2016-15.14.0.zip
+download https://www.dropbox.com/s/zr8fzj6ppp40ci9/msoffice-2016-15.14.0.zip
+unzip -qo msoffice-2016-15.14.0.zip
 # tom tom GPS
 download http://cdn.sa.services.tomtom.com/static/sa/Mac/MyDriveConnect.dmg
 # open this dir in finder so we can install
