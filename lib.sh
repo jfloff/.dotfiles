@@ -197,3 +197,8 @@ function symlinkifne {
     ln -s ~/.dotfiles/$1 $1
     echo -en ' linked \n'
 }
+
+function clean_stdin()
+{
+    while read -e -t 0.1; do : ; done
+}
