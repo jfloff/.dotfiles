@@ -12,7 +12,7 @@ DEFAULT_GITHUBUSER="jfloff"
 # include my library helpers for colorized echo and require_brew, etc
 source ./lib.sh
 # sourcing shellvars so we can get tools specific pre-loaded settings
-source ./shellvars
+source ./.shellvars
 
 clean_stdin
 

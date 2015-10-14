@@ -32,6 +32,7 @@ function bot() {
 }
 
 function question() {
+  clean_stdin
   echo -en "$COL_MAGENTA ¿$COL_RESET" $1 " "
   read -rp "" ret
   eval "$2=\$ret"
@@ -200,5 +201,5 @@ function symlinkifne {
 
 function clean_stdin()
 {
-    while read -e -t 0.1; do : ; done
+    while read -e -t 1; do : ; done
 }

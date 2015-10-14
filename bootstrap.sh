@@ -20,5 +20,6 @@ fi
 
 # already exists run install script
 pushd ~/.dotfiles/ > /dev/null 2>&1
-./install.sh
+# set input from the terminal
+./install.sh </dev/tty
 popd > /dev/null 2>&1
