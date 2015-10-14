@@ -58,8 +58,23 @@ function error() {
     echo -e "$COL_RED[error]$COL_RESET "$1
 }
 
+function required_alfred_workflow() {
+  download $1
+  echo ${foo##*. }
+  open ${1##*/}
+}
+
+function download() {
+  running "curl -L -O $1"
+  curl -L -O "$1"
+  if [[ $? != 0 ]]; then
+    error "failed to download $1!"
+  fi
+  ok
+}
+
 function require_cask() {
-    running "\xF0\x9f\x8d\xba \t brew cask $1"
+    running "\xF0\x9f\x8d\xba brew cask $1"
     brew cask list $1 > /dev/null 2>&1 | true
     if [[ ${PIPESTATUS[0]} != 0 ]]; then
         brew cask install $1
@@ -71,24 +86,8 @@ function require_cask() {
     ok
 }
 
-function required_alfred_workflow() {
-  wget_download $1
-  echo ${foo##*. }
-  open ${1##*/}
-}
-
-function wget_download() {
-  running "downloading $1"
-  action "wget $1 ./downloads"
-  wget -nc $1 ./downloads
-  if [[ $? != 0 ]]; then
-    error "failed to download $1!"
-  fi
-  ok
-}
-
 function require_brew() {
-    running "\xF0\x9f\x8d\xba \t brew $1 $2"
+    running "\xF0\x9f\x8d\xba  brew $1 $2"
     brew list $1 > /dev/null 2>&1 | true
     if [[ ${PIPESTATUS[0]} != 0 ]]; then
         brew install $1 $2

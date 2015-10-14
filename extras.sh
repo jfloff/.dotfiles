@@ -8,9 +8,9 @@ fi
 ###############################################################################
 bot "Installing Alfred"
 ###############################################################################
-pushd .downloads > /dev/null 2>&1
-wget_download https://www.dropbox.com/s/b8bwzhl7trj9rxx/alfred-2.8_414.zip?dl=0
-unzip alfred-2.8_414.zip -d alfred-2.8_414
+pushd ./downloads > /dev/null 2>&1
+download https://www.dropbox.com/s/b8bwzhl7trj9rxx/alfred-2.8_414.zip
+unzip -qof alfred-2.8_414.zip
 open alfred-2.8_414
 popd > /dev/null 2>&1
 
@@ -36,16 +36,17 @@ if [[ $response =~ ^(yes|y|Y) ]];then
 fi
 
 ###############################################################################
-bot "Installing Texpad"
-###############################################################################
-pushd .downloads > /dev/null 2>&1
-wget_download https://www.dropbox.com/s/t85ydbgero0p7ge/texpad-1716.zip?dl=0
-unzip texpad-1716.zip.zip -d texpad-1716.zip
-open texpad-1716.zip
-popd > /dev/null 2>&1
-
-###############################################################################
 bot "Downloading custom link software"
 ###############################################################################
-wget_download http://cdn.sa.services.tomtom.com/static/sa/Mac/MyDriveConnect.dmg
-wget_download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip?dl=0
+pushd ./downloads > /dev/null 2>&1
+
+# texpad
+download https://www.dropbox.com/s/t85ydbgero0p7ge/texpad-1716.zip
+unzip -qof texpad-1716.zip
+# tuxera ntfs
+download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip
+unzip -qof texpad-1716.zip
+# tom tom GPS
+download http://cdn.sa.services.tomtom.com/static/sa/Mac/MyDriveConnect.dmg
+
+popd > /dev/null 2>&1

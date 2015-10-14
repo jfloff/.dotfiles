@@ -1,20 +1,17 @@
 # \\[._.]/ - Hi, I'm the OSX bot
 
-I will update your OSX machine with better system defaults, preferences, software configuration and even auto-install some handy development tools and apps that my developer friends find helpful.
+My father is @atomantic but I was adopted by @jfloff.
 
-You don't need to install or configure anything upfront! This works with a brand-new machine from the factory as well as an existing machine that you've been working with for years.
+I will update your OSX machine with better system defaults, preferences, software configuration and even auto-install some handy development tools and apps I find helpful.
+
+You don't need to install or configure anything upfront! This works with a brand-new machine as well as an existing machine that you've been working with for years.
 
 # Forget About Manual Configuration!
 
-Don't you hate getting a new laptop or joining a new team and then spending a whole day setting up your system preferences and tools? Me too. That's why we automate; we did it once and we don't want to do have to do it again.
+Don't you hate getting a new laptop or formatting yourr existing one and then spending a whole day setting up your system preferences and tools? Me too. That's why we automate; we did it once and we don't want to do have to do it again.
 
-\\[^_^]/ - This started as Adam Eivy's OSX shell configuration dotfiles but has grown to a mutil-developer platform for machine configuration.
+\\[^_^]/ - This started as Adam Eivy's OSX shell configuration dotfiles but has grown to a mutil-developer platform for machine configuration. Now @jfloff is adopting me.
 
-When I finish with your machine, you will be able to look at your command-line in full-screen mode like this (running iTerm):
-
-![iTerm Screenshot](https://raw.githubusercontent.com/atomantic/dotfiles/master/img/dotfiles.png)
-
-Check out how your shell prompt includes the full path & the working git branch!
 \\[._.]/ - I'm so excited I just binaried in my pants!
 
 # Watch me run!
@@ -24,10 +21,12 @@ Check out how your shell prompt includes the full path & the working git branch!
 
 Note: I recommend forking this repo in case you don't like anything I do and want to set your own preferences (and pull request them!)
 ```bash
-git clone --recurse-submodules https://github.com/atomantic/dotfiles ~/.dotfiles
+git clone --recurse-submodules https://github.com/jfloff/.dotfiles ~/.dotfiles
 cd ~/.dotfiles;
 ./install.sh;
 ```
+
+You can also fork the [original repo](https://github.com/atomantic/dotfiles) from @atomantic
 
 > Note: running install.sh is idempotent. You can run it again and again as you add new features or software to the scripts! I'll regularly add new configurations so keep an eye on this repo as it grows and optimizes.
 
@@ -37,15 +36,7 @@ If you have existing dotfiles for configuring git, zsh, vim, etc, these will be 
 
 # ¯\\_(ツ)_/¯ Warning / Liability
 > Warning:
-The creator of this repo is not responsible if your machine ends up in a state you are not happy with. If you are concerned, look at install.sh and osx.sh to review everything this script will do to your machine :)
-
-# Additional
-
-There are a few additional features in this repo:
-
-- .crontab: you can `cron ~/.crontab` if you want to add my nightly cron software updates.
-
-> \\[0_0]/ - Note that this may wake you in the morning to compatibility issues so use only if you like being on the edge
+The creator of this repo is not responsible if your machine ends up in a state you are not happy with. If you are concerned, look at all shell scripts (osx.sh, brew.sh, casks.sh, extras.sh) to review everything this script will do to your machine :)
 
 # Settings
 This project changes a number of settings and configures software on OSX.

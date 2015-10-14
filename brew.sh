@@ -130,4 +130,7 @@ require_brew watch
 # Install wget with IRI support
 require_brew wget --with-iri
 require_brew rename
+# Record terminal to share: https://asciinema.org/
+require_brew asciinema
+
 botdone

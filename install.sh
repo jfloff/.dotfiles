@@ -129,10 +129,15 @@ botdone
 ################################################
 bot "Setting up >crontab nightly jobs<"
 ################################################
+# adds nightly cron software updates.
+# Note that this may wake you in the morning to compatibility issues so use only if you like being on the edge
 running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
 symlinkifne .crontab
 popd > /dev/null 2>&1
+running "starting cron"
+
+cron ~/.crontab;ok
 
 botdone
 
@@ -210,12 +215,21 @@ done
 botdone
 
 ###############################################################################
-bot "Unfortunately I can't setup everything :( Heres a list of things you need to do manually"
+bot "Unfortunately I can't setup everything :( Heres a list of things you need to manually do"
 ###############################################################################
 item 1 "Installing from App Store:"
 item 2 "Keynote"
 item 2 "Numbers"
 item 2 "Pages"
+filler
+item 1 "Set Finder settings"
+item 2 "Remove tags from the sidebar by unselecting all"
+item 2 "Remove 'All My Files', 'Movies', 'Music' and 'Pictures' from sidebar"
+item 2 "Add folders to sidebar: 'PhD', 'Code'"
+filler
+item 1 "Set Dock Icons"
+item 2 "Add apps: Google Chrome, Spotify, Atom"
+item 2 "Add folders: PhD, Dropbox"
 filler
 item 1 "Set iCloud settings:"
 item 2 "Disable Safari and Mail sync"
