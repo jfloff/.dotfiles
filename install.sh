@@ -127,6 +127,13 @@ ok
 botdone
 
 ################################################
+bot "Updating >OSX<"
+################################################
+softwareupdate -iva
+botdone
+
+return
+################################################
 bot "Setting up >crontab nightly jobs<"
 ################################################
 # adds nightly cron software updates.
