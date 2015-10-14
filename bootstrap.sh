@@ -7,10 +7,13 @@
 # check if there is a clone of .dotfiles already running
 if [[ ! -e ~/.dotfiles ]]; then
   # install command line tools so we have git
-  #run in background so we can catch the PID
-  xcode-select --install &
-  # wait for xcode-select to finish
-  wait $!
+  # loops while we don't have the tools installed
+  while true; do
+    xcode-select --install
+    sleep 5
+    xcode-select -p > /dev/null 2>&1
+    [ $? == 2 ] || break
+  done
   # clone repo
   git clone --recurse-submodules https://github.com/jfloff/.dotfiles ~/.dotfiles
 fi
