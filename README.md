@@ -21,10 +21,10 @@ Don't you hate getting a new laptop or formatting yourr existing one and then sp
 
 Note: I recommend forking this repo in case you don't like anything I do and want to set your own preferences (and pull request them!)
 ```bash
-git clone --recurse-submodules https://github.com/jfloff/.dotfiles ~/.dotfiles
-cd ~/.dotfiles;
-./install.sh;
+curl -#LS https://raw.githubusercontent.com/jfloff/.dotfiles/master/bootstrap.sh | sh
 ```
+
+This will work even in a brand new Mac with no git installed. After installation you can either run `bootstrap.sh` or `install.sh` inside the `~/.dotfiles` dir.
 
 You can also fork the [original repo](https://github.com/atomantic/dotfiles) from @atomantic
 

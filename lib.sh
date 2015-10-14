@@ -65,8 +65,8 @@ function required_alfred_workflow() {
 }
 
 function download() {
-  running "curl -L -O $1";filler
-  curl -# -L -O "$1"
+  running "curl -#LO $1";filler
+  curl -#LO "$1"
   if [[ $? != 0 ]]; then
     error "failed to download $1!"
   fi
