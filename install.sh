@@ -18,7 +18,7 @@ source ./.shellvars
 clean_stdin
 
 caffeinate &
-caff_pid = $?
+caff_pid=$?
 
 # make a backup directory for overwritten dotfiles
 if [[ ! -e ~/.dotfiles_backup ]]; then
