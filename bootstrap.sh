@@ -6,6 +6,10 @@
 
 # check if there is a clone of .dotfiles already running
 if [[ ! -e ~/.dotfiles ]]; then
+  # keeps system alive
+  caffeinate &
+  caff_pid = $?
+
   # install command line tools so we have git
   # loops while we don't have the tools installed
   while true; do
@@ -16,6 +20,8 @@ if [[ ! -e ~/.dotfiles ]]; then
   done
   # clone repo
   git clone --recurse-submodules https://github.com/jfloff/.dotfiles ~/.dotfiles > /dev/null 2>&1
+  
+  kill $caff_pid
 fi
 
 # already exists run install script
