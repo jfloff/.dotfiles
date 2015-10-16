@@ -81,6 +81,33 @@ require_brew hub
 botdone
 
 ################################################
+bot "Setting up >ZSH<"
+################################################
+running "installing zsh brews"; filler
+require_brew zsh
+require_brew zsh-completions
+
+running "changing your login shell to zsh"
+chsh -s $(which zsh); ok
+
+running "symlinking shell files"; filler
+pushd ~ > /dev/null 2>&1
+# common to all shells
+symlinkifne .profile
+symlinkifne .shellaliases
+symlinkifne .shellfn
+symlinkifne .shellpaths
+symlinkifne .shellvars
+# zsh shell
+symlinkifne .zlogout
+symlinkifne .zprofile
+symlinkifne .zshenv
+symlinkifne .zshrc
+popd > /dev/null 2>&1
+
+botdone
+
+################################################
 bot "Installing >homebrew command-line tools<"
 ################################################
 # hide output to avoid anoying warning

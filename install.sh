@@ -163,34 +163,6 @@ sudo cron ~/.crontab;ok
 botdone
 
 ################################################
-bot "Setting up >ZSH<"
-################################################
-
-running "changing your login shell to zsh"
-echo $0 | grep zsh > /dev/null 2>&1 | true
-if [[ ${PIPESTATUS[0]} != 0 ]]; then
-  chsh -s $(which zsh)
-fi
-ok
-
-running "symlinking shell files"; filler
-pushd ~ > /dev/null 2>&1
-# common to all shells
-symlinkifne .profile
-symlinkifne .shellaliases
-symlinkifne .shellfn
-symlinkifne .shellpaths
-symlinkifne .shellvars
-# zsh shell
-symlinkifne .zlogout
-symlinkifne .zprofile
-symlinkifne .zshenv
-symlinkifne .zshrc
-popd > /dev/null 2>&1
-
-botdone
-
-################################################
 # homebrew
 ################################################
 source ./brew.sh
