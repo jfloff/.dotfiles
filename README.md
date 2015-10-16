@@ -48,10 +48,7 @@ Please refer to the [Contributor Covenant](https://github.com/atomantic/dotfiles
 3. Mehs should be > /dev/null
 4. Praise should be directed to [@antic](http://twitter.com/antic) or [@matthewmccull](http://twitter.com/matthewmccull) or [@mathiasbynens](https://github.com/mathiasbynens/dotfiles)
 
+# TODO
 
-# Release History
-
-### <sup>v1.1.0</sup>
- * Added dotfiles backup and restore.sh script
-     * you can now restore your previous dotfiles with ./restore.sh
- * prompting the user more (e.g. `brew upgrade` is now optional)
+* Hook for alfred preferences so new folder in preferences/local is deleted, but name linked to existing folder
+* Add VPN

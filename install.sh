@@ -17,7 +17,7 @@ source ./.shellvars
 # clear stdin from pending input
 clean_stdin
 
-caffeinate &
+caffeinate -i -d &
 caff_pid=$!
 
 # make a backup directory for overwritten dotfiles
@@ -219,17 +219,11 @@ brew cleanup > /dev/null 2>&1
 brew cask cleanup > /dev/null 2>&1
 ok
 
-question "Can I clean up downloads directory? [y|N]" response
-if [[ $response =~ ^(yes|y|Y) ]];then
-  rm -rf ./downloads
-fi
-ok
-
 running "Note that some of these changes require a logout/restart to take effect.\n
 Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
-  "iCal" "Terminal" "Transmission" "Atom" "Alfred"; do
+  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" "iCal" \
+  "Transmission" "Atom" "Alfred"; do
   killall "${app}" > /dev/null 2>&1
 done
 ok
@@ -262,6 +256,7 @@ item 2 "Share screenshots using Dropbox"
 item 2 "Enable LAN sync"
 filler
 item 1 "Set Alfred configuration:"
+item 2 "Remove Spotlight shortcut"
 item 2 "General: set hotkey to CMD-Space"
 item 2 "Appearance: OSX Yosemite Dark"
 filler

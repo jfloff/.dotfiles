@@ -7,7 +7,7 @@
 # check if there is a clone of .dotfiles already running
 if [[ ! -e ~/.dotfiles ]]; then
   # keeps system alive
-  caffeinate &
+  caffeinate -i -d &
   caff_pid=$!
 
   # install command line tools so we have git

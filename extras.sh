@@ -3,19 +3,13 @@
 # Keep-alive: update existing sudo time stamp until the script has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-# make a downloads directory
-if [[ ! -e ./downloads ]]; then
-    mkdir ./downloads
-fi
-
 ###############################################################################
 bot "Setting up >Alfred<"
 ###############################################################################
 running "Installing Alfred"; filler
-pushd ./downloads > /dev/null 2>&1
+pushd ~/Downloads > /dev/null 2>&1
 download https://www.dropbox.com/s/b8bwzhl7trj9rxx/alfred-2.8_414.zip
-unzip -qo alfred-2.8_414.zip
-open alfred-2.8_414
+open .
 popd > /dev/null 2>&1
 ok
 
@@ -50,17 +44,15 @@ botdone
 ###############################################################################
 bot "Downloading custom link software"
 ###############################################################################
-pushd ./downloads > /dev/null 2>&1
+pushd ~/Downloads > /dev/null 2>&1
 download https://www.dropbox.com/s/t85ydbgero0p7ge/texpad-1716.zip
 download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip
 download https://www.dropbox.com/s/zr8fzj6ppp40ci9/msoffice-2016-15.14.0.zip
+download https://www.dropbox.com/s/w7d6mqenbg79lai/shapes-4.34.zip?dl=0
 # tom tom GPS
 download http://cdn.sa.services.tomtom.com/static/sa/Mac/MyDriveConnect.dmg
 
 # unzips all and opens dir in finder so we can install
-unzip -qo texpad-1716.zip
-unzip -qo tuxera-nfts-2015.zip
-# unzip -qo msoffice-2016-15.14.0.zip
 open .
 popd > /dev/null 2>&1
 botdone

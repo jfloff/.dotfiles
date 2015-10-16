@@ -155,8 +155,9 @@ defaults write com.apple.helpviewer DevMode -bool true;ok
 running "Reveal IP, hostname, OS, etc. when clicking clock in login window"
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName;ok
 
-running "Disable Notification Center and remove the menu bar icon"
-launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist > /dev/null 2>&1;ok
+# not woking under El Capitan
+#running "Disable Notification Center and remove the menu bar icon"
+#launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist > /dev/null 2>&1;ok
 
 running "Disable smart quotes as they’re annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false;ok
@@ -220,6 +221,8 @@ running "Wipe all (default) apps & folders icons from the Dock"
 defaults write com.apple.dock persistent-apps -array ""
 defaults write com.apple.dock persistent-others -array "";ok
 
+# Even though the symlink icon will appear fo casks, this situation should be temporary
+# since casks are starting to being MOVED and not SYMLINKED so soon this will all look good
 running "Add new apps & folders to the Dock"
 defaults write com.apple.dock persistent-apps -array-add '
   <dict>
@@ -255,6 +258,19 @@ defaults write com.apple.dock persistent-apps -array-add '
       <dict>
         <key>_CFURLString</key>
         <string>/Applications/Spotify.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>/Applications/Atom.app</string>
         <key>_CFURLStringType</key>
         <integer>0</integer>
       </dict>
@@ -452,13 +468,13 @@ botdone
 
 
 ################################################
-bot "System Preferences > Language & Region"
+bot "Setting System Preferences > Language & Region"
 ################################################
 
 # Set language and text formats
 running "Set language and text formats (english/en)"
 defaults write NSGlobalDomain AppleLanguages -array "en" "pt_PT"
-defaults write NSGlobalDomain AppleLocale -string "en_US@currency=EUR"
+defaults write NSGlobalDomain AppleLocale -string "en_PT@currency=EUR"
 defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
 defaults write NSGlobalDomain AppleMetricUnits -bool true;ok
 
@@ -491,53 +507,54 @@ botdone
 
 
 ###############################################################################
-bot "System Preferences > Spotlight"
+bot "Setting System Preferences > Spotlight"
 ###############################################################################
+# None of these settings is working under El Capitan
 
-running "Remove spotlight keyboard shortcut"
-sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 524288); type = 'standard'; }; }";ok
+# running "Remove spotlight keyboard shortcut"
+# sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 524288); type = 'standard'; }; }";ok
 
 # not working under El Capitan - needs a weird hack going into Recovery Mode
 #running "Hide Spotlight tray-icon (and subsequent helper)"
 #sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search;ok
 
-running "Disable Spotlight indexing for any volume that gets mounted and has not yet been indexed"
+#running "Disable Spotlight indexing for any volume that gets mounted and has not yet been indexed"
 # Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
-sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes";ok
+#sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes";ok
 
-running "Change indexing order and disable some file types from being indexed"
-defaults write com.apple.spotlight orderedItems -array \
-  '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-  '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
-  '{"enabled" = 1;"name" = "DIRECTORIES";}' \
-  '{"enabled" = 1;"name" = "PDF";}' \
-  '{"enabled" = 1;"name" = "FONTS";}' \
-  '{"enabled" = 1;"name" = "DOCUMENTS";}' \
-  '{"enabled" = 0;"name" = "MESSAGES";}' \
-  '{"enabled" = 0;"name" = "CONTACT";}' \
-  '{"enabled" = 1;"name" = "EVENT_TODO";}' \
-  '{"enabled" = 1;"name" = "IMAGES";}' \
-  '{"enabled" = 0;"name" = "BOOKMARKS";}' \
-  '{"enabled" = 0;"name" = "MUSIC";}' \
-  '{"enabled" = 1;"name" = "MOVIES";}' \
-  '{"enabled" = 1;"name" = "PRESENTATIONS";}' \
-  '{"enabled" = 1;"name" = "SPREADSHEETS";}' \
-  '{"enabled" = 0;"name" = "SOURCE";}' \
-  '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-  '{"enabled" = 0;"name" = "MENU_OTHER";}' \
-  '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
-  '{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
-  '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
-  '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}';ok
-
-running "Load new settings before rebuilding the index"
-killall mds > /dev/null 2>&1;ok
-
-running "Make sure indexing is enabled for the main volume"
-sudo mdutil -i on / > /dev/null;ok
-
-running "Rebuild the index from scratch"
-sudo mdutil -E / > /dev/null;ok
+# running "Change indexing order and disable some file types from being indexed"
+# defaults write com.apple.spotlight orderedItems -array \
+#   '{"enabled" = 1;"name" = "APPLICATIONS";}' \
+#   '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
+#   '{"enabled" = 1;"name" = "DIRECTORIES";}' \
+#   '{"enabled" = 1;"name" = "PDF";}' \
+#   '{"enabled" = 1;"name" = "FONTS";}' \
+#   '{"enabled" = 1;"name" = "DOCUMENTS";}' \
+#   '{"enabled" = 0;"name" = "MESSAGES";}' \
+#   '{"enabled" = 0;"name" = "CONTACT";}' \
+#   '{"enabled" = 1;"name" = "EVENT_TODO";}' \
+#   '{"enabled" = 1;"name" = "IMAGES";}' \
+#   '{"enabled" = 0;"name" = "BOOKMARKS";}' \
+#   '{"enabled" = 0;"name" = "MUSIC";}' \
+#   '{"enabled" = 1;"name" = "MOVIES";}' \
+#   '{"enabled" = 1;"name" = "PRESENTATIONS";}' \
+#   '{"enabled" = 1;"name" = "SPREADSHEETS";}' \
+#   '{"enabled" = 0;"name" = "SOURCE";}' \
+#   '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+#   '{"enabled" = 0;"name" = "MENU_OTHER";}' \
+#   '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
+#   '{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
+#   '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
+#   '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}';ok
+#
+# running "Load new settings before rebuilding the index"
+# killall mds > /dev/null 2>&1;ok
+#
+# running "Make sure indexing is enabled for the main volume"
+# sudo mdutil -i on / > /dev/null;ok
+#
+# running "Rebuild the index from scratch"
+# sudo mdutil -E / > /dev/null;ok
 
 botdone
 
@@ -658,7 +675,7 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true;ok
 #running "Disable window animations and Get Info animations"
 #defaults write com.apple.finder DisableAllAnimations -bool true;ok
 
-running "Set Desktop as the default location for new Finder windows"
+running "Set HOME as the default location for new Finder windows"
 # For other paths, use `PfLo` and `file:///full/path/here/`
 defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/";ok
@@ -745,7 +762,8 @@ running "Show 7 days"
 defaults write com.apple.iCal "n days of week" -int 7;ok
 
 running "Week starts on monday"
-defaults write com.apple.iCal "first day of week" -int 1;ok
+defaults write com.apple.iCal "first day of week" -int 1
+defaults write NSGlobalDomain AppleFirstWeekday -dict 'gregorian' 2;ok
 
 running "Show event times"
 defaults write com.apple.iCal "Show time in Month View" -bool true;ok

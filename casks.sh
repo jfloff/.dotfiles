@@ -62,7 +62,7 @@ popd > /dev/null 2>&1
 
 running "Installing packages"; filler
 # strip packages of versions
-sed -i 's/@.*//' ./configs/atom-packages.txt
+sed -i 's/@.*//' ./configs/atom-packages.txt > /dev/null 2>&1
 apm install --packages-file ./configs/atom-packages.txt;ok
 # require_apm linter
 # require_apm linter-eslint
@@ -256,7 +256,6 @@ require_cask skype
 require_cask kext-utility
 require_cask teamviewer
 require_cask gimp
-require_cask shapes
 require_cask alinof-timer
 
 
