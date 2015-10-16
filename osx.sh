@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
+# Keep-alive: update existing sudo time stamp until the script has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ################################################
 bot "Setting >Standard System Changes<"
 ################################################
-promptSudo
 
 ################################################
 # Computer Name
@@ -208,10 +209,142 @@ botdone
 bot "System Preferences > Dock & Mission Control"
 ################################################
 
-running "Wipe all (default) app icons from the Dock"
+running "Wipe all (default) apps & folders icons from the Dock"
 # # This is only really useful when setting up a new Mac, or if you don’t use
 # # the Dock to launch apps.
-defaults write com.apple.dock persistent-apps -array "";ok
+defaults write com.apple.dock persistent-apps -array ""
+defaults write com.apple.dock persistent-others -array "";ok
+
+running "Add new apps & folders to the Dock"
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>/Applications/Google Chrome.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>/Applications/Spotify.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>/Applications/Atom.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>/Applications/Docker/Docker Quickstart Terminal.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>/Applications/Texpad.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>/Applications/Mendeley Desktop.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-others -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>file:///Users/jfloff/Dropbox/PhD%20Loff/</string>
+        <key>_CFURLStringType</key>
+        <integer>15</integer>
+      </dict>
+      <key>file-label</key>
+      <string>PhD Loff</string>
+    </dict>
+    <key>tile-type</key>
+    <string>directory-tile</string>
+  </dict>'
+defaults write com.apple.dock persistent-others -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>file:///Users/jfloff/Dropbox/</string>
+        <key>_CFURLStringType</key>
+        <integer>15</integer>
+      </dict>
+      <key>file-label</key>
+      <string>Dropbox</string>
+    </dict>
+    <key>tile-type</key>
+    <string>directory-tile</string>
+  </dict>'
+defaults write com.apple.dock persistent-others -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
+        <string>file:///Users/jfloff/Downloads/</string>
+        <key>_CFURLStringType</key>
+        <integer>15</integer>
+      </dict>
+      <key>file-label</key>
+      <string>Downloads</string>
+    </dict>
+    <key>tile-type</key>
+    <string>directory-tile</string>
+  </dict>';ok
 
 running "Set the icon size of Dock items to 45 pixels"
 defaults write com.apple.dock tilesize -int 45;ok
@@ -308,7 +441,7 @@ running "Speed up Mission Control animations"
 defaults write com.apple.dock expose-animation-duration -float 0.1;ok
 
 running "Reset Launchpad, but keep the desktop wallpaper intact"
-find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete;ok
+find "${HOME}/Library/Application Support/Dock" -maxdepth 1 -name "*-*.db" -delete;ok
 
 botdone
 
@@ -359,8 +492,9 @@ bot "System Preferences > Spotlight"
 running "Remove spotlight keyboard shortcut"
 sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 524288); type = 'standard'; }; }";ok
 
-running "Hide Spotlight tray-icon (and subsequent helper)"
-sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search;ok
+# not working under El Capitan - needs a weird hack going into Recovery Mode
+#running "Hide Spotlight tray-icon (and subsequent helper)"
+#sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search;ok
 
 running "Disable Spotlight indexing for any volume that gets mounted and has not yet been indexed"
 # Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
@@ -591,10 +725,6 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 
 # running "Enable the MacBook Air SuperDrive on any Mac"
 # sudo nvram boot-args="mbasd=1";ok
-
-running "Remove Dropbox’s green checkmark icons in Finder"
-file=/Applications/Dropbox.app/Contents/Resources/emblem-dropbox-uptodate.icns
-[ -e "${file}" ] && mv -f "${file}" "${file}.bak";ok
 
 botdone
 

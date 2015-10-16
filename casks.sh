@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+# Keep-alive: update existing sudo time stamp until the script has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 ################################################
 bot "Setting up >Homebrew Cask<"
 ################################################
-promptSudo
 running "checking brew-cask install"
 output=$(brew tap | grep cask)
 if [[ $? != 0 ]]; then
@@ -13,6 +15,23 @@ else
 fi
 brew tap caskroom/versions > /dev/null 2>&1
 ok; botdone
+
+
+###############################################################################
+bot "Setting up >Google Chrome<"
+###############################################################################
+require_cask google-chrome
+
+running "Allow installing user scripts via GitHub Gist or Userscripts.org"
+defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*";ok
+
+running "Use the system-native print preview dialog"
+defaults write com.google.Chrome DisablePrintPreview -bool true;ok
+
+running "Expand the print dialog by default"
+defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
+
+botdone
 
 
 ################################################
@@ -27,6 +46,11 @@ ln -s /Applications/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm /u
 sudo rm /usr/local/bin/atom
 ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom;ok
 
+# theres instances when the .atom folder is not createad right away
+if [[ ! -e ~/.atom ]]; then
+    mkdir ~/.atom
+fi
+
 running "symlinking atom dotfiles"; filler
 pushd ~ > /dev/null 2>&1
 symlinkifne .atom/config.cson
@@ -35,7 +59,6 @@ symlinkifne .atom/keymap.cson
 symlinkifne .atom/snippets.cson
 symlinkifne .atom/styles.less
 popd > /dev/null 2>&1
-ok
 
 running "Installing packages"; filler
 # strip packages of versions
@@ -57,9 +80,7 @@ running "Copying pre-set definitions"
 yes | cp -rf ./configs/iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist;ok
 
 running "Installing the Solarized Dark theme for iTerm (opening file)"
-# copy preferences so we can convert to XML
-cp ~/Library/Preferences/com.googlecode.iterm2.plist ./temp.iterm2.plist
-plutil -convert xml1 temp.iterm2.plist
+plutil -convert xml1 -o temp.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
 if ! grep -F "Solarized" temp.iterm2.plist
 then
   open "./configs/Solarized Dark.itermcolors"
@@ -88,29 +109,12 @@ botdone
 
 
 ###############################################################################
-bot "Setting up >Google Chrome<"
-###############################################################################
-require_cask google-chrome
-
-running "Allow installing user scripts via GitHub Gist or Userscripts.org"
-defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*"
-
-running "Use the system-native print preview dialog"
-defaults write com.google.Chrome DisablePrintPreview -bool true;ok
-
-running "Expand the print dialog by default"
-defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
-
-botdone
-
-
-###############################################################################
 bot "Setting up >Transmission<"
 ###############################################################################
 require_cask transmission
 
 running "Use '~/Downloads' to store incomplete downloads"
-defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true;ok
+defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads";ok
 
 running "Don’t prompt for confirmation before downloading"
@@ -169,19 +173,88 @@ defaults write com.mendeley.Mendeley\ Desktop BibtexSync.path -string "~/Dropbox
 botdone
 
 ###############################################################################
+bot "Installing >smcFanControl<"
+###############################################################################
+require_cask smcfancontrol
+
+running "Start at login"
+defaults write com.eidac.smcFanControl2 AutoStart -bool true; ok
+
+running "Disable donation message"
+defaults write com.eidac.smcFanControl2 DonationMessageShown -bool true; ok
+
+running "Check updates automatically"
+defaults write com.eidac.smcFanControl2 SUCheckAtStartup -bool true
+defaults write com.eidac.smcFanControl2 SUEnableAutomaticChecks -bool true; ok
+
+running "Adding 'Extreme RPM' profile"
+# checking if current preferences already have a extreme profile
+plutil -convert xml1 -o temp.smcFanControl2.plist ~/Library/Preferences/com.eidac.smcFanControl2.plist
+if ! grep -F "Extreme" temp.smcFanControl2.plist
+then
+  defaults write com.eidac.smcFanControl2 Favorites -array-add '
+    {
+      FanData = (
+          {
+              Description = "Left Fan";
+              Maxspeed = 6000;
+              Minspeed = 2000;
+              menu = 1;
+              selspeed = 6000;
+          },
+          {
+              Description = "Right Fan";
+              Maxspeed = 6000;
+              Minspeed = 2000;
+              selspeed = 6000;
+          }
+      );
+      Standard = 0;
+      Title = "Extreme RPM";
+  }'
+fi > /dev/null 2>&1
+rm -f temp.smcFanControl2.plist
+ok
+
+botdone
+
+
+###############################################################################
+bot "Installing >Dropbox<"
+###############################################################################
+require_cask dropbox
+
+running "Remove Dropbox’s green checkmark icons in Finder"
+file=/Applications/Dropbox.app/Contents/Resources/emblem-dropbox-uptodate.icns
+[ -e "${file}" ] && mv -f "${file}" "${file}.bak";ok
+
+botdone
+
+
+###############################################################################
+bot "Installing >AppTrap<"
+###############################################################################
+require_cask apptrap
+
+running "Add to system startup"
+if ! grep -F "AppTrap" ~/Library/Preferences/com.apple.loginitems.plist
+then
+  osascript -e 'tell application "System Events" to make new login item at end with properties {path:"/Applications/AppTrap.app", name:"AppTrap", hidden:true}';ok
+fi > /dev/null 2>&1
+ok;
+botdone;
+
+
+###############################################################################
 bot "Installing remaining casks"
 ###############################################################################
-
-require_cask virtualbox
-require_cask sqlitebrowser
+require_cask spotify
 require_cask dockertoolbox
-require_cask dropbox
+require_cask sqlitebrowser
 require_cask vlc
 require_cask cheatsheet
-require_cask apptrap
-require_cask asepsis
-require_cask smcfancontrol
-require_cask spotify
+# not working under El Capitan :(
+#require_cask asepsis
 require_cask basictex
 require_cask skype
 require_cask kext-utility

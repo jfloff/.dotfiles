@@ -14,7 +14,11 @@ source ./lib.sh
 # sourcing shellvars so we can get tools specific pre-loaded settings
 source ./.shellvars
 
+# clear stdin from pending input
 clean_stdin
+
+caffeinate &
+caff_pid = $?
 
 # make a backup directory for overwritten dotfiles
 if [[ ! -e ~/.dotfiles_backup ]]; then
@@ -72,7 +76,7 @@ else
 fi
 
 if [[ $response =~ ^(no|n|N) ]];then
-  question "What is your email then? [$DEFAULT_EMAIL] " email
+  question "What is your email? [$DEFAULT_EMAIL] " email
   if [[ ! $email ]];then
     email=$DEFAULT_EMAIL
   fi
@@ -103,7 +107,15 @@ botdone
 ################################################
 bot "Cheking sudo"
 ################################################
-promptSudo
+if sudo -n true 2>/dev/null; then
+  msg "Already has sudo";filler
+else
+  # Ask for the administrator password upfront
+  msg "Sudo is needed:"
+  sudo -p "" -v
+fi
+# Keep-alive: update existing sudo time stamp until the script has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ################################################
 # check if user wants sudo passwordless
@@ -134,7 +146,7 @@ bot "Updating >OSX<"
 softwareupdate -iva
 botdone
 
-return
+
 ################################################
 bot "Setting up >crontab nightly jobs<"
 ################################################
@@ -144,7 +156,6 @@ running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
 symlinkifne .crontab
 popd > /dev/null 2>&1
-ok
 
 running "starting cron"
 sudo cron ~/.crontab;ok
@@ -177,7 +188,7 @@ symlinkifne .zshenv
 symlinkifne .zshrc
 popd > /dev/null 2>&1
 
-ok; botdone
+botdone
 
 ################################################
 # homebrew
@@ -221,6 +232,7 @@ for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "iCal" "Terminal" "Transmission" "Atom" "Alfred"; do
   killall "${app}" > /dev/null 2>&1
 done
+ok
 
 botdone
 
@@ -236,10 +248,6 @@ item 1 "Set Finder settings"
 item 2 "Remove tags from the sidebar by unselecting all"
 item 2 "Remove 'All My Files', 'Movies', 'Music' and 'Pictures' from sidebar"
 item 2 "Add folders to sidebar: 'PhD', 'Code'"
-filler
-item 1 "Set Dock Icons"
-item 2 "Add apps: Google Chrome, Spotify, Atom"
-item 2 "Add folders: PhD, Dropbox"
 filler
 item 1 "Set iCloud settings:"
 item 2 "Disable Safari and Mail sync"
@@ -257,11 +265,7 @@ item 1 "Set Alfred configuration:"
 item 2 "General: set hotkey to CMD-Space"
 item 2 "Appearance: OSX Yosemite Dark"
 filler
-item 1 "Set AppTrap configuration:"
-item 2 "Start on login"
-filler
 item 1 "Set Mendeley configuration:"
-item 2 "Login with account"
 item 2 "File Organizer > Organize my files: ~/Dropbox/PhD Loff/rw"
 item 2 "File Organizer > Sort files into subfolders > Folder path: Year"
 item 2 "File Organizer > Rename document files > Filename: Author Year Title"
@@ -271,6 +275,9 @@ item 2 "Import configuration file in ~/.dotfile/configs/texpad.settings.json"
 filler
 
 botdone
+
+# kills caffeinate
+kill $caff_pid
 
 ################################################
 bot "Woot! All done."
