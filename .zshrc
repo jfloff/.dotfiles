@@ -27,20 +27,21 @@ export TERM=xterm-256color
 # Your normal git commands will all work, hub merely adds some sugar.
 eval "$(hub alias -s)"
 
-# set antigen path
-export ADOTDIR=$HOME/.dotfiles/antigen/
-
 # load antigen
 source $HOME/.dotfiles/antigen/antigen.zsh
 
 # # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
+# brew coreutils - due to bug this path has to come AFTER the oh-my-zsh
+export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview
 # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
-antigen bundle colored-man
+antigen bundle colored-man-pages
 antigen bundle colorize
 antigen bundle command-not-found
 antigen bundle copydir
@@ -49,12 +50,10 @@ antigen bundle dirpersist
 antigen bundle per-directory-history
 antigen bundle wd
 antigen bundle docker
-antigen bundle git
 antigen bundle git-extras
 antigen bundle git-flow
 antigen bundle github
-# causing ls to not color
-# antigen bundle gnu-utils
+antigen bundle gnu-utils
 antigen bundle brew
 antigen bundle brew-cask
 antigen bundle osx

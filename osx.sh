@@ -46,11 +46,13 @@ running "Disable hibernation (speeds up entering sleep mode)"
 sudo pmset -a hibernatemode 0;ok
 
 running "Remove the sleep image file to save disk space"
-sudo rm -rf /Private/var/vm/sleepimage
+# remove locked status beforehand
+sudo chflags nouchg /private/var/vm/sleepimage
+sudo rm -rf /private/var/vm/sleepimage
 # Create a zero-byte file instead
-sudo touch /Private/var/vm/sleepimage
+sudo touch /private/var/vm/sleepimage
 # and make sure it can’t be rewritten
-sudo chflags uchg /Private/var/vm/sleepimage;ok
+sudo chflags uchg /private/var/vm/sleepimage;ok
 
 running "Disable the sudden motion sensor as it’s not useful for SSDs"
 sudo pmset -a sms 0;ok
@@ -223,6 +225,19 @@ defaults write com.apple.dock persistent-apps -array-add '
       <key>file-data</key>
       <dict>
         <key>_CFURLString</key>
+        <string>/Applications/Calendar.app</string>
+        <key>_CFURLStringType</key>
+        <integer>0</integer>
+      </dict>
+    </dict>
+  </dict>'
+defaults write com.apple.dock persistent-apps -array-add '
+  <dict>
+    <key>tile-data</key>
+    <dict>
+      <key>file-data</key>
+      <dict>
+        <key>_CFURLString</key>
         <string>/Applications/Google Chrome.app</string>
         <key>_CFURLStringType</key>
         <integer>0</integer>
@@ -250,19 +265,6 @@ defaults write com.apple.dock persistent-apps -array-add '
       <dict>
         <key>_CFURLString</key>
         <string>/Applications/Atom.app</string>
-        <key>_CFURLStringType</key>
-        <integer>0</integer>
-      </dict>
-    </dict>
-  </dict>'
-defaults write com.apple.dock persistent-apps -array-add '
-  <dict>
-    <key>tile-data</key>
-    <dict>
-      <key>file-data</key>
-      <dict>
-        <key>_CFURLString</key>
-        <string>/Applications/Docker/Docker Quickstart Terminal.app</string>
         <key>_CFURLStringType</key>
         <integer>0</integer>
       </dict>

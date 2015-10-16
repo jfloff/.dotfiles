@@ -1,4 +1,5 @@
 [include]
+  # https://github.com/blog/180-local-github-config
   # For username / creds / etc
   path = .gitconfig.local
 
@@ -7,7 +8,6 @@
   email = jfloff@gmail.com
 
 [github]
-  # https://github.com/blog/180-local-github-config
   user = jfloff
 
 [color]

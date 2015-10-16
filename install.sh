@@ -82,7 +82,7 @@ if [[ $response =~ ^(no|n|N) ]];then
   fi
 fi
 
-running "Email set to '$COL_YELLOW$fullname$COL_RESET'";ok
+running "Email set to '$COL_YELLOW$email$COL_RESET'";ok
 
 ################################################
 # github username
@@ -100,7 +100,7 @@ if [[ $response =~ ^(no|n|N) ]];then
     githubuser=$DEFAULT_GITHUBUSER
   fi
 fi
-running "Email set to '$COL_YELLOW$fullname$COL_RESET'";ok
+running "Github username set to '$COL_YELLOW$githubuser$COL_RESET'";ok
 
 botdone
 

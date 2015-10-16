@@ -80,12 +80,10 @@ running "Copying pre-set definitions"
 yes | cp -rf ./configs/iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist;ok
 
 running "Installing the Solarized Dark theme for iTerm (opening file)"
-plutil -convert xml1 -o temp.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
-if ! grep -F "Solarized" temp.iterm2.plist
+if ! grep -F "Solarized" ~/Library/Preferences/com.googlecode.iterm2.plist
 then
   open "./configs/Solarized Dark.itermcolors"
 fi > /dev/null 2>&1
-rm -f temp.iterm2.plist
 ok
 
 running "Don’t display the annoying prompt when quitting iTerm"
@@ -189,8 +187,7 @@ defaults write com.eidac.smcFanControl2 SUEnableAutomaticChecks -bool true; ok
 
 running "Adding 'Extreme RPM' profile"
 # checking if current preferences already have a extreme profile
-plutil -convert xml1 -o temp.smcFanControl2.plist ~/Library/Preferences/com.eidac.smcFanControl2.plist
-if ! grep -F "Extreme" temp.smcFanControl2.plist
+if ! grep -F "Extreme" ~/Library/Preferences/com.eidac.smcFanControl2.plist
 then
   defaults write com.eidac.smcFanControl2 Favorites -array-add '
     {
@@ -213,7 +210,6 @@ then
       Title = "Extreme RPM";
   }'
 fi > /dev/null 2>&1
-rm -f temp.smcFanControl2.plist
 ok
 
 botdone
