@@ -60,13 +60,11 @@ symlinkifne .atom/snippets.cson
 symlinkifne .atom/styles.less
 popd > /dev/null 2>&1
 
-running "Installing packages"; filler
+running "Installing & updating packages"; filler
 # strip packages of versions
 sed -i 's/@.*//' ./configs/atom-packages.txt > /dev/null 2>&1
 apm install --packages-file ./configs/atom-packages.txt;ok
-# require_apm linter
-# require_apm linter-eslint
-# require_apm atom-beautify
+apm update --no-confirm
 
 botdone
 

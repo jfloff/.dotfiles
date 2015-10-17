@@ -77,3 +77,25 @@ function skill()
 function fixperms(){
     find . \( -name "*.sh" -or -type d \) -exec chmod 755 {} \; && find . -type f ! -name "*.sh" -exec chmod 644 {} \;
 }
+
+# Gets app and bundle
+# http://stackoverflow.com/a/12900116/1700053
+whichapp() {
+  local appNameOrBundleId=$1 isAppName=0 bundleId
+  # Determine whether an app *name* or *bundle ID* was specified.
+  [[ $appNameOrBundleId =~ \.[aA][pP][pP]$ || $appNameOrBundleId =~ ^[^.]+$ ]] && isAppName=1
+  if (( isAppName )); then # an application NAME was specified
+    # Translate to a bundle ID first.
+    bundleId=$(osascript -e "id of application \"$appNameOrBundleId\"" 2>/dev/null) ||
+      { echo "$FUNCNAME: ERROR: Application with specified name not found: $appNameOrBundleId" 1>&2; return 1; }
+  else # a BUNDLE ID was specified
+    bundleId=$appNameOrBundleId
+  fi
+    # Let AppleScript determine the full bundle path.
+  osascript -e "tell application \"Finder\" to POSIX path of (get application file id \"$bundleId\" as alias)" 2>/dev/null ||
+    { echo "$FUNCNAME: ERROR: Application with specified bundle ID not found: $bundleId" 1>&2; return 1; }
+}
+bundleid() {
+  osascript -e "id of application \"$1\"" 2>/dev/null ||
+    { echo "$FUNCNAME: ERROR: Application with specified name not found: $1" 1>&2; return 1; }
+}

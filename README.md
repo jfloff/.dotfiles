@@ -50,5 +50,4 @@ Please refer to the [Contributor Covenant](https://github.com/atomantic/dotfiles
 
 # TODO
 
-* Hook for alfred preferences so new folder in preferences/local is deleted, but name linked to existing folder
 * Add VPN

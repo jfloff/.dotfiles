@@ -4,7 +4,7 @@
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ################################################
-bot "Setting >Standard System Changes<"
+bot "Configuring >Standard System Changes<"
 ################################################
 
 ################################################
@@ -184,7 +184,7 @@ botdone
 
 
 ################################################
-bot "System Preferences > General"
+bot "Configuring System Preferences > General"
 ################################################
 
 running "Set highlight color to green"
@@ -212,7 +212,7 @@ botdone
 
 
 ################################################
-bot "System Preferences > Dock & Mission Control"
+bot "Configuring System Preferences > Dock & Mission Control"
 ################################################
 
 running "Wipe all (default) apps & folders icons from the Dock"
@@ -468,7 +468,7 @@ botdone
 
 
 ################################################
-bot "Setting System Preferences > Language & Region"
+bot "Configuring System Preferences > Language & Region"
 ################################################
 
 # Set language and text formats
@@ -490,7 +490,7 @@ botdone
 
 
 ################################################
-bot "System Preferences > Security & Privacy"
+bot "Configuring System Preferences > Security & Privacy"
 ################################################
 
 running "Require password immediately after sleep or screen saver begins"
@@ -507,7 +507,7 @@ botdone
 
 
 ###############################################################################
-bot "Setting System Preferences > Spotlight"
+bot "Configuring System Preferences > Spotlight"
 ###############################################################################
 # None of these settings is working under El Capitan
 
@@ -559,7 +559,7 @@ bot "Setting System Preferences > Spotlight"
 botdone
 
 ################################################
-bot "System Preferences > Keyboard"
+bot "Configuring System Preferences > Keyboard"
 ################################################
 
 running "Enable full keyboard access for all controls (e.g. enable Tab in modal dialogs)"
@@ -585,7 +585,7 @@ botdone
 
 
 ################################################
-bot "System Preferences > Trackpad"
+bot "Configuring System Preferences > Trackpad"
 ################################################
 
 #running "Trackpad: enable tap to click for this user and for the login screen"
@@ -650,7 +650,7 @@ botdone
 
 
 ################################################
-bot "System Preferences > Sound"
+bot "Configuring System Preferences > Sound"
 ################################################
 
 #running "Increase sound quality for Bluetooth headphones/headsets"
@@ -660,7 +660,7 @@ botdone
 
 
 ################################################
-bot "Finder Preferences"
+bot "Configuring Finder Preferences"
 ################################################
 
 running "Show icons for external hard drives, servers, and removable media on the desktop"
@@ -752,7 +752,7 @@ botdone
 
 
 ###############################################################################
-bot "Calendar"
+bot "Configuring Calendar"
 ###############################################################################
 
 running "Show week numbers (10.8 only)"
@@ -772,7 +772,7 @@ botdone
 
 
 ###############################################################################
-bot "Terminal"
+bot "Configuring Terminal"
 ###############################################################################
 
 #running "Enable “focus follows mouse” for Terminal.app and all X11 apps"
@@ -791,7 +791,7 @@ botdone
 
 
 ###############################################################################
-bot "Time Machine"
+bot "Configuring Time Machine"
 ###############################################################################
 
 running "Prevent Time Machine from prompting to use new hard drives as backup volume"
@@ -804,7 +804,7 @@ botdone
 
 
 ###############################################################################
-bot "Activity Monitor"
+bot "Configuring Activity Monitor"
 ###############################################################################
 
 running "Show the main window when launching Activity Monitor"
@@ -824,7 +824,7 @@ botdone
 
 
 ###############################################################################
-bot "TextEdit"
+bot "Configuring TextEdit"
 ###############################################################################
 
 #running "Enable the debug menu in Address Book"
@@ -848,7 +848,7 @@ botdone
 
 
 ###############################################################################
-bot "Mac App Store"
+bot "Configuring Mac App Store"
 ###############################################################################
 
 #running "Enable the WebKit Developer Tools in the Mac App Store"

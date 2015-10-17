@@ -13,6 +13,8 @@ DEFAULT_GITHUBUSER="jfloff"
 source ./lib.sh
 # sourcing shellvars so we can get tools specific pre-loaded settings
 source ./.shellvars
+# we might need the functions
+source ./.shellfn
 
 # clear stdin from pending input
 clean_stdin
@@ -195,7 +197,7 @@ running "Note that some of these changes require a logout/restart to take effect
 Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" "iCal" \
-  "Transmission" "Atom" "Alfred"; do
+  "Transmission" "Atom" "Alfred 2"; do
   killall "${app}" > /dev/null 2>&1
 done
 ok
