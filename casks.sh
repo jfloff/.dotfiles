@@ -118,34 +118,6 @@ botdone
 
 
 ###############################################################################
-bot "Setting up >The Unarchiver<"
-###############################################################################
-require_cask the-unarchiver
-# opens and closes unarchiver untill the preferences are loaded
-uncpath=`whichapp 'The Unarchiver'`
-open "$uncpath"
-# waiting for The Unarchiver to create file
-while true; do
-  sleep 1
-  [ ! -f ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist ] || break
-done
-killall 'The Unarchiver' > /dev/null 2>&1
-
-running "Set to extract archives to same folder as the archive"
-defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist extractionDestination -int 1;ok
-
-running "Set the modification date of the created folder to the modification date of the archive file"
-defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist folderModifiedDate -int 2;ok
-
-running "Delete archive after extraction"
-defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist deleteExtractedArchive -bool true;ok
-
-running "Do not open folder afer extraction"
-defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist openExtractedFolder -bool false;ok
-
-botdone
-
-###############################################################################
 bot "Installing >Mendeley<"
 ###############################################################################
 require_cask mendeley-desktop
@@ -165,6 +137,7 @@ defaults write com.mendeley.Mendeley\ Desktop BibtexSync.syncMode -string "Singl
 running "Setting Bibtex sync folder"
 defaults write com.mendeley.Mendeley\ Desktop BibtexSync.path -string "~/Dropbox/PhD Loff/rw";ok
 botdone
+
 
 ###############################################################################
 bot "Installing >smcFanControl<"
@@ -256,6 +229,29 @@ require_cask apptrap
 #   osascript -e 'tell application "System Events" to make new login item at end with properties {path:"/Applications/AppTrap.app", name:"AppTrap", hidden:true}';ok
 # fi > /dev/null 2>&1
 # ok;
+
+require_cask the-unarchiver
+# ONLY WORKS ON YOSEMITE
+# opens and closes unarchiver untill the preferences are loaded
+# waiting for The Unarchiver to create file
+# open "/Applications/The Unarchiver.app"
+# while true; do
+#   sleep 1
+#   [ ! -f ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist ] || break
+# done
+# killall 'The Unarchiver' > /dev/null 2>&1
+#
+# running "Set to extract archives to same folder as the archive"
+# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist extractionDestination -int 1;ok
+#
+# running "Set the modification date of the created folder to the modification date of the archive file"
+# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist folderModifiedDate -int 2;ok
+#
+# running "Delete archive after extraction"
+# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist deleteExtractedArchive -bool true;ok
+#
+# running "Do not open folder afer extraction"
+# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist openExtractedFolder -bool false;ok
 
 # commented out casks
 #require_cask diffmerge

@@ -4,13 +4,11 @@
 bot "Setting up >Alfred 2<"
 ###############################################################################
 
-alfpath=`whichapp 'Alfred 2'`
+alfpath=`whichapp 'Alfred 2'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  response='Y'
-  question "Alfred 2 is not installed. Do you want to download? [Y|n]" response
+  question "Alfred 2 is not installed. Do you want to download? [y|n]" response
 else
-  reponse='N'
-  question "Alfred 2 is already installed. Do you want to download again? [y|N]" response
+  question "Alfred 2 is already installed. Do you want to download again? [y|n]" response
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -23,7 +21,7 @@ fi
 
 question "Is Alfred correctly installed? [y|N]" response
 if [[ $response =~ ^(yes|y|Y) ]];then
-  alfpath=`whichapp 'Alfred 2'`
+  alfpath=`whichapp 'Alfred 2'` > /dev/null 2>&1
   if [ $? == 1 ]; then
     msg "Alfred 2 is not yet installed! Skipping setting preferences. (Run me again after you've installed Alfred 2)"
   else
@@ -79,13 +77,11 @@ botdone
 ###############################################################################
 bot "Downloading Texpad"
 ###############################################################################
-softpath=`whichapp 'Texpad'`
+softpath=`whichapp 'Texpad'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  response='Y'
-  question "Texpad is not installed. Do you want to download? [Y|n]" response
+  question "Texpad is not installed. Do you want to download? [y|n]" response
 else
-  reponse='N'
-  question "Texpad is already installed. Do you want to download again? [y|N]" response
+  question "Texpad is already installed. Do you want to download again? [y|n]" response
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -102,13 +98,11 @@ botdone
 bot "Downloading Microsoft Office"
 ###############################################################################
 # checks only word
-softpath=`whichapp 'Microsoft Word'`
+softpath=`whichapp 'Microsoft Word'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  response='Y'
-  question "Microsoft Office is not installed. Do you want to download? [Y|n]" response
+  question "Microsoft Office is not installed. Do you want to download? [y|n]" response
 else
-  reponse='N'
-  question "Microsoft Office is already installed. Do you want to download again? [y|N]" response
+  question "Microsoft Office is already installed. Do you want to download again? [y|n]" response
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -125,13 +119,11 @@ botdone
 bot "Downloading Shapes"
 ###############################################################################
 # checks only word
-softpath=`whichapp 'Shapes'`
+softpath=`whichapp 'Shapes'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  response='Y'
-  question "Shapes is not installed. Do you want to download? [Y|n]" response
+  question "Shapes is not installed. Do you want to download? [y|n]" response
 else
-  reponse='N'
-  question "Shapes is already installed. Do you want to download again? [y|N]" response
+  question "Shapes is already installed. Do you want to download again? [y|n]" response
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -148,11 +140,9 @@ botdone
 bot "Downloading Tuxera NTFS"
 ###############################################################################
 if ! grep -F "Tuxera" ~/Library/Caches/com.apple.preferencepanes.cache > /dev/null 2>&1; then
-  response='Y'
-  question "Tuxera NTFS is not installed. Do you want to download? [Y|n]" response
+  question "Tuxera NTFS is not installed. Do you want to download? [y|n]" response
 else
-  reponse='N'
-  question "Tuxera NTFS is already installed. Do you want to download again? [y|N]" response
+  question "Tuxera NTFS is already installed. Do you want to download again? [y|n]" response
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
