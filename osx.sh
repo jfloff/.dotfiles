@@ -137,7 +137,7 @@ defaults write com.apple.systemuiserver menuExtras -array \
 ok
 
 running "Set battery menu bar item to show percentage"
-defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+defaults write com.apple.menuextra.battery ShowPercent -string "YES";ok
 
 running "Automatically quit printer app once the print jobs complete"
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true;ok

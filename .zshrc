@@ -1,3 +1,6 @@
+# for brew zsh-completions
+fpath=(/usr/local/share/zsh-completions $fpath)
+
 # Set to this to use case-sensitive completion
 export CASE_SENSITIVE="true"
 

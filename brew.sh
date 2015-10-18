@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Keep-alive: update existing sudo time stamp until the script has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
 ################################################
 bot "Setting up >Homebrew<"
 ################################################
@@ -54,9 +51,9 @@ fi
 
 # ask sensible information
 running "Opening Github tokens website ..."
-open "https://github.com/settings/tokens";ok
-question "Please input your github command line token: " githubtoken
-
+open "https://github.com/settings/tokens"; filler
+question "Please input your github command line token:" githubtoken
+ok
 # build file
 running "Creating your .gitconfig.local file with sensible information"
 cat > .gitconfig.local <<EOL
@@ -88,7 +85,7 @@ require_brew zsh
 require_brew zsh-completions
 
 running "changing your login shell to zsh"
-chsh -s $(which zsh); ok
+sudo chsh -s $(which zsh); ok
 
 running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1

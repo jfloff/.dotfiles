@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Keep-alive: update existing sudo time stamp until the script has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
 ################################################
 bot "Setting up >Homebrew Cask<"
 ################################################
@@ -64,8 +61,6 @@ running "Installing & updating packages"; filler
 # strip packages of versions
 sed -i 's/@.*//' ./configs/atom-packages.txt > /dev/null 2>&1
 apm install --packages-file ./configs/atom-packages.txt;ok
-apm update --no-confirm
-
 botdone
 
 
@@ -251,7 +246,7 @@ require_cask cheatsheet
 #require_cask asepsis
 require_cask basictex
 require_cask skype
-require_cask kext-utility
+#require_cask kext-utility
 require_cask teamviewer
 require_cask gimp
 require_cask alinof-timer

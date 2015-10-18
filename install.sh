@@ -117,7 +117,9 @@ else
   sudo -p "" -v
 fi
 # Keep-alive: update existing sudo time stamp until the script has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+# while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+while true; do sudo -n true; sleep 60; done 2>/dev/null &
+sudoPID=$!
 
 ################################################
 # check if user wants sudo passwordless
@@ -160,7 +162,7 @@ symlinkifne .crontab
 popd > /dev/null 2>&1
 
 running "starting cron"
-sudo cron ~/.crontab;ok
+sudo cron ~/.crontab > /dev/null 2>&1 ;ok
 
 botdone
 
@@ -182,7 +184,7 @@ source ./casks.sh
 ################################################
 # "extras"
 ################################################
-source ./extras.sh
+source extras.sh
 
 ################################################
 bot "Cleaning up the mess ..."
@@ -193,11 +195,11 @@ brew cleanup > /dev/null 2>&1
 brew cask cleanup > /dev/null 2>&1
 ok
 
-running "Note that some of these changes require a logout/restart to take effect.\n
-Killing affected applications (so they can reboot)...."
+running "Note that some of these changes require a logout/restart to take effect. You can choose not to restart";ok
+running "Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" "iCal" \
-  "Transmission" "Atom" "Alfred 2"; do
+  "Dock" "Finder" "Mail" "Messages" "SystemUIServer" "iCal" "Transmission" "Atom" \
+   "Alfred 2" "The Unarchiver" "smcFanControl"; do
   killall "${app}" > /dev/null 2>&1
 done
 ok
@@ -231,8 +233,6 @@ item 2 "Enable LAN sync"
 filler
 item 1 "Set Alfred configuration:"
 item 2 "Remove Spotlight shortcut"
-item 2 "General: set hotkey to CMD-Space"
-item 2 "Appearance: OSX Yosemite Dark"
 filler
 item 1 "Set Mendeley configuration:"
 item 2 "File Organizer > Organize my files: ~/Dropbox/PhD Loff/rw"
@@ -244,6 +244,10 @@ item 2 "Import configuration file in ~/.dotfile/configs/texpad.settings.json"
 filler
 
 botdone
+
+# kills sudo
+kill -TERM $sudoPID
+sudo -k
 
 # kills caffeinate
 kill -INT $caff_pid

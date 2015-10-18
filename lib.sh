@@ -20,7 +20,7 @@ function ok() {
 }
 
 function botdone() {
-  echo -e "$COL_GREEN\[._.]/$COL_RESET - $COL_GREEN\xe2\x98\x85$COL_RESET Done!"
+  echo -e "$COL_GREEN\[^_^]/$COL_RESET - $COL_GREEN\xe2\x98\x85$COL_RESET Done!"
 }
 
 function filler() {
