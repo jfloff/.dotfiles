@@ -270,7 +270,7 @@ defaults write com.apple.dock persistent-apps -array-add '
       <key>file-data</key>
       <dict>
         <key>_CFURLString</key>
-        <string>/Applications/Atom.app</string>
+        <string>/Applications/iTerm.app</string>
         <key>_CFURLStringType</key>
         <integer>0</integer>
       </dict>
