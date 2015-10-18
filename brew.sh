@@ -85,7 +85,7 @@ require_brew zsh
 require_brew zsh-completions
 
 running "changing your login shell to zsh"
-sudo chsh -s $(which zsh); ok
+sudo chsh -s $(which zsh) > /dev/null 2>&1; ok
 
 running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
