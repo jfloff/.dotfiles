@@ -147,14 +147,13 @@ botdone
 ###############################################################################
 bot "Downloading Tuxera NTFS"
 ###############################################################################
-if ! grep -F "Tuxera" ~/Library/Caches/com.apple.preferencepanes.cache
-then
+if ! grep -F "Tuxera" ~/Library/Caches/com.apple.preferencepanes.cache > /dev/null 2>&1; then
   response='Y'
   question "Tuxera NTFS is not installed. Do you want to download? [Y|n]" response
 else
   reponse='N'
   question "Tuxera NTFS is already installed. Do you want to download again? [y|N]" response
-fi > /dev/null 2>&1
+fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Tuxera NTFS to ~/Downloads"; filler
