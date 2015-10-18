@@ -50,7 +50,7 @@ else
 fi
 
 # ask sensible information
-running "Opening Github tokens website ..."
+running "Opening Github tokens website"
 open "https://github.com/settings/tokens"; filler
 question "Please input your github command line token:" githubtoken
 ok

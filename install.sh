@@ -195,7 +195,7 @@ brew cleanup > /dev/null 2>&1
 brew cask cleanup > /dev/null 2>&1
 ok
 
-running "Note that some of these changes require a logout/restart to take effect. You can choose not to restart";ok
+msg "Note that some of these changes require a logout/restart to take effect."
 running "Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Dock" "Finder" "Mail" "Messages" "SystemUIServer" "iCal" "Transmission" "Atom" \
