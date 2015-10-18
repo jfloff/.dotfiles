@@ -3,11 +3,23 @@
 ###############################################################################
 bot "Setting up >Alfred 2<"
 ###############################################################################
-running "Installing Alfred 2"; filler
-pushd ~/Downloads > /dev/null 2>&1
-download https://www.dropbox.com/s/b8bwzhl7trj9rxx/alfred-2.8_414.zip
-open .
-popd > /dev/null 2>&1
+
+alfpath=`whichapp 'Alfred 2'`
+if [ $? == 1 ]; then
+  response='Y'
+  question "Alfred 2 is not installed. Do you want to download? [Y|n]" response
+else
+  reponse='N'
+  question "Alfred 2 is already installed. Do you want to download again? [y|N]" response
+fi
+
+if [[ $response =~ ^(yes|y|Y) ]]; then
+  running "Downloading Alfred 2 to ~/Downloads"; filler
+  pushd ~/Downloads > /dev/null 2>&1
+  download https://www.dropbox.com/s/b8bwzhl7trj9rxx/alfred-2.8_414.zip
+  open .
+  popd > /dev/null 2>&1
+fi
 
 question "Is Alfred correctly installed? [y|N]" response
 if [[ $response =~ ^(yes|y|Y) ]];then
@@ -30,7 +42,8 @@ if [[ $response =~ ^(yes|y|Y) ]];then
 
     # mini-script so we can link our local-preferences to the ones created by Alfred
     pushd Alfred.alfredpreferences/preferences/local/ > /dev/null 2>&1
-    inumber=`stat -c '%i' ../local-preferences`
+    # uses mac stat since gnu stat doesn't have -f option and mac doesnt have -c
+    inumber=`/usr/bin/stat -f '%i' ../local-preferences`
     # searches for any file in this dir (assuming any file here is already linked)
     search=`find . -inum $inumber 2> /dev/null`
     if [[ -z $search ]] ; then
@@ -64,17 +77,78 @@ botdone
 
 
 ###############################################################################
-bot "Downloading custom link software"
+bot "Downloading Texpad"
 ###############################################################################
-pushd ~/Downloads > /dev/null 2>&1
-download https://www.dropbox.com/s/t85ydbgero0p7ge/texpad-1716.zip
+softpath=`whichapp 'Texpad'`
+if [ $? == 1 ]; then
+  response='Y'
+  question "Texpad is not installed. Do you want to download? [Y|n]" response
+else
+  reponse='N'
+  question "Texpad is already installed. Do you want to download again? [y|N]" response
+fi
+
+if [[ $response =~ ^(yes|y|Y) ]]; then
+  running "Downloading Texpad to ~/Downloads"; filler
+  pushd ~/Downloads > /dev/null 2>&1
+  download https://www.dropbox.com/s/t85ydbgero0p7ge/texpad-1716.zip
+  open .
+  popd > /dev/null 2>&1
+fi
+botdone
+
+
+###############################################################################
+bot "Downloading Microsoft Office"
+###############################################################################
+# checks only word
+softpath=`whichapp 'Microsoft Word'`
+if [ $? == 1 ]; then
+  response='Y'
+  question "Microsoft Office is not installed. Do you want to download? [Y|n]" response
+else
+  reponse='N'
+  question "Microsoft Office is already installed. Do you want to download again? [y|N]" response
+fi
+
+if [[ $response =~ ^(yes|y|Y) ]]; then
+  running "Downloading Microsoft Office to ~/Downloads"; filler
+  pushd ~/Downloads > /dev/null 2>&1
+  download https://www.dropbox.com/s/zr8fzj6ppp40ci9/msoffice-2016-15.14.0.zip
+  open .
+  popd > /dev/null 2>&1
+fi
+botdone
+
+
+###############################################################################
+bot "Downloading Shapes"
+###############################################################################
+# checks only word
+softpath=`whichapp 'Shapes'`
+if [ $? == 1 ]; then
+  response='Y'
+  question "Shapes is not installed. Do you want to download? [Y|n]" response
+else
+  reponse='N'
+  question "Shapes is already installed. Do you want to download again? [y|N]" response
+fi
+
+if [[ $response =~ ^(yes|y|Y) ]]; then
+  running "Downloading Shapes to ~/Downloads"; filler
+  pushd ~/Downloads > /dev/null 2>&1
+  download https://www.dropbox.com/s/w7d6mqenbg79lai/shapes-4.34.zip?dl=0
+  open .
+  popd > /dev/null 2>&1
+fi
+botdone
+
+
+###############################################################################
+# Other Downloads
+###############################################################################
 download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip
-download https://www.dropbox.com/s/zr8fzj6ppp40ci9/msoffice-2016-15.14.0.zip
-download https://www.dropbox.com/s/w7d6mqenbg79lai/shapes-4.34.zip?dl=0
 # tom tom GPS
 # download http://cdn.sa.services.tomtom.com/static/sa/Mac/MyDriveConnect.dmg
 
 # unzips all and opens dir in finder so we can install
-open .
-popd > /dev/null 2>&1
-botdone

@@ -34,14 +34,8 @@ botdone
 ################################################
 bot "Setting up >Atom<"
 ################################################
+# Rememver: cask already install the shell tools
 require_cask atom
-
-# emulate the 'install shell commands' from inside atom
-running "Installing Atom Shell Tools"
-sudo rm /usr/local/bin/apm
-ln -s /Applications/Atom.app/Contents/Resources/app/apm/node_modules/.bin/apm /usr/local/bin/apm
-sudo rm /usr/local/bin/atom
-ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom;ok
 
 # theres instances when the .atom folder is not createad right away
 if [[ ! -e ~/.atom ]]; then
@@ -127,6 +121,15 @@ botdone
 bot "Setting up >The Unarchiver<"
 ###############################################################################
 require_cask the-unarchiver
+# opens and closes unarchiver untill the preferences are loaded
+uncpath=`whichapp 'The Unarchiver'`
+open "$uncpath"
+# waiting for The Unarchiver to create file
+while true; do
+  sleep 1
+  [ ! -f ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist ] || break
+done
+killall 'The Unarchiver'
 
 running "Set to extract archives to same folder as the archive"
 defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist extractionDestination -int 1;ok
@@ -167,6 +170,16 @@ botdone
 bot "Installing >smcFanControl<"
 ###############################################################################
 require_cask smcfancontrol
+
+# opens and closes unarchiver untill the preferences are loaded
+smcpath=`whichapp 'smcFanControl'`
+open "$smcpath"
+# waiting for smcFanControl to create file
+while true; do
+  sleep 1
+  [ ! -f ~/Library/Preferences/com.eidac.smcFanControl2.plist ] || break
+done
+killall 'smcFanControl'
 
 running "Start at login"
 defaults write com.eidac.smcFanControl2 AutoStart -bool true; ok
@@ -221,20 +234,6 @@ botdone
 
 
 ###############################################################################
-bot "Installing >AppTrap<"
-###############################################################################
-require_cask apptrap
-
-running "Add to system startup"
-if ! grep -F "AppTrap" ~/Library/Preferences/com.apple.loginitems.plist
-then
-  osascript -e 'tell application "System Events" to make new login item at end with properties {path:"/Applications/AppTrap.app", name:"AppTrap", hidden:true}';ok
-fi > /dev/null 2>&1
-ok;
-botdone;
-
-
-###############################################################################
 bot "Installing remaining casks"
 ###############################################################################
 require_cask spotify
@@ -251,6 +250,13 @@ require_cask teamviewer
 require_cask gimp
 require_cask alinof-timer
 
+require_cask apptrap
+# running "Add to system startup"
+# if ! grep -F "AppTrap" ~/Library/Preferences/com.apple.loginitems.plist
+# then
+#   osascript -e 'tell application "System Events" to make new login item at end with properties {path:"/Applications/AppTrap.app", name:"AppTrap", hidden:true}';ok
+# fi > /dev/null 2>&1
+# ok;
 
 # commented out casks
 #require_cask diffmerge

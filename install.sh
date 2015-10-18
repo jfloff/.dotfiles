@@ -214,10 +214,16 @@ item 2 "Keynote"
 item 2 "Numbers"
 item 2 "Pages"
 filler
+item 1 "Set Spotlight configuration:"
+item 2 "Remove Spotlight shortcut"
+filler
 item 1 "Set Finder settings"
 item 2 "Remove tags from the sidebar by unselecting all"
 item 2 "Remove 'All My Files', 'Movies', 'Music' and 'Pictures' from sidebar"
 item 2 "Add folders to sidebar: 'PhD', 'Code'"
+filler
+item 1 "Set Network settings:"
+item 2 "Add University VPN"
 filler
 item 1 "Set iCloud settings:"
 item 2 "Disable Safari and Mail sync"
@@ -231,9 +237,6 @@ item 2 "Do not enable camera uploads"
 item 2 "Share screenshots using Dropbox"
 item 2 "Enable LAN sync"
 filler
-item 1 "Set Alfred configuration:"
-item 2 "Remove Spotlight shortcut"
-filler
 item 1 "Set Mendeley configuration:"
 item 2 "File Organizer > Organize my files: ~/Dropbox/PhD Loff/rw"
 item 2 "File Organizer > Sort files into subfolders > Folder path: Year"
@@ -241,6 +244,10 @@ item 2 "File Organizer > Rename document files > Filename: Author Year Title"
 filler
 item 1 "Set Texpad configuration:"
 item 2 "Import configuration file in ~/.dotfile/configs/texpad.settings.json"
+filler
+item 1 "Set AppTrap configuration:"
+item 2 "Start AppTrap"
+item 2 "Select to start at login"
 filler
 
 botdone

@@ -7,7 +7,8 @@ running "checking homebrew install"
 brew_bin=$(which brew) 2>&1 > /dev/null
 if [[ $? != 0 ]]; then
   action "installing homebrew"
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  # redirect input so we bypass the prompt: http://stackoverflow.com/a/25535532/1700053
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null
   if [[ $? != 0 ]]; then
     error "unable to install homebrew, script $0 abort!"
     exit -1
@@ -85,7 +86,7 @@ require_brew zsh
 require_brew zsh-completions
 
 running "changing your login shell to zsh"
-sudo chsh -s $(which zsh) > /dev/null 2>&1; ok
+chsh -s $(which zsh) > /dev/null 2>&1; ok
 
 running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
