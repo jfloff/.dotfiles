@@ -145,9 +145,30 @@ botdone
 
 
 ###############################################################################
+bot "Downloading Tuxera NTFS"
+###############################################################################
+if ! grep -F "Tuxera" ~/Library/Caches/com.apple.preferencepanes.cache
+then
+  response='Y'
+  question "Tuxera NTFS is not installed. Do you want to download? [Y|n]" response
+else
+  reponse='N'
+  question "Tuxera NTFS is already installed. Do you want to download again? [y|N]" response
+fi > /dev/null 2>&1
+
+if [[ $response =~ ^(yes|y|Y) ]]; then
+  running "Downloading Tuxera NTFS to ~/Downloads"; filler
+  pushd ~/Downloads > /dev/null 2>&1
+  download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip
+  open .
+  popd > /dev/null 2>&1
+fi
+botdone
+
+
+###############################################################################
 # Other Downloads
 ###############################################################################
-download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip
 # tom tom GPS
 # download http://cdn.sa.services.tomtom.com/static/sa/Mac/MyDriveConnect.dmg
 
