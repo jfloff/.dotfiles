@@ -117,9 +117,7 @@ else
   sudo -p "" -v
 fi
 # Keep-alive: update existing sudo time stamp until the script has finished
-# while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-while true; do sudo -n true; sleep 60; done 2>/dev/null &
-sudoPID=$!
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ################################################
 # check if user wants sudo passwordless
@@ -177,20 +175,20 @@ source ./brew.sh
 source ./osx.sh
 
 ################################################
-# brew-cask
+# brew cask
 ################################################
 source ./casks.sh
 
 ################################################
-# "extras"
+# "extra" software
 ################################################
 source extras.sh
 
 ################################################
-bot "Cleaning up the mess ..."
+bot "Cleaning up the mess"
 ################################################
 # Remove outdated versions from the cellar
-running "Cleaning up homebrew cache..."
+running "Cleaning up homebrew cache"
 brew cleanup > /dev/null 2>&1
 brew cask cleanup > /dev/null 2>&1
 ok
@@ -252,12 +250,8 @@ filler
 
 botdone
 
-# kills sudo
-kill -TERM $sudoPID
-sudo -k
-
 # kills caffeinate
-kill -INT $caff_pid
+kill $caff_pid > /dev/null 2>&1
 
 ################################################
 bot "Woot! All done."

@@ -129,7 +129,7 @@ while true; do
   sleep 1
   [ ! -f ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist ] || break
 done
-killall 'The Unarchiver'
+killall 'The Unarchiver' > /dev/null 2>&1
 
 running "Set to extract archives to same folder as the archive"
 defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist extractionDestination -int 1;ok
@@ -172,14 +172,13 @@ bot "Installing >smcFanControl<"
 require_cask smcfancontrol
 
 # opens and closes unarchiver untill the preferences are loaded
-smcpath=`whichapp 'smcFanControl'`
-open "$smcpath"
+open "/Applications/smcFanControl.app"
 # waiting for smcFanControl to create file
 while true; do
   sleep 1
   [ ! -f ~/Library/Preferences/com.eidac.smcFanControl2.plist ] || break
 done
-killall 'smcFanControl'
+killall 'smcFanControl' > /dev/null 2>&1
 
 running "Start at login"
 defaults write com.eidac.smcFanControl2 AutoStart -bool true; ok

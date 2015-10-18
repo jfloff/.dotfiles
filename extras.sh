@@ -59,7 +59,7 @@ if [[ $response =~ ^(yes|y|Y) ]];then
           [[ -z $lastdir ]] || break
         done
         # kills alfred after so we can safely link local preferences
-        killall 'Alfred 2'
+        killall 'Alfred 2' > /dev/null 2>&1
       fi
       # removes created Alfred directory
       rm -rf "$lastdir"
