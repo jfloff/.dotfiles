@@ -140,6 +140,28 @@ botdone
 
 
 ###############################################################################
+bot "Installing >The Unarchiver<"
+###############################################################################
+require_cask the-unarchiver
+
+# Work on El Capitan but for YOSEMITE it creates a "special file"
+# somehwere the ~/Library/Containers folder
+running "Set to extract archives to same folder as the archive"
+defaults write cx.c3.theunarchiver extractionDestination -int 1;ok
+
+running "Set the modification date of the created folder to the modification date of the archive file"
+defaults write cx.c3.theunarchiver folderModifiedDate -int 2;ok
+
+running "Delete archive after extraction"
+defaults write cx.c3.theunarchiver deleteExtractedArchive -bool true;ok
+
+running "Do not open folder afer extraction"
+defaults write cx.c3.theunarchiver openExtractedFolder -bool false;ok
+
+botdone
+
+
+###############################################################################
 bot "Installing >smcFanControl<"
 ###############################################################################
 require_cask smcfancontrol
@@ -213,6 +235,7 @@ require_cask dockertoolbox
 require_cask sqlitebrowser
 require_cask vlc
 require_cask cheatsheet
+open /Applications/CheatSheet.app
 # not working under El Capitan :(
 #require_cask asepsis
 require_cask basictex
@@ -223,35 +246,13 @@ require_cask gimp
 require_cask alinof-timer
 
 require_cask apptrap
+open ~/Library/PreferencePanes/AppTrap.prefPane
 # running "Add to system startup"
 # if ! grep -F "AppTrap" ~/Library/Preferences/com.apple.loginitems.plist
 # then
 #   osascript -e 'tell application "System Events" to make new login item at end with properties {path:"/Applications/AppTrap.app", name:"AppTrap", hidden:true}';ok
 # fi > /dev/null 2>&1
 # ok;
-
-require_cask the-unarchiver
-# ONLY WORKS ON YOSEMITE
-# opens and closes unarchiver untill the preferences are loaded
-# waiting for The Unarchiver to create file
-# open "/Applications/The Unarchiver.app"
-# while true; do
-#   sleep 1
-#   [ ! -f ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist ] || break
-# done
-# killall 'The Unarchiver' > /dev/null 2>&1
-#
-# running "Set to extract archives to same folder as the archive"
-# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist extractionDestination -int 1;ok
-#
-# running "Set the modification date of the created folder to the modification date of the archive file"
-# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist folderModifiedDate -int 2;ok
-#
-# running "Delete archive after extraction"
-# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist deleteExtractedArchive -bool true;ok
-#
-# running "Do not open folder afer extraction"
-# defaults write ~/Library/Containers/cx.c3.theunarchiver/Data/Library/Preferences/cx.c3.theunarchiver.plist openExtractedFolder -bool false;ok
 
 # commented out casks
 #require_cask diffmerge
@@ -265,11 +266,6 @@ require_cask the-unarchiver
 #require_cask chefdk
 # vagrant for running dev environments using docker images
 #require_cask vagrant # # | grep Caskroom | sed "s/.*'\(.*\)'.*/open \1\/Vagrant.pkg/g" | sh
-
-
-# Cracked applications - I've yet to find a solution
-# $ brew cask install alfred
-# brew cask alfred link
 
 ################################################
 bot "Installing >Quicklook plugins<"

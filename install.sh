@@ -182,7 +182,7 @@ source ./casks.sh
 ################################################
 # "extra" software
 ################################################
-source extras.sh
+source ./extras.sh
 
 ################################################
 bot "Cleaning up the mess"
@@ -251,7 +251,8 @@ filler
 botdone
 
 # kills caffeinate
-kill $caff_pid > /dev/null 2>&1
+kill $caff_pid
+wait $caff_pid 2>/dev/null
 
 ################################################
 bot "Woot! All done."

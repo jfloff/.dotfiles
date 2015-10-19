@@ -6,9 +6,11 @@ bot "Setting up >Alfred 2<"
 
 alfpath=`whichapp 'Alfred 2'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  question "Alfred 2 is not installed. Do you want to download? [y|n]" response
+  question "Alfred 2 is not installed. Do you want to download? [Y|n]" response
+  if [[ -z "$response" ]]; then response='Y'; fi
 else
-  question "Alfred 2 is already installed. Do you want to download again? [y|n]" response
+  question "Alfred 2 is already installed. Do you want to download again? [y|N]" response
+  if [[ -z "$response" ]]; then response='N'; fi
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -79,9 +81,11 @@ bot "Downloading Texpad"
 ###############################################################################
 softpath=`whichapp 'Texpad'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  question "Texpad is not installed. Do you want to download? [y|n]" response
+  question "Texpad is not installed. Do you want to download? [Y|n]" response
+  if [[ -z "$response" ]]; then response='Y'; fi
 else
-  question "Texpad is already installed. Do you want to download again? [y|n]" response
+  question "Texpad is already installed. Do you want to download again? [y|N]" response
+  if [[ -z "$response" ]]; then response='N'; fi
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -100,9 +104,11 @@ bot "Downloading Microsoft Office"
 # checks only word
 softpath=`whichapp 'Microsoft Word'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  question "Microsoft Office is not installed. Do you want to download? [y|n]" response
+  question "Microsoft Office is not installed. Do you want to download? [Y|n]" response
+  if [[ -z "$response" ]]; then response='Y'; fi
 else
-  question "Microsoft Office is already installed. Do you want to download again? [y|n]" response
+  question "Microsoft Office is already installed. Do you want to download again? [y|N]" response
+  if [[ -z "$response" ]]; then response='N'; fi
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -121,9 +127,11 @@ bot "Downloading Shapes"
 # checks only word
 softpath=`whichapp 'Shapes'` > /dev/null 2>&1
 if [ $? == 1 ]; then
-  question "Shapes is not installed. Do you want to download? [y|n]" response
+  question "Shapes is not installed. Do you want to download? [Y|n]" response
+  if [[ -z "$response" ]]; then response='Y'; fi
 else
-  question "Shapes is already installed. Do you want to download again? [y|n]" response
+  question "Shapes is already installed. Do you want to download again? [y|N]" response
+  if [[ -z "$response" ]]; then response='N'; fi
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
@@ -140,9 +148,11 @@ botdone
 bot "Downloading Tuxera NTFS"
 ###############################################################################
 if ! grep -F "Tuxera" ~/Library/Caches/com.apple.preferencepanes.cache > /dev/null 2>&1; then
-  question "Tuxera NTFS is not installed. Do you want to download? [y|n]" response
+  question "Tuxera NTFS is not installed. Do you want to download? [Y|n]" response
+  if [[ -z "$response" ]]; then response='Y'; fi
 else
-  question "Tuxera NTFS is already installed. Do you want to download again? [y|n]" response
+  question "Tuxera NTFS is already installed. Do you want to download again? [y|N]" response
+  if [[ -z "$response" ]]; then response='N'; fi
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]]; then
