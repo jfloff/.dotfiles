@@ -193,11 +193,11 @@ brew cleanup > /dev/null 2>&1
 brew cask cleanup > /dev/null 2>&1
 ok
 
-msg "Note that some of these changes require a logout/restart to take effect."
+msg "Note that some of these changes require a logout/restart to take effect."; filler
 running "Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Dock" "Finder" "Mail" "Messages" "SystemUIServer" "iCal" "Transmission" "Atom" \
-   "Alfred 2" "The Unarchiver" "smcFanControl"; do
+  "The Unarchiver" "smcFanControl"; do
   killall "${app}" > /dev/null 2>&1
 done
 ok
@@ -243,14 +243,13 @@ filler
 item 1 "Set Texpad configuration:"
 item 2 "Import configuration file in ~/.dotfile/configs/texpad.settings.json"
 filler
-item 1 "Set AppTrap configuration:"
-item 2 "Start AppTrap"
-item 2 "Select to start at login"
-filler
+item 1 "Extra apps:"
+item 2 "Add to firewall"
 
 botdone
 
 # kills caffeinate
+# TODO Outputing the terminated message
 kill $caff_pid
 wait $caff_pid 2>/dev/null
 

@@ -353,6 +353,8 @@ defaults write com.apple.dock persistent-others -array-add '
   <dict>
     <key>tile-data</key>
     <dict>
+      <key>arrangement</key>
+      <integer>2</integer>
       <key>file-data</key>
       <dict>
         <key>_CFURLString</key>
@@ -511,42 +513,42 @@ bot "Configuring System Preferences > Spotlight"
 ###############################################################################
 # None of these settings is working under El Capitan
 
-# running "Remove spotlight keyboard shortcut"
-# sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 524288); type = 'standard'; }; }";ok
+running "Remove spotlight keyboard shortcut"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "enabled = 0; value = { parameters = (65535, 49, 1048576); type = standard;};";ok
 
 # not working under El Capitan - needs a weird hack going into Recovery Mode
 #running "Hide Spotlight tray-icon (and subsequent helper)"
 #sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search;ok
 
-#running "Disable Spotlight indexing for any volume that gets mounted and has not yet been indexed"
+running "Disable Spotlight indexing for any volume that gets mounted and has not yet been indexed"
 # Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
-#sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes";ok
+sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes";ok
 
-# running "Change indexing order and disable some file types from being indexed"
-# defaults write com.apple.spotlight orderedItems -array \
-#   '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-#   '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
-#   '{"enabled" = 1;"name" = "DIRECTORIES";}' \
-#   '{"enabled" = 1;"name" = "PDF";}' \
-#   '{"enabled" = 1;"name" = "FONTS";}' \
-#   '{"enabled" = 1;"name" = "DOCUMENTS";}' \
-#   '{"enabled" = 0;"name" = "MESSAGES";}' \
-#   '{"enabled" = 0;"name" = "CONTACT";}' \
-#   '{"enabled" = 1;"name" = "EVENT_TODO";}' \
-#   '{"enabled" = 1;"name" = "IMAGES";}' \
-#   '{"enabled" = 0;"name" = "BOOKMARKS";}' \
-#   '{"enabled" = 0;"name" = "MUSIC";}' \
-#   '{"enabled" = 1;"name" = "MOVIES";}' \
-#   '{"enabled" = 1;"name" = "PRESENTATIONS";}' \
-#   '{"enabled" = 1;"name" = "SPREADSHEETS";}' \
-#   '{"enabled" = 0;"name" = "SOURCE";}' \
-#   '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-#   '{"enabled" = 0;"name" = "MENU_OTHER";}' \
-#   '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
-#   '{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
-#   '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
-#   '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}';ok
-#
+running "Change indexing order and disable some file types from being indexed"
+defaults write com.apple.spotlight orderedItems -array \
+  '{"enabled" = 1;"name" = "APPLICATIONS";}' \
+  '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
+  '{"enabled" = 1;"name" = "DIRECTORIES";}' \
+  '{"enabled" = 1;"name" = "PDF";}' \
+  '{"enabled" = 1;"name" = "FONTS";}' \
+  '{"enabled" = 1;"name" = "DOCUMENTS";}' \
+  '{"enabled" = 0;"name" = "MESSAGES";}' \
+  '{"enabled" = 0;"name" = "CONTACT";}' \
+  '{"enabled" = 1;"name" = "EVENT_TODO";}' \
+  '{"enabled" = 1;"name" = "IMAGES";}' \
+  '{"enabled" = 0;"name" = "BOOKMARKS";}' \
+  '{"enabled" = 0;"name" = "MUSIC";}' \
+  '{"enabled" = 1;"name" = "MOVIES";}' \
+  '{"enabled" = 1;"name" = "PRESENTATIONS";}' \
+  '{"enabled" = 1;"name" = "SPREADSHEETS";}' \
+  '{"enabled" = 0;"name" = "SOURCE";}' \
+  '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+  '{"enabled" = 0;"name" = "MENU_OTHER";}' \
+  '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
+  '{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
+  '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
+  '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}';ok
+
 # running "Load new settings before rebuilding the index"
 # killall mds > /dev/null 2>&1;ok
 #

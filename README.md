@@ -51,3 +51,5 @@ Please refer to the [Contributor Covenant](https://github.com/atomantic/dotfiles
 # TODO
 
 * Add VPN
+* iterm 2: Switch from copying settings to "defaults write"
+* finder: update more preferences

@@ -6,6 +6,7 @@ bot "Setting up >Homebrew Cask<"
 running "checking brew-cask install"
 output=$(brew tap | grep cask)
 if [[ $? != 0 ]]; then
+  filler
   require_brew caskroom/cask/brew-cask
 else
   echo -n "already installed "
@@ -17,6 +18,9 @@ ok; botdone
 ###############################################################################
 bot "Setting up >Google Chrome<"
 ###############################################################################
+# checks if google chrome was already installed
+firstinstall=`whichapp 'Google Chrome' > /dev/null 2>&1; echo $?`
+
 require_cask google-chrome
 
 running "Allow installing user scripts via GitHub Gist or Userscripts.org"
@@ -28,6 +32,10 @@ defaults write com.google.Chrome DisablePrintPreview -bool true;ok
 running "Expand the print dialog by default"
 defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
 
+# if first installation, opens
+if [ $firstinstall == 1 ]; then
+  open "/Applications/Google Chrome.app"
+fi
 botdone
 
 
@@ -120,6 +128,9 @@ botdone
 ###############################################################################
 bot "Installing >Mendeley<"
 ###############################################################################
+# checks if was already installed
+firstinstall=`whichapp 'Mendeley Desktop' > /dev/null 2>&1; echo $?`
+
 require_cask mendeley-desktop
 
 running "Enabling Bibtex sync"
@@ -136,6 +147,11 @@ defaults write com.mendeley.Mendeley\ Desktop BibtexSync.syncMode -string "Singl
 
 running "Setting Bibtex sync folder"
 defaults write com.mendeley.Mendeley\ Desktop BibtexSync.path -string "~/Dropbox/PhD Loff/rw";ok
+
+# if first installation, opens
+if [ $firstinstall == 1 ]; then
+  open "/Applications/Mendeley Desktop.app"
+fi
 botdone
 
 
@@ -219,23 +235,45 @@ botdone
 bot "Installing >Dropbox<"
 ###############################################################################
 require_cask dropbox
-
 running "Remove Dropbox’s green checkmark icons in Finder"
 file=/Applications/Dropbox.app/Contents/Resources/emblem-dropbox-uptodate.icns
 [ -e "${file}" ] && mv -f "${file}" "${file}.bak";ok
 
+open "/Applications/Dropbox.app"
 botdone
 
 
 ###############################################################################
 bot "Installing remaining casks"
 ###############################################################################
+# checks if  was already installed
+firstinstall=`whichapp 'Spotify' > /dev/null 2>&1; echo $?`
 require_cask spotify
+# if first installation, opens
+if [ $firstinstall == 1 ]; then
+  open "/Applications/Spotify.app"
+fi
+
+# checks if was already installed
+firstinstall=`whichapp 'CheatSheet' > /dev/null 2>&1; echo $?`
+require_cask cheatsheet
+# if first installation, opens
+if [ $firstinstall == 1 ]; then
+  open "/Applications/CheatSheet.app"
+fi
+
+# checks if was already installed
+if [ ! -f ~/Library/PreferencePanes/AppTrap.prefPane ]; then
+  $firstinstall = 1
+fi
+require_cask apptrap
+if [ $firstinstall == 1 ]; then
+  open "~/Library/PreferencePanes/AppTrap.prefPane"
+fi
+
 require_cask dockertoolbox
 require_cask sqlitebrowser
 require_cask vlc
-require_cask cheatsheet
-open /Applications/CheatSheet.app
 # not working under El Capitan :(
 #require_cask asepsis
 require_cask basictex
@@ -245,8 +283,6 @@ require_cask teamviewer
 require_cask gimp
 require_cask alinof-timer
 
-require_cask apptrap
-open ~/Library/PreferencePanes/AppTrap.prefPane
 # running "Add to system startup"
 # if ! grep -F "AppTrap" ~/Library/Preferences/com.apple.loginitems.plist
 # then
@@ -266,6 +302,9 @@ open ~/Library/PreferencePanes/AppTrap.prefPane
 #require_cask chefdk
 # vagrant for running dev environments using docker images
 #require_cask vagrant # # | grep Caskroom | sed "s/.*'\(.*\)'.*/open \1\/Vagrant.pkg/g" | sh
+
+botdone
+
 
 ################################################
 bot "Installing >Quicklook plugins<"

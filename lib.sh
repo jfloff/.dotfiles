@@ -71,7 +71,8 @@ function required_alfred_workflow() {
 
 function download() {
   running "downloading $1";filler
-  curl -#LO "$1"
+  # retry download until complete
+  curl -#LO "$1" --retry 999 --retry-max-time 0 -C -
   if [[ $? != 0 ]]; then
     error "failed to download $1!"
   fi

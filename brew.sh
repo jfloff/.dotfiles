@@ -6,6 +6,7 @@ bot "Setting up >Homebrew<"
 running "checking homebrew install"
 brew_bin=$(which brew) 2>&1 > /dev/null
 if [[ $? != 0 ]]; then
+  filler
   action "installing homebrew"
   # redirect input so we bypass the prompt: http://stackoverflow.com/a/25535532/1700053
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null
@@ -50,22 +51,27 @@ else
   sed -i 's/jfloff/'$(whoami)'/g' .zshrc;ok
 fi
 
-# ask sensible information
-running "Opening Github tokens website"
-open "https://github.com/settings/tokens"; filler
-question "Please input your github command line token:" githubtoken
-ok
-# build file
-running "Creating your .gitconfig.local file with sensible information"
-cat > .gitconfig.local <<EOL
-[github]
-  token = ${githubtoken}
-EOL
+running "Setting [github.token] parameter"; filler
+config=`git config -f .gitconfig.local github.token > /dev/null 2>&1`
+if [[ $? == 0 ]]; then
+  question "[github.token] configuration already found. Do you want to replace it? [y|N]" response
+else
+  response = 'Y'
+fi
+
+if [[ $response =~ ^(yes|y|Y) ]];then
+  running "Opening Github tokens website"
+  open "https://github.com/settings/tokens"; ok
+  question "Please input your github command line token:" githubtoken
+  running "Adding github token to your .gitconfig.local file"
+  git config -f .gitconfig.local github.token "$githubtoken"
+fi
 ok
 
 running "symlinking git dotfiles"; filler
 pushd ~ > /dev/null 2>&1
 symlinkifne .gitconfig
+symlinkifne .gitconfig.local
 symlinkifne .gitignore
 popd > /dev/null 2>&1
 
@@ -86,7 +92,7 @@ require_brew zsh
 require_brew zsh-completions
 
 running "changing your login shell to zsh"
-chsh -s $(which zsh) > /dev/null 2>&1; ok
+sudo chsh -s $(which zsh) $USER > /dev/null 2>&1; ok
 
 running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1

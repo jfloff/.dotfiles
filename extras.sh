@@ -4,7 +4,7 @@
 bot "Setting up >Alfred 2<"
 ###############################################################################
 
-alfpath=`whichapp 'Alfred 2'` > /dev/null 2>&1
+alfpath=`whichapp 'Alfred 2' > /dev/null 2>&1`
 if [ $? == 1 ]; then
   question "Alfred 2 is not installed. Do you want to download? [Y|n]" response
   if [[ -z "$response" ]]; then response='Y'; fi
@@ -23,7 +23,7 @@ fi
 
 question "Is Alfred correctly installed? [y|N]" response
 if [[ $response =~ ^(yes|y|Y) ]];then
-  alfpath=`whichapp 'Alfred 2'` > /dev/null 2>&1
+  alfpath=`whichapp 'Alfred 2' > /dev/null 2>&1`
   if [ $? == 1 ]; then
     msg "Alfred 2 is not yet installed! Skipping setting preferences. (Run me again after you've installed Alfred 2)"
   else
@@ -69,17 +69,18 @@ if [[ $response =~ ^(yes|y|Y) ]];then
       hln ../local-preferences "$lastdir"
     fi
     popd > /dev/null 2>&1
-
+    open "$alfpath"
     ok;
   fi
 fi
+
 botdone
 
 
 ###############################################################################
 bot "Downloading Texpad"
 ###############################################################################
-softpath=`whichapp 'Texpad'` > /dev/null 2>&1
+softpath=`whichapp 'Texpad' > /dev/null 2>&1`
 if [ $? == 1 ]; then
   question "Texpad is not installed. Do you want to download? [Y|n]" response
   if [[ -z "$response" ]]; then response='Y'; fi
@@ -91,7 +92,7 @@ fi
 if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Texpad to ~/Downloads"; filler
   pushd ~/Downloads > /dev/null 2>&1
-  download https://www.dropbox.com/s/t85ydbgero0p7ge/texpad-1716.zip
+  download https://www.dropbox.com/s/p0flbldsyplvldb/texpad-1.7.15.zip
   open .
   popd > /dev/null 2>&1
 fi
@@ -102,7 +103,7 @@ botdone
 bot "Downloading Microsoft Office"
 ###############################################################################
 # checks only word
-softpath=`whichapp 'Microsoft Word'` > /dev/null 2>&1
+softpath=`whichapp 'Microsoft Word' > /dev/null 2>&1`
 if [ $? == 1 ]; then
   question "Microsoft Office is not installed. Do you want to download? [Y|n]" response
   if [[ -z "$response" ]]; then response='Y'; fi
@@ -125,7 +126,7 @@ botdone
 bot "Downloading Shapes"
 ###############################################################################
 # checks only word
-softpath=`whichapp 'Shapes'` > /dev/null 2>&1
+softpath=`whichapp 'Shapes' > /dev/null 2>&1`
 if [ $? == 1 ]; then
   question "Shapes is not installed. Do you want to download? [Y|n]" response
   if [[ -z "$response" ]]; then response='Y'; fi
@@ -137,7 +138,7 @@ fi
 if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Shapes to ~/Downloads"; filler
   pushd ~/Downloads > /dev/null 2>&1
-  download https://www.dropbox.com/s/w7d6mqenbg79lai/shapes-4.34.zip?dl=0
+  download https://www.dropbox.com/s/w7d6mqenbg79lai/shapes-4.34.zip
   open .
   popd > /dev/null 2>&1
 fi
