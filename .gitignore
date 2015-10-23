@@ -56,4 +56,5 @@ pids
 ##########
 # script #
 ##########
-teste.sh # my tests
+# my tests
+teste.sh

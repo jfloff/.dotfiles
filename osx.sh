@@ -4,8 +4,20 @@
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ################################################
+bot "Updating >OSX<"
+################################################
+running "Enable software updates"
+sudo softwareupdate --schedule on &> /dev/null ;ok
+running "Checking software updates"
+softwareupdate -iva;ok
+botdone
+
+################################################
 bot "Configuring >Standard System Changes<"
 ################################################
+
+running "First we kill System Preferences so changes aren't overwritten"
+killall 'System Preferences' &> /dev/null ;ok
 
 ################################################
 # Computer Name
@@ -32,15 +44,12 @@ sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist > /d
 running "Set standby delay to 24 hours (default is 1 hour)"
 sudo pmset -a standbydelay 86400;ok
 
-running "Disable the sound effects on boot"
-sudo nvram SystemAudioVolume=" ";ok
+#running "Disable the sound effects on boot"
+#sudo nvram SystemAudioVolume=" ";ok
 
 ###############################################################################
 # SSD-specific tweaks                                                         #
 ###############################################################################
-
-running "Disable local Time Machine snapshots"
-sudo tmutil disablelocal;ok
 
 running "Disable hibernation (speeds up entering sleep mode)"
 sudo pmset -a hibernatemode 0;ok
@@ -155,6 +164,9 @@ defaults write com.apple.helpviewer DevMode -bool true;ok
 running "Reveal IP, hostname, OS, etc. when clicking clock in login window"
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName;ok
 
+running "Disable guest account form login window"
+sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false;ok
+
 # not woking under El Capitan
 #running "Disable Notification Center and remove the menu bar icon"
 #launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist > /dev/null 2>&1;ok
@@ -215,15 +227,11 @@ botdone
 bot "Configuring System Preferences > Dock & Mission Control"
 ################################################
 
-running "Wipe all (default) apps & folders icons from the Dock"
-# # This is only really useful when setting up a new Mac, or if you don’t use
-# # the Dock to launch apps.
+running "Set Dock apps and folders"
 defaults write com.apple.dock persistent-apps -array ""
-defaults write com.apple.dock persistent-others -array "";ok
-
+defaults write com.apple.dock persistent-others -array ""
 # Even though the symlink icon will appear fo casks, this situation should be temporary
 # since casks are starting to being MOVED and not SYMLINKED so soon this will all look good
-running "Add new apps & folders to the Dock"
 defaults write com.apple.dock persistent-apps -array-add '
   <dict>
     <key>tile-data</key>
@@ -514,7 +522,7 @@ bot "Configuring System Preferences > Spotlight"
 # None of these settings is working under El Capitan
 
 running "Remove spotlight keyboard shortcut"
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "enabled = 0; value = { parameters = (65535, 49, 1048576); type = standard;};";ok
+/usr/libexec/PlistBuddy -c "Set AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist;ok
 
 # not working under El Capitan - needs a weird hack going into Recovery Mode
 #running "Hide Spotlight tray-icon (and subsequent helper)"
@@ -525,38 +533,37 @@ running "Disable Spotlight indexing for any volume that gets mounted and has not
 sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes";ok
 
 running "Change indexing order and disable some file types from being indexed"
-defaults write com.apple.spotlight orderedItems -array \
-  '{"enabled" = 1;"name" = "APPLICATIONS";}' \
-  '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
-  '{"enabled" = 1;"name" = "DIRECTORIES";}' \
-  '{"enabled" = 1;"name" = "PDF";}' \
-  '{"enabled" = 1;"name" = "FONTS";}' \
-  '{"enabled" = 1;"name" = "DOCUMENTS";}' \
-  '{"enabled" = 0;"name" = "MESSAGES";}' \
-  '{"enabled" = 0;"name" = "CONTACT";}' \
-  '{"enabled" = 1;"name" = "EVENT_TODO";}' \
-  '{"enabled" = 1;"name" = "IMAGES";}' \
-  '{"enabled" = 0;"name" = "BOOKMARKS";}' \
-  '{"enabled" = 0;"name" = "MUSIC";}' \
-  '{"enabled" = 1;"name" = "MOVIES";}' \
-  '{"enabled" = 1;"name" = "PRESENTATIONS";}' \
-  '{"enabled" = 1;"name" = "SPREADSHEETS";}' \
-  '{"enabled" = 0;"name" = "SOURCE";}' \
-  '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-  '{"enabled" = 0;"name" = "MENU_OTHER";}' \
-  '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
-  '{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
-  '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
-  '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}';ok
+defaults delete com.apple.spotlight orderedItems
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>APPLICATIONS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>MENU_SPOTLIGHT_SUGGESTIONS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>MENU_CONVERSION</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>MENU_EXPRESSION</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>MENU_DEFINITION</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>SYSTEM_PREFS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>DOCUMENTS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>DIRECTORIES</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>PRESENTATIONS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>SPREADSHEETS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>PDF</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>MESSAGES</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>CONTACT</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>EVENT_TODO</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>IMAGES</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>BOOKMARKS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>MUSIC</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>MOVIES</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>FONTS</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>MENU_OTHER</string> </dict>'
+defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <false/> <key>name</key> <string>MENU_WEBSEARCH</string> </dict>'
+ok
 
-# running "Load new settings before rebuilding the index"
-# killall mds > /dev/null 2>&1;ok
-#
-# running "Make sure indexing is enabled for the main volume"
-# sudo mdutil -i on / > /dev/null;ok
-#
-# running "Rebuild the index from scratch"
-# sudo mdutil -E / > /dev/null;ok
+running "Rebuilding the index from scratch"
+# Load new settings before rebuilding the index
+killall mds > /dev/null 2>&1
+# Make sure indexing is enabled for the main volume
+sudo mdutil -i on / > /dev/null
+# rebuild index
+sudo mdutil -E / > /dev/null;ok
 
 botdone
 
@@ -629,12 +636,12 @@ running "Show Notification Center"
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 2;ok
 
 # other gestures
-running "Enabling other gestures"
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerVertSwipeGesture -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerPinchGesture -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFiveFingerPinchGesture -int 2;ok
+# running "Enabling other gestures"
+# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerVertSwipeGesture -int 2
+# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2
+# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerPinchGesture -int 2
+# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2
+# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFiveFingerPinchGesture -int 2;ok
 
 running "Show Mission Control"
 defaults write com.apple.dock showMissionControlGestureEnabled -bool true;ok
@@ -652,13 +659,13 @@ botdone
 
 
 ################################################
-bot "Configuring System Preferences > Sound"
+#bot "Configuring System Preferences > Sound"
 ################################################
 
 #running "Increase sound quality for Bluetooth headphones/headsets"
 #defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40;ok
 
-botdone
+#botdone
 
 
 ################################################
@@ -670,6 +677,9 @@ defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true;ok
+
+running "Hide recent tags from sidebar"
+defaults write com.apple.finder ShowRecentTags -bool false;ok
 
 #running "Allow quitting via ⌘ + Q; doing so will also hide desktop icons"
 #defaults write com.apple.finder QuitMenuItem -bool true;ok
@@ -802,6 +812,9 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true;ok
 running "Disable local Time Machine backups"
 hash tmutil &> /dev/null && sudo tmutil disablelocal;ok
 
+running "Disable local Time Machine snapshots"
+sudo tmutil disablelocal;ok
+
 botdone
 
 
@@ -850,7 +863,7 @@ botdone
 
 
 ###############################################################################
-bot "Configuring Mac App Store"
+#bot "Configuring Mac App Store"
 ###############################################################################
 
 #running "Enable the WebKit Developer Tools in the Mac App Store"
@@ -859,4 +872,4 @@ bot "Configuring Mac App Store"
 #running "Enable Debug Menu in the Mac App Store"
 #defaults write com.apple.appstore ShowDebugMenu -bool true;ok
 
-botdone
+#botdone

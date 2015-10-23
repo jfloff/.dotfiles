@@ -107,7 +107,7 @@ running "Github username set to '$COL_YELLOW$githubuser$COL_RESET'";ok
 botdone
 
 ################################################
-bot "Cheking sudo"
+bot "Checking sudo"
 ################################################
 if sudo -n true 2>/dev/null; then
   msg "Already has sudo";filler
@@ -141,13 +141,6 @@ fi
 ok
 
 botdone
-
-################################################
-bot "Updating >OSX<"
-################################################
-softwareupdate -iva
-botdone
-
 
 ################################################
 bot "Setting up >crontab nightly jobs<"
@@ -194,6 +187,7 @@ brew cask cleanup > /dev/null 2>&1
 ok
 
 msg "Note that some of these changes require a logout/restart to take effect."; filler
+msg "You should also NOT open System Preferences. It might overwrite some of the settings."; filler
 running "Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Dock" "Finder" "Mail" "Messages" "SystemUIServer" "iCal" "Transmission" "Atom" \
@@ -204,54 +198,55 @@ ok
 
 botdone
 
-###############################################################################
-bot "Unfortunately I can't setup everything :( Heres a list of things you need to manually do"
-###############################################################################
-item 1 "Installing from App Store:"
-item 2 "Keynote"
-item 2 "Numbers"
-item 2 "Pages"
+{
+  ###############################################################################
+  bot "Unfortunately I can't setup everything :( Heres a list of things you need to manually do"
+  ###############################################################################
+  item 1 "Installing from App Store:"
+  item 2 "Keynote"
+  item 2 "Numbers"
+  item 2 "Pages"
+  filler
+  item 1 "Set Finder settings"
+  item 2 "Remove 'All My Files', 'Movies', 'Music' and 'Pictures' from sidebar"
+  item 2 "Add folders to sidebar: 'PhD', 'Code'"
+  filler
+  item 1 "Set Network settings:"
+  item 2 "Add University VPN"
+  filler
+  item 1 "Set iCloud settings:"
+  item 2 "Disable Safari and Mail sync"
+  item 2 "Sign in for Facebook, Twitter, Linkedin, Google (Only select contacts)"
+  filler
+  item 1 "Set Dropbox configuration:"
+  item 2 "Show desktop notifications"
+  item 2 "Start dropbox on system startup"
+  item 2 "Selective Sync folders"
+  item 2 "Do not enable camera uploads"
+  item 2 "Share screenshots using Dropbox"
+  item 2 "Enable LAN sync"
+  filler
+  item 1 "Set Mendeley configuration:"
+  item 2 "File Organizer > Organize my files: ~/Dropbox/PhD Loff/rw"
+  item 2 "File Organizer > Sort files into subfolders > Folder path: Year"
+  item 2 "File Organizer > Rename document files > Filename: Author Year Title"
+  filler
+  item 1 "Set Texpad configuration:"
+  item 2 "Import configuration file in ~/Downloads/texpad.settings.json"
+  filler
+  item 1 "Extra apps:"
+  item 2 "Add to firewall"
+} | tee ~/Desktop/osxbot_manual.txt
+sed -e "s/\[32;01m//g; s/\[39;49;00m//g; s/\[35;01m//g" -i ~/Desktop/osxbot_manual.txt
 filler
-item 1 "Set Spotlight configuration:"
-item 2 "Remove Spotlight shortcut"
-filler
-item 1 "Set Finder settings"
-item 2 "Remove tags from the sidebar by unselecting all"
-item 2 "Remove 'All My Files', 'Movies', 'Music' and 'Pictures' from sidebar"
-item 2 "Add folders to sidebar: 'PhD', 'Code'"
-filler
-item 1 "Set Network settings:"
-item 2 "Add University VPN"
-filler
-item 1 "Set iCloud settings:"
-item 2 "Disable Safari and Mail sync"
-item 2 "Sign in for Facebook, Twitter, Linkedin, Google (Only select contacts)"
-filler
-item 1 "Set Dropbox configuration:"
-item 2 "Show desktop notifications"
-item 2 "Start dropbox on system startup"
-item 2 "Selective Sync folders"
-item 2 "Do not enable camera uploads"
-item 2 "Share screenshots using Dropbox"
-item 2 "Enable LAN sync"
-filler
-item 1 "Set Mendeley configuration:"
-item 2 "File Organizer > Organize my files: ~/Dropbox/PhD Loff/rw"
-item 2 "File Organizer > Sort files into subfolders > Folder path: Year"
-item 2 "File Organizer > Rename document files > Filename: Author Year Title"
-filler
-item 1 "Set Texpad configuration:"
-item 2 "Import configuration file in ~/.dotfile/configs/texpad.settings.json"
-filler
-item 1 "Extra apps:"
-item 2 "Add to firewall"
+msg "Manual instructions saved to '~/Desktop/osxbot_manual.txt'";filler
 
 botdone
 
 # kills caffeinate
 # TODO Outputing the terminated message
 kill $caff_pid
-wait $caff_pid 2>/dev/null
+wait $caff_pid &>/dev/null
 
 ################################################
 bot "Woot! All done."

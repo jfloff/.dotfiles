@@ -17,7 +17,6 @@ if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Alfred 2 to ~/Downloads"; filler
   pushd ~/Downloads > /dev/null 2>&1
   download https://www.dropbox.com/s/b8bwzhl7trj9rxx/alfred-2.8_414.zip
-  open .
   popd > /dev/null 2>&1
 fi
 
@@ -69,6 +68,7 @@ if [[ $response =~ ^(yes|y|Y) ]];then
       hln ../local-preferences "$lastdir"
     fi
     popd > /dev/null 2>&1
+    sudo codesign --force --deep --sign - "$alfpath" &> /dev/null
     open "$alfpath"
     ok;
   fi
@@ -93,8 +93,10 @@ if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Texpad to ~/Downloads"; filler
   pushd ~/Downloads > /dev/null 2>&1
   download https://www.dropbox.com/s/p0flbldsyplvldb/texpad-1.7.15.zip
-  open .
   popd > /dev/null 2>&1
+
+  running "Copying settings to ~/Downloads"
+  cp ./configs/texpad.settings.json ~/Downloads/ ;ok
 fi
 botdone
 
@@ -116,7 +118,6 @@ if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Microsoft Office to ~/Downloads"; filler
   pushd ~/Downloads > /dev/null 2>&1
   download https://www.dropbox.com/s/zr8fzj6ppp40ci9/msoffice-2016-15.14.0.zip
-  open .
   popd > /dev/null 2>&1
 fi
 botdone
@@ -139,7 +140,6 @@ if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Shapes to ~/Downloads"; filler
   pushd ~/Downloads > /dev/null 2>&1
   download https://www.dropbox.com/s/w7d6mqenbg79lai/shapes-4.34.zip
-  open .
   popd > /dev/null 2>&1
 fi
 botdone
@@ -160,7 +160,6 @@ if [[ $response =~ ^(yes|y|Y) ]]; then
   running "Downloading Tuxera NTFS to ~/Downloads"; filler
   pushd ~/Downloads > /dev/null 2>&1
   download https://www.dropbox.com/s/1pp7ai6q9dng33d/tuxera-nfts-2015.zip
-  open .
   popd > /dev/null 2>&1
 fi
 botdone
@@ -171,5 +170,3 @@ botdone
 ###############################################################################
 # tom tom GPS
 # download http://cdn.sa.services.tomtom.com/static/sa/Mac/MyDriveConnect.dmg
-
-# unzips all and opens dir in finder so we can install

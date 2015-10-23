@@ -9,3 +9,4 @@
     invisibles: {}
   "tabs-to-spaces":
     onSave: "untabify"
+  "xml-formatter": {}
