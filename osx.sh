@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
 
+whoami=`whoami`
+
 # Keep-alive: update existing sudo time stamp until the script has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ################################################
-bot "Updating >OSX<"
+bot "OSX Updates"
 ################################################
 running "Enable software updates"
+sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdateRestartRequired -bool true
 sudo softwareupdate --schedule on &> /dev/null ;ok
+
+running "Check for software updates daily, not just once per week"
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate ScheduleFrequency -int 1;ok
+
 running "Checking software updates"
 softwareupdate -iva;ok
 botdone
@@ -72,9 +79,6 @@ sudo systemsetup -setrestartfreeze on;ok
 
 #running "Never go into computer sleep mode"
 #sudo systemsetup -setcomputersleep Off > /dev/null;ok
-
-running "Check for software updates daily, not just once per week"
-defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1;ok
 
 running "Disable automatic termination of inactive apps"
 defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true;ok
@@ -147,6 +151,22 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo Hos
 running "Disable guest account form login window"
 sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false;ok
 
+running "Enable auto-login at my user"
+sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser -string "$whoami";ok
+
+running "Enable lock screen after auto-login"
+# check if its already loaded, if not forces loading
+if ! launchctl list | grep "com.osxbot.loginhook" &> /dev/null ; then
+  sed -e "s/\$WHOAMI/$whoami/g" ./configs/com.osxbot.loginhook.plist > ~/Library/LaunchAgents/com.osxbot.loginhook.plist
+  # execute commands before script ends
+  function finish {
+    # loading the loginhook
+    # actually is quite nice since we will be locking the screen right after
+    launchctl load ~/Library/LaunchAgents/com.osxbot.loginhook.plist
+  }
+  trap finish EXIT
+fi;ok
+
 running "Disable smart quotes as they’re annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false;ok
 
@@ -181,7 +201,7 @@ for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
     "/System/Library/CoreServices/Menu Extras/Volume.menu" \
     "/System/Library/CoreServices/Menu Extras/User.menu" \
     "/System/Library/CoreServices/Menu Extras/Bluetooth.menu"
-done;
+done;ok
 
 running "Show the Airport, VPN, Battery and Clock icons"
 defaults write com.apple.systemuiserver menuExtras -array \
