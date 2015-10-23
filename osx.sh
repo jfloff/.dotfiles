@@ -12,6 +12,7 @@ running "Checking software updates"
 softwareupdate -iva;ok
 botdone
 
+
 ################################################
 bot "Configuring >Standard System Changes<"
 ################################################
@@ -113,9 +114,6 @@ launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/nul
 #sudo rm -rf /System/Library/CoreServices/DefaultDesktop.jpg
 #sudo ln -s ~/.dotfiles/img/wallpaper.jpg /System/Library/CoreServices/DefaultDesktop.jpg;ok
 
-running "Menu bar: disable transparency"
-defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false;ok
-
 running "Increase window resize speed for Cocoa applications"
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001;ok
 
@@ -129,24 +127,6 @@ defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true;ok
 
 running "Save to disk (not to iCloud) by default"
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false;ok
-
-running "Menu bar: hide the Time Machine, Volume, User, and Bluetooth icons"
-for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
-  defaults write "${domain}" dontAutoLoad -array \
-    "/System/Library/CoreServices/Menu Extras/TimeMachine.menu" \
-    "/System/Library/CoreServices/Menu Extras/Volume.menu" \
-    "/System/Library/CoreServices/Menu Extras/User.menu" \
-    "/System/Library/CoreServices/Menu Extras/Bluetooth.menu"
-done;
-defaults write com.apple.systemuiserver menuExtras -array \
-  "/System/Library/CoreServices/Menu Extras/AirPort.menu" \
-  "/System/Library/CoreServices/Menu Extras/VPN.menu" \
-  "/System/Library/CoreServices/Menu Extras/Battery.menu" \
-  "/System/Library/CoreServices/Menu Extras/Clock.menu"
-ok
-
-running "Set battery menu bar item to show percentage"
-defaults write com.apple.menuextra.battery ShowPercent -string "YES";ok
 
 running "Automatically quit printer app once the print jobs complete"
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true;ok
@@ -166,10 +146,6 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo Hos
 
 running "Disable guest account form login window"
 sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false;ok
-
-# not woking under El Capitan
-#running "Disable Notification Center and remove the menu bar icon"
-#launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist > /dev/null 2>&1;ok
 
 running "Disable smart quotes as they’re annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false;ok
@@ -191,6 +167,51 @@ defaults write com.apple.screencapture disable-shadow -bool true;ok
 
 #running "Enable HiDPI display modes (requires restart)"
 #sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true;ok
+
+botdone
+
+
+################################################
+bot "Configuring Menu bar"
+################################################
+running "Hide the Time Machine, Volume, User, and Bluetooth icons"
+for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
+  defaults write "${domain}" dontAutoLoad -array \
+    "/System/Library/CoreServices/Menu Extras/TimeMachine.menu" \
+    "/System/Library/CoreServices/Menu Extras/Volume.menu" \
+    "/System/Library/CoreServices/Menu Extras/User.menu" \
+    "/System/Library/CoreServices/Menu Extras/Bluetooth.menu"
+done;
+
+running "Show the Airport, VPN, Battery and Clock icons"
+defaults write com.apple.systemuiserver menuExtras -array \
+  "/System/Library/CoreServices/Menu Extras/AirPort.menu" \
+  "/System/Library/CoreServices/Menu Extras/VPN.menu" \
+  "/System/Library/CoreServices/Menu Extras/Battery.menu" \
+  "/System/Library/CoreServices/Menu Extras/Clock.menu"
+ok
+
+running "Set battery icon to show percentage"
+defaults write com.apple.menuextra.battery ShowPercent -string "YES";ok
+
+running "Set clock to show as digital"
+defaults write com.apple.menuextra.clock IsAnalog -bool false;ok
+
+running "Disable seconds seperators flash on clock"
+defaults write com.apple.menuextra.clock FlashDateSeparators -bool false;ok
+
+running "Set clock to show in weekday, day and hour format"
+defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  HH:mm";ok
+
+running "Show VPN connected time"
+defaults write com.apple.networkConnect VPNShowTime -bool true;ok
+
+running "Disable menu bar transparency"
+defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false;ok
+
+# not woking under El Capitan
+#running "Disable Notification Center and remove the menu bar icon"
+#launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist > /dev/null 2>&1;ok
 
 botdone
 
