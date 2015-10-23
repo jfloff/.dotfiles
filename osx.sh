@@ -157,6 +157,11 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser -st
 running "Enable lock screen after auto-login"
 # check if its already loaded, if not forces loading
 if ! launchctl list | grep "com.osxbot.loginhook" &> /dev/null ; then
+  # create dir ... weird bug seen where this dir hasnt been created yet
+  # Just to make sure I touch the file aswell
+  mkdir ~/Library/LaunchAgents
+  touch ~/Library/LaunchAgents/com.osxbot.loginhook.plist
+  # replace the $WHOAMI  tag in the file with the current username
   sed -e "s/\$WHOAMI/$whoami/g" ./configs/com.osxbot.loginhook.plist > ~/Library/LaunchAgents/com.osxbot.loginhook.plist
   # execute commands before script ends
   function finish {
@@ -563,7 +568,22 @@ bot "Configuring System Preferences > Spotlight"
 # None of these settings is working under El Capitan
 
 running "Remove spotlight keyboard shortcut"
-/usr/libexec/PlistBuddy -c "Set AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist;ok
+{
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64 dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64:enabled bool" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Set AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64:value dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64:value:type string" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Set AppleSymbolicHotKeys:64:value:type standard" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64:value:parameters array" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64:value:parameters:0 integer" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64:value:parameters:1 integer" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Add AppleSymbolicHotKeys:64:value:parameters:2 integer" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Set AppleSymbolicHotKeys:64:value:parameters:0 65535" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Set AppleSymbolicHotKeys:64:value:parameters:1 49" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+  /usr/libexec/PlistBuddy -c "Set AppleSymbolicHotKeys:64:value:parameters:2 1048576" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+} &> /dev/null
+ok
 
 # not working under El Capitan - needs a weird hack going into Recovery Mode
 #running "Hide Spotlight tray-icon (and subsequent helper)"
@@ -574,7 +594,8 @@ running "Disable Spotlight indexing for any volume that gets mounted and has not
 sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes";ok
 
 running "Change indexing order and disable some file types from being indexed"
-defaults delete com.apple.spotlight orderedItems
+# delete might throw errow saying it does not exist
+defaults delete com.apple.spotlight orderedItems &> /dev/null
 defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>APPLICATIONS</string> </dict>'
 defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>MENU_SPOTLIGHT_SUGGESTIONS</string> </dict>'
 defaults write com.apple.spotlight orderedItems -array-add '<dict><key>enabled</key> <true/> <key>name</key> <string>MENU_CONVERSION</string> </dict>'
