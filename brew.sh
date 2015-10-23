@@ -56,7 +56,7 @@ config=`git config -f .gitconfig.local github.token > /dev/null 2>&1`
 if [[ $? == 0 ]]; then
   question "[github.token] configuration already found. Do you want to replace it? [y|N]" response
 else
-  response = 'Y'
+  response='Y'
 fi
 
 if [[ $response =~ ^(yes|y|Y) ]];then
