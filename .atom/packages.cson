@@ -13,5 +13,4 @@ packages: [
   "package-sync"
   "project-manager"
   "tabs-to-spaces"
-  "xml-formatter"
 ]
