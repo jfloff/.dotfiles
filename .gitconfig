@@ -50,6 +50,7 @@
   # most commonly used
   co = checkout
   c = commit
+  cm = commit -m
   cam = commit -a -m
   d = diff --color-words
   ph = push
