@@ -237,7 +237,8 @@ botdone
   item 1 "Extra apps:"
   item 2 "Add to firewall"
 } | tee ~/Desktop/osxbot_manual.txt
-sed -e "s/\[32;01m//g; s/\[39;49;00m//g; s/\[35;01m//g" -i ~/Desktop/osxbot_manual.txt
+# force mac version
+/usr/bin/sed -i '' -e "s/\[32;01m//g; s/\[39;49;00m//g; s/\[35;01m//g" ~/Desktop/osxbot_manual.txt
 filler
 msg "Manual instructions saved to '~/Desktop/osxbot_manual.txt'";filler
 
