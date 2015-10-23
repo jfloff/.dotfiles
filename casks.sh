@@ -19,8 +19,7 @@ ok; botdone
 bot "Setting up >Google Chrome<"
 ###############################################################################
 # checks if google chrome was already installed
-whichapp 'Google Chrome' > /dev/null 2>&1
-firstinstall=$?
+firstinstall=`brew cask list | grep "google-chrome" &> /dev/null ; echo $?`
 
 require_cask google-chrome
 
@@ -34,11 +33,10 @@ running "Expand the print dialog by default"
 defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
 
 # if first installation, opens
-if [[ $firstinstall == 1 ]]; then
+if [ $firstinstall == 1 ]; then
   open "/Applications/Google Chrome.app"
 fi
 botdone
-
 
 ################################################
 bot "Setting up >Atom<"
@@ -308,8 +306,7 @@ botdone
 bot "Installing >Mendeley<"
 ###############################################################################
 # checks if was already installed
-whichapp 'Mendeley Desktop' > /dev/null 2>&1
-firstinstall=$?
+firstinstall=`brew cask list | grep "mendeley-desktop" &> /dev/null ; echo $?`
 
 require_cask mendeley-desktop
 
@@ -334,6 +331,7 @@ if [[ $firstinstall == 1 ]]; then
 fi
 botdone
 
+exit
 
 ###############################################################################
 bot "Installing >The Unarchiver<"
@@ -432,9 +430,7 @@ botdone
 bot "Installing remaining casks"
 ###############################################################################
 # checks if  was already installed
-whichapp 'Spotify' > /dev/null 2>&1
-firstinstall=$?
-
+firstinstall=`brew cask list | grep "spotify" &> /dev/null ; echo $?`
 require_cask spotify
 # if first installation, opens
 if [[ $firstinstall == 1 ]]; then
@@ -442,9 +438,7 @@ if [[ $firstinstall == 1 ]]; then
 fi
 
 # checks if was already installed
-whichapp 'CheatSheet' > /dev/null 2>&1
-firstinstall=$?
-
+firstinstall=`brew cask list | grep "cheatsheet" &> /dev/null ; echo $?`
 require_cask cheatsheet
 # if first installation, opens
 if [[ $firstinstall == 1 ]]; then
@@ -452,12 +446,12 @@ if [[ $firstinstall == 1 ]]; then
 fi
 
 # checks if was already installed
-if [ ! -f ~/Library/PreferencePanes/AppTrap.prefPane ]; then
+if [ -f "$HOME/Library/PreferencePanes/AppTrap.prefPane" ]; then
   firstinstall=1
 fi
 require_cask apptrap
 if [[ $firstinstall == 1 ]]; then
-  open "~/Library/PreferencePanes/AppTrap.prefPane"
+  open "$HOME/Library/PreferencePanes/AppTrap.prefPane"
 fi
 
 require_cask dockertoolbox
