@@ -4,7 +4,7 @@
 bot "Setting up >Alfred 2<"
 ###############################################################################
 
-alfpath=`whichapp 'Alfred 2' > /dev/null 2>&1`
+alfpath=`whichapp 'Alfred 2' 2> /dev/null`
 if [ $? == 1 ]; then
   question "Alfred 2 is not installed. Do you want to download? [Y|n]" response
   if [[ -z "$response" ]]; then response='Y'; fi
@@ -22,7 +22,7 @@ fi
 
 question "Is Alfred correctly installed? [y|N]" response
 if [[ $response =~ ^(yes|y|Y) ]];then
-  alfpath=`whichapp 'Alfred 2' > /dev/null 2>&1`
+  alfpath=`whichapp 'Alfred 2' 2> /dev/null`
   if [ $? == 1 ]; then
     msg "Alfred 2 is not yet installed! Skipping setting preferences. (Run me again after you've installed Alfred 2)"
   else
@@ -68,7 +68,9 @@ if [[ $response =~ ^(yes|y|Y) ]];then
       hln ../local-preferences "$lastdir"
     fi
     popd > /dev/null 2>&1
+    # signs application so we avoid the anoying "Accesso to contacts error"
     sudo codesign --force --deep --sign - "$alfpath" &> /dev/null
+    sudo codesign --force --deep --sign - "$alfpath/Contents/Frameworks/Alfred Framework.framework/Versions/A/Alfred Framework" &> /dev/null
     open "$alfpath"
     ok;
   fi

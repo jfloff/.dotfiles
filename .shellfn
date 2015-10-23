@@ -55,6 +55,7 @@ whichapp() {
   osascript -e "tell application \"Finder\" to POSIX path of (get application file id \"$bundleId\" as alias)" 2>/dev/null ||
     { echo "$FUNCNAME: ERROR: Application with specified bundle ID not found: $bundleId" 1>&2; return 1; }
 }
+
 bundleid() {
   osascript -e "id of application \"$1\"" 2>/dev/null ||
     { echo "$FUNCNAME: ERROR: Application with specified name not found: $1" 1>&2; return 1; }
