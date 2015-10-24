@@ -5,20 +5,10 @@ whoami=`whoami`
 # Keep-alive: update existing sudo time stamp until the script has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-################################################
-bot "OSX Updates"
-################################################
-running "Enable software updates"
-sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdateRestartRequired -bool true
-sudo softwareupdate --schedule on &> /dev/null ;ok
-
-running "Check for software updates daily, not just once per week"
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate ScheduleFrequency -int 1;ok
-
-running "Checking software updates"
-softwareupdate -iva;ok
-botdone
-
+# Peforming updates would be kinda neat, but it was causing bugs with apps isntalled
+# after the software updates. It's better we avoid that.
+#running "Checking software updates"
+#softwareupdate -iva;ok
 
 ################################################
 bot "Configuring >Standard System Changes<"
@@ -85,6 +75,13 @@ defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true;ok
 
 running "Disable the crash reporter"
 defaults write com.apple.CrashReporter DialogType -string "none";ok
+
+running "Enable software updates"
+sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdateRestartRequired -bool true
+sudo softwareupdate --schedule on &> /dev/null ;ok
+
+running "Check for software updates daily, not just once per week"
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate ScheduleFrequency -int 1;ok
 
 botdone
 
