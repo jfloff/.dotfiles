@@ -214,6 +214,10 @@ botdone
   item 1 "Set Network settings:"
   item 2 "Add University VPN"
   filler
+  item 1 "Set User & Groups settings:"
+  item 2 "Enable auto login"
+  item 2 "Disable Guest account"
+  filler
   item 1 "Set iCloud settings:"
   item 2 "Disable Safari and Mail sync"
   item 2 "Sign in for Facebook, Twitter, Linkedin, Google (Only select contacts)"

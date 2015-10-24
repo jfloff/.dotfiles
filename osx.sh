@@ -148,11 +148,11 @@ defaults write com.apple.helpviewer DevMode -bool true;ok
 running "Reveal IP, hostname, OS, etc. when clicking clock in login window"
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName;ok
 
-running "Disable guest account form login window"
-sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false;ok
+#running "Disable guest account form login window"
+#sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false;ok
 
-running "Enable auto-login at my user"
-sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser -string "$whoami";ok
+#running "Enable auto-login at my user"
+#sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser -string "$whoami";ok
 
 running "Enable lock screen after auto-login"
 # check if its already loaded, if not forces loading
