@@ -163,6 +163,12 @@ running "Add MacOS word navigation and delete shortcuts"
   /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf703-0x300000 dict" ~/Library/Preferences/com.googlecode.iterm2.plist
   /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf703-0x300000:Action integer" ~/Library/Preferences/com.googlecode.iterm2.plist
   /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf703-0x300000:Text string" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf702-0x380000 dict" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf702-0x380000:Action integer" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf702-0x380000:Text string" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf703-0x380000 dict" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf703-0x380000:Action integer" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Add New\ Bookmarks:0:Keyboard\ Map:0xf703-0x380000:Text string" ~/Library/Preferences/com.googlecode.iterm2.plist
   # Keyboard Shortcut: ⌘←Delete
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0x7f-0x100000:Action 1" ~/Library/Preferences/com.googlecode.iterm2.plist
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0x7f-0x100000:Text '0x15'" ~/Library/Preferences/com.googlecode.iterm2.plist
@@ -172,7 +178,7 @@ running "Add MacOS word navigation and delete shortcuts"
   # Keyboard Shortcut: ⌥←
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf702-0x280000:Action 10" ~/Library/Preferences/com.googlecode.iterm2.plist
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf702-0x280000:Text 'b'" ~/Library/Preferences/com.googlecode.iterm2.plist
-  # Keyboard Shortcut: ⌘←
+  # Keyboard Shortcut: ⌘←⌥←
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf702-0x300000:Action 10" ~/Library/Preferences/com.googlecode.iterm2.plist
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf702-0x300000:Text '[H'" ~/Library/Preferences/com.googlecode.iterm2.plist
   # Keyboard Shortcut: ⌥→
@@ -181,6 +187,12 @@ running "Add MacOS word navigation and delete shortcuts"
   # Keyboard Shortcut: ⌘→
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf703-0x300000:Action 10" ~/Library/Preferences/com.googlecode.iterm2.plist
   /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf703-0x300000:Text '[F'" ~/Library/Preferences/com.googlecode.iterm2.plist
+  # Keyboard Shortcute: ⌘⌥←
+  /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf702-0x380000:Action 2" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf702-0x380000:Text ''" ~/Library/Preferences/com.googlecode.iterm2.plist
+  # Keyboard Shortcute: ⌘⌥→
+  /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf703-0x380000:Action 0" ~/Library/Preferences/com.googlecode.iterm2.plist
+  /usr/libexec/PlistBuddy -c "Set New\ Bookmarks:0:Keyboard\ Map:0xf703-0x380000:Text ''" ~/Library/Preferences/com.googlecode.iterm2.plist
 } &> /dev/null;ok
 
 running "Set dimming light to 0"
@@ -425,6 +437,19 @@ botdone
 
 
 ###############################################################################
+bot "Installing >LaTeX<"
+###############################################################################
+require_cask basictex
+
+running "Updating tlmgr"
+sudo tlmgr update --self ;ok
+
+running "Installing listed packages"
+cat ./configs/installed_tex_packages.txt | cut -f1 -d":" | cut -c 2- | sudo xargs -L1 tlmgr install ;ok
+botdone
+
+
+###############################################################################
 bot "Installing remaining casks"
 ###############################################################################
 # checks if  was already installed
@@ -457,7 +482,6 @@ require_cask sqlitebrowser
 require_cask vlc
 # not working under El Capitan :(
 #require_cask asepsis
-require_cask basictex
 require_cask skype
 #require_cask kext-utility
 require_cask teamviewer

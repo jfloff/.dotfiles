@@ -190,6 +190,9 @@ defaults write com.apple.screencapture disable-shadow -bool true;ok
 #running "Enable HiDPI display modes (requires restart)"
 #sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true;ok
 
+running "Play chime (iOS charging sound) when charging"
+defaults write com.apple.PowerChime ChimeOnAllHardware -bool true && open /System/Library/CoreServices/PowerChime.app ;ok
+
 botdone
 
 
@@ -783,6 +786,9 @@ defaults write NSGlobalDomain com.apple.springing.delay -float 0;ok
 
 running "Avoid creating .DS_Store files on network volumes"
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true;ok
+
+running "Avoid creating .DS_Store files on USB volumes"
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true;ok
 
 running "Disable disk image verification"
 defaults write com.apple.frameworks.diskimages skip-verify -bool true
