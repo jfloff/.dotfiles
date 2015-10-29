@@ -10,3 +10,6 @@
   "tabs-to-spaces":
     onSave: "untabify"
   "xml-formatter": {}
+  tabs:
+    usePreviewTabs: true
+    enableVcsColoring: true

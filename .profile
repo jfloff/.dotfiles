@@ -6,3 +6,4 @@ source ~/.shellvars
 source ~/.shellfn
 source ~/.shellpaths
 source ~/.shellaliases
+source ~/.dockeraliases

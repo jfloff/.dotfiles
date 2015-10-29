@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#########################################
+# emulates the commands below like they would natively be in docker
+# docker clean -- runs --> docker-clean
+# etc
+docker() {
+  if command -v "docker-$1" > /dev/null 2>&1; then
+    subcommand=$1
+    shift
+    docker-$subcommand $@
+  else
+    /usr/local/bin/docker $@
+  fi
+}
+
+# Emulates Docker Terminal Quickstart alias using alias
+docker-qs() {
+    bash --login '/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh'
+}
+
+# cleans untagged images
+docker-clean() {
+  for i in `docker images|grep \<none\>|awk '{print $3}'`;do docker rmi $i;done
+}

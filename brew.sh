@@ -98,6 +98,7 @@ running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
 # common to all shells
 symlinkifne .profile
+symlinkifne .dockeraliases
 symlinkifne .shellaliases
 symlinkifne .shellfn
 symlinkifne .shellpaths

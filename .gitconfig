@@ -58,6 +58,7 @@
   st = status
   sync = !git pull && git push
   listconf = config --global --list
+  undo = reset --soft HEAD^
 
 #Enable the recording of resolved conflicts, so that identical hunks can be resolved automatically later on
 [rerere]
