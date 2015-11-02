@@ -16,27 +16,25 @@ ok; botdone
 
 
 ###############################################################################
-bot "Setting up >Google Chrome<"
+bot "Installing >Docker<"
 ###############################################################################
-# checks if google chrome was already installed
-firstinstall=`brew cask list | grep "google-chrome" &> /dev/null ; echo $?`
+require_cask dockertoolbox
 
-require_cask google-chrome
-
-running "Allow installing user scripts via GitHub Gist or Userscripts.org"
-defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*";ok
-
-running "Use the system-native print preview dialog"
-defaults write com.google.Chrome DisablePrintPreview -bool true;ok
-
-running "Expand the print dialog by default"
-defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
-
-# if first installation, opens
-if [ $firstinstall == 1 ]; then
-  open "/Applications/Google Chrome.app"
+running "installing docker-machine-nfs for faster sync (https://github.com/adlogix/docker-machine-nfs)"
+if [ ! -f /usr/local/bin/docker-machine-nfs ]; then
+  sudo curl -o /usr/local/bin/docker-machine-nfs https://raw.githubusercontent.com/adlogix/docker-machine-nfs/master/docker-machine-nfs.sh && \
+  sudo chmod +x /usr/local/bin/docker-machine-nfs
 fi
+ok
+
+running "symlinking dockeraliases file"; filler
+pushd ~ > /dev/null 2>&1
+symlinkifne .dockeraliases
+popd > /dev/null 2>&1
+ok
+
 botdone
+
 
 ################################################
 bot "Setting up >Atom<"
@@ -291,6 +289,30 @@ botdone
 
 
 ###############################################################################
+bot "Setting up >Google Chrome<"
+###############################################################################
+# checks if google chrome was already installed
+firstinstall=`brew cask list | grep "google-chrome" &> /dev/null ; echo $?`
+
+require_cask google-chrome
+
+running "Allow installing user scripts via GitHub Gist or Userscripts.org"
+defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*";ok
+
+running "Use the system-native print preview dialog"
+defaults write com.google.Chrome DisablePrintPreview -bool true;ok
+
+running "Expand the print dialog by default"
+defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true;ok
+
+# if first installation, opens
+if [ $firstinstall == 1 ]; then
+  open "/Applications/Google Chrome.app"
+fi
+botdone
+
+
+###############################################################################
 bot "Setting up >Transmission<"
 ###############################################################################
 require_cask transmission
@@ -477,7 +499,6 @@ if [[ $firstinstall == 1 ]]; then
   open "$HOME/Library/PreferencePanes/AppTrap.prefPane"
 fi
 
-require_cask dockertoolbox
 require_cask sqlitebrowser
 require_cask vlc
 # not working under El Capitan :(

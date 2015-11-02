@@ -30,6 +30,12 @@ export TERM=xterm-256color
 # Your normal git commands will all work, hub merely adds some sugar.
 eval "$(hub alias -s)"
 
+# enable docker fast mount
+machine=`docker-machine active` &> /dev/null
+if [[ $? == 0 ]]; then
+  docker-machine-nfs "$machine"
+fi
+
 # load antigen
 source $HOME/.dotfiles/antigen/antigen.zsh
 

@@ -3,7 +3,10 @@
     userId: "7114340b-7dd6-a445-9644-56690075480c"
   welcome:
     showOnStartup: false
-  core: {}
+  core:
+    disabledPackages: [
+      "emmet"
+    ]
   editor:
     tabType: "soft"
     invisibles: {}
@@ -13,3 +16,6 @@
   tabs:
     usePreviewTabs: true
     enableVcsColoring: true
+  emmet: {}
+  'atom-text-editor[data-grammar="text html basic"]:not([mini]), atom-text-editor[data-grammar~="jade"]:not([mini]), atom-text-editor[data-grammar~="css"]:not([mini]), atom-text-editor[data-grammar~="sass"]:not([mini])':
+    'tab': 'unset!'
