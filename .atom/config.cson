@@ -17,5 +17,5 @@
     usePreviewTabs: true
     enableVcsColoring: true
   emmet: {}
-  'atom-text-editor[data-grammar="text html basic"]:not([mini]), atom-text-editor[data-grammar~="jade"]:not([mini]), atom-text-editor[data-grammar~="css"]:not([mini]), atom-text-editor[data-grammar~="sass"]:not([mini])':
-    'tab': 'unset!'
+  "atom-text-editor[data-grammar=\"text html basic\"]:not([mini]), atom-text-editor[data-grammar~=\"jade\"]:not([mini]), atom-text-editor[data-grammar~=\"css\"]:not([mini]), atom-text-editor[data-grammar~=\"sass\"]:not([mini])":
+    tab: "unset!"

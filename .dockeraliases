@@ -23,3 +23,25 @@ docker-qs() {
 docker-clean() {
   for i in `docker images|grep \<none\>|awk '{print $3}'`;do docker rmi -f $i;done
 }
+
+# purges all images and containers
+docker-purge() {
+  echo -n "Are you sure you want to purge Docker? This will delete all containers and images! [y|N] "
+  read response
+  if [[ $response =~ ^(y|yes|Y) ]];then
+    #docker rm $(docker ps -a -q)
+    if [[ $(docker ps -q) ]]; then
+      for i in `docker ps -q|awk '{print $1}'`; do
+        docker stop $i
+        docker rm $i
+      done
+    fi
+    #docker rmi $(docker images -q)
+    if [[ $(docker images -q) ]]; then
+      #docker rmi $(docker images -qa)
+      for i in `docker images -q|awk '{print $1}'`; do
+        docker rmi $i
+      done
+    fi
+  fi
+}
