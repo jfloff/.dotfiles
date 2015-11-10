@@ -32,16 +32,32 @@ docker-purge() {
     #docker rm $(docker ps -a -q)
     if [[ $(docker ps -q) ]]; then
       for i in `docker ps -q|awk '{print $1}'`; do
-        docker stop $i
-        docker rm $i
+        docker stop -f $i
+        docker rm -f $i
       done
     fi
     #docker rmi $(docker images -q)
     if [[ $(docker images -q) ]]; then
       #docker rmi $(docker images -qa)
       for i in `docker images -q|awk '{print $1}'`; do
-        docker rmi $i
+        docker rmi -f $i
       done
+    fi
+  fi
+}
+
+# restarts specified docker machine
+docker-restart() {
+  if [ -z "$1" ]; then
+    echo "Error: Expected to get one or more machine names as arguments."
+  else
+    docker-machine ls | grep "$1" &> /dev/null
+    if [[ $? == 0 ]]; then
+      docker-machine restart $1
+      docker-machine env $1
+      eval "$(docker-machine env $1)"
+    else
+      echo "Error: Machine '$1' not found."
     fi
   fi
 }
