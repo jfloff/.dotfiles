@@ -508,6 +508,7 @@ require_cask skype
 require_cask teamviewer
 require_cask gimp
 require_cask alinof-timer
+require_cask hex-fiend
 
 # running "Add to system startup"
 # if ! grep -F "AppTrap" ~/Library/Preferences/com.apple.loginitems.plist
