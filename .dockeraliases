@@ -54,8 +54,9 @@ docker-restart() {
     docker-machine ls | grep "$1" &> /dev/null
     if [[ $? == 0 ]]; then
       docker-machine restart $1 | head -n -1
+      echo "VM Started. Exporting Docker variables."
       docker-machine env $1 | head -n -2
-      eval "$(docker-machine env $1)" 
+      eval "$(docker-machine env $1)"
     else
       echo "Error: Machine '$1' not found."
     fi
