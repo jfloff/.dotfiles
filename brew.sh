@@ -176,5 +176,7 @@ require_brew rename
 require_brew hardlink-osx
 # Record terminal to share: https://asciinema.org/
 require_brew asciinema
+# manage ssh servers
+require_brew stormssh
 
 botdone
