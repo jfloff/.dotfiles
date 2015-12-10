@@ -3,10 +3,7 @@
     userId: "7114340b-7dd6-a445-9644-56690075480c"
   welcome:
     showOnStartup: false
-  core:
-    disabledPackages: [
-      "emmet"
-    ]
+  core: {}
   editor:
     tabType: "soft"
     invisibles: {}
@@ -19,3 +16,5 @@
   emmet: {}
   "atom-text-editor[data-grammar=\"text html basic\"]:not([mini]), atom-text-editor[data-grammar~=\"jade\"]:not([mini]), atom-text-editor[data-grammar~=\"css\"]:not([mini]), atom-text-editor[data-grammar~=\"sass\"]:not([mini])":
     tab: "unset!"
+  "highlight-line":
+    enableSelectionBorder: true
