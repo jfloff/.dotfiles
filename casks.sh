@@ -510,6 +510,7 @@ require_cask gimp
 require_cask alinof-timer
 require_cask hex-fiend
 require_cask java
+require_cask insomniax
 
 # running "Add to system startup"
 # if ! grep -F "AppTrap" ~/Library/Preferences/com.apple.loginitems.plist
