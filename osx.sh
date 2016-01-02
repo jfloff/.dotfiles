@@ -64,8 +64,8 @@ sudo chflags uchg /private/var/vm/sleepimage;ok
 running "Disable the sudden motion sensor as it’s not useful for SSDs"
 sudo pmset -a sms 0;ok
 
-running "Restart automatically if the computer freezes"
-sudo systemsetup -setrestartfreeze on;ok
+# running "Restart automatically if the computer freezes"
+# sudo systemsetup -setrestartfreeze on;ok
 
 #running "Never go into computer sleep mode"
 #sudo systemsetup -setcomputersleep Off > /dev/null;ok

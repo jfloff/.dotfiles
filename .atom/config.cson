@@ -3,7 +3,16 @@
     userId: "7114340b-7dd6-a445-9644-56690075480c"
   welcome:
     showOnStartup: false
-  core: {}
+  core:
+    ignoredNames: [
+      ".git"
+      ".hg"
+      ".svn"
+      ".DS_Store"
+      "._*"
+      "Thumbs.db"
+      "*.pyc"
+    ]
   editor:
     tabType: "soft"
     invisibles: {}
@@ -18,3 +27,7 @@
     tab: "unset!"
   "highlight-line":
     enableSelectionBorder: true
+  "tree-view":
+    hideIgnoredNames: true
+  "atom-beautify":
+    _analyticsUserId: "73dc38ec-a819-4994-9643-df0154adfc62"

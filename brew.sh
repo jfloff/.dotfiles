@@ -178,5 +178,7 @@ require_brew hardlink-osx
 require_brew asciinema
 # manage ssh servers
 require_brew stormssh
+# bibtex tools
+require_brew bib-tool
 
 botdone
