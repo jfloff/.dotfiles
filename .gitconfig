@@ -72,7 +72,7 @@
   default = matching
 
 [credential]
-  helper = osxkeychain
+	helper = osxkeychain
 
 [hub]
   protocol = https

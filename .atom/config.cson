@@ -1,8 +1,9 @@
 "*":
-  "exception-reporting":
-    userId: "7114340b-7dd6-a445-9644-56690075480c"
-  welcome:
-    showOnStartup: false
+  "atom-beautify":
+    _analyticsUserId: "73dc38ec-a819-4994-9643-df0154adfc62"
+  "atom-text-editor[data-grammar=\"text html basic\"]:not([mini]), atom-text-editor[data-grammar~=\"jade\"]:not([mini]), atom-text-editor[data-grammar~=\"css\"]:not([mini]), atom-text-editor[data-grammar~=\"sass\"]:not([mini])":
+    tab: "unset!"
+  "autocomplete-plus": {}
   core:
     ignoredNames: [
       ".git"
@@ -14,20 +15,20 @@
       "*.pyc"
     ]
   editor:
-    tabType: "soft"
     invisibles: {}
-  "tabs-to-spaces":
-    onSave: "untabify"
-  "xml-formatter": {}
-  tabs:
-    usePreviewTabs: true
-    enableVcsColoring: true
+    tabType: "soft"
   emmet: {}
-  "atom-text-editor[data-grammar=\"text html basic\"]:not([mini]), atom-text-editor[data-grammar~=\"jade\"]:not([mini]), atom-text-editor[data-grammar~=\"css\"]:not([mini]), atom-text-editor[data-grammar~=\"sass\"]:not([mini])":
-    tab: "unset!"
+  "exception-reporting":
+    userId: "7114340b-7dd6-a445-9644-56690075480c"
   "highlight-line":
     enableSelectionBorder: true
+  tabs:
+    enableVcsColoring: true
+    usePreviewTabs: true
+  "tabs-to-spaces":
+    onSave: "untabify"
   "tree-view":
     hideIgnoredNames: true
-  "atom-beautify":
-    _analyticsUserId: "73dc38ec-a819-4994-9643-df0154adfc62"
+  welcome:
+    showOnStartup: false
+  "xml-formatter": {}
