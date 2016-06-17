@@ -4,8 +4,6 @@
 <dict>
 	<key>bundleid</key>
 	<string>net.deanishe.alfred-convert</string>
-	<key>category</key>
-	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
 		<key>1E12C11D-30DB-44A8-AD75-F5BE7F2DA451</key>

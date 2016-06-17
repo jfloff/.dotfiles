@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # encoding: utf-8
 #
-# Copyright © 2014 deanishe@deanishe.net
+# Copyright  (c) 2014 deanishe@deanishe.net
 #
 # MIT Licence. See http://opensource.org/licenses/MIT
 #
@@ -9,6 +9,8 @@
 #
 
 """info.py [options] [<query>]
+
+View/manage workflow settings.
 
 Usage:
     info.py [<query>]
@@ -35,30 +37,46 @@ import shutil
 import subprocess
 import sys
 
-from workflow import (Workflow,
-                      ICON_HELP, ICON_WARNING, ICON_INFO, ICON_SETTINGS,
-                      MATCH_ALL, MATCH_ALLCHARS)
+from vendor.docopt import docopt
 
-from config import (ICON_CURRENCY,
-                    CURRENCY_CACHE_NAME,
-                    CUSTOM_DEFINITIONS_FILENAME,
-                    CURRENCIES,
-                    DECIMAL_PLACES_DEFAULT,
-                    README_URL)
+from workflow import (
+    ICON_HELP,
+    ICON_INFO,
+    ICON_SETTINGS,
+    ICON_WARNING,
+    MATCH_ALL,
+    MATCH_ALLCHARS,
+    Workflow,
+)
+
+from config import (
+    CURRENCIES,
+    CURRENCY_CACHE_NAME,
+    CUSTOM_DEFINITIONS_FILENAME,
+    DECIMAL_PLACES_DEFAULT,
+    ICON_CURRENCY,
+    KEYWORD_SETTINGS,
+    README_URL,
+)
 
 log = None
 
-DELIMITER = '⟩'
+DELIMITER = '\u203a'  # SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
 
-ALFRED_AS = 'tell application "Alfred 2" to search "convinfo"'
+ALFRED_AS = 'tell application "Alfred 2" to search "{0}"'.format(
+    KEYWORD_SETTINGS)
 
 
 def human_timedelta(td):
-    """Return relative time (past) in human-readable format
+    """Return relative time (past) in human-readable format.
 
-    :param td: :class:`datetime.timedelta`
-    :returns: Human-readable Unicode string
+    Example: "10 minutes ago"
 
+    Args:
+        td (datetime.timedelta): Time delta to convert.
+
+    Returns:
+        unicode: Human-readable time delta.
     """
 
     output = []
@@ -84,9 +102,14 @@ def human_timedelta(td):
 
 
 def main(wf):
+    """Run Script Filter.
 
-    from docopt import docopt
+    Args:
+        wf (workflow.Workflow): Workflow object.
 
+    Returns:
+        int: Exit status.
+    """
     args = docopt(__doc__, wf.args)
 
     log.debug('args : {!r}'.format(args))
@@ -101,7 +124,7 @@ def main(wf):
         path = wf.datafile(CUSTOM_DEFINITIONS_FILENAME)
         if not os.path.exists(path):
             shutil.copy(
-                wf.workflowfile('{}.sample'.format(
+                wf.workflowfile('{0}.sample'.format(
                                 CUSTOM_DEFINITIONS_FILENAME)),
                 path)
 
@@ -125,15 +148,15 @@ def main(wf):
 
         wf.add_item('View Supported Currencies',
                     'View and search list of supported currencies',
-                    autocomplete=' currencies {} '.format(DELIMITER),
+                    autocomplete=' currencies {0} '.format(DELIMITER),
                     icon=ICON_CURRENCY)
 
         wf.add_item(('Decimal Places in Results '
-                    '(current : {})'.format(wf.settings.get(
+                    '(current : {0})'.format(wf.settings.get(
                                             'decimal_places',
                                             DECIMAL_PLACES_DEFAULT))),
                     'View and search list of supported currencies',
-                    autocomplete=' places {} '.format(DELIMITER),
+                    autocomplete=' places {0} '.format(DELIMITER),
                     icon=ICON_SETTINGS)
 
         wf.add_item('Edit Custom Units',
@@ -177,8 +200,8 @@ def main(wf):
                             icon=ICON_WARNING)
 
             for name, symbol in currencies:
-                wf.add_item('{} // {}'.format(name, symbol),
-                            'Use `{}` in conversions'.format(symbol),
+                wf.add_item('{0} // {1}'.format(name, symbol),
+                            'Use `{0}` in conversions'.format(symbol),
                             icon=ICON_CURRENCY)
 
             wf.send_feedback()
@@ -187,18 +210,18 @@ def main(wf):
 
             if query:
                 if not query.isdigit():
-                    wf.add_item('Invalid number : {}'.format(query),
+                    wf.add_item('Invalid number : {0}'.format(query),
                                 'Please enter a number',
                                 icon=ICON_WARNING)
                 else:
-                    wf.add_item('Set decimal places to : {}'.format(query),
+                    wf.add_item('Set decimal places to : {0}'.format(query),
                                 'Hit `ENTER` to save',
                                 valid=True,
-                                arg='--places {}'.format(query),
+                                arg='--places {0}'.format(query),
                                 icon=ICON_SETTINGS)
             else:
                 wf.add_item('Enter a number of decimal places',
-                            'Current number is {}'.format(
+                            'Current number is {0}'.format(
                                 wf.settings.get('decimal_places',
                                                 DECIMAL_PLACES_DEFAULT)),
                             icon=ICON_INFO)
