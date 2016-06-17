@@ -30,6 +30,9 @@ export TERM=xterm-256color
 # Your normal git commands will all work, hub merely adds some sugar.
 eval "$(hub alias -s)"
 
+# Init jenv
+if which jenv > /dev/null; then eval "$(jenv init -)"; fi
+
 # load antigen
 source $HOME/.dotfiles/antigen/antigen.zsh
 

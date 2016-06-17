@@ -26,6 +26,17 @@ docker-clean() {
   for i in `docker images|grep \<none\>|awk '{print $3}'`;do docker rmi -f $i;done
 }
 
+# stop and remove container
+docker-strm() {
+  docker stop $1
+  docker rm $1 1> /dev/null
+}
+
+# get ip of container
+docker-ip() {
+  docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1
+}
+
 # purges all images and containers
 docker-purge() {
   echo -n "Are you sure you want to purge Docker? This will delete all containers and images! [y|N] "

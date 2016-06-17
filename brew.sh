@@ -180,5 +180,8 @@ require_brew asciinema
 require_brew stormssh
 # bibtex tools
 require_brew bib-tool
+require_brew npm
+require_brew jenv
+jenv enable-plugin export
 
 botdone
