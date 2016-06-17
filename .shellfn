@@ -60,3 +60,70 @@ bundleid() {
   osascript -e "id of application \"$1\"" 2>/dev/null ||
     { echo "$FUNCNAME: ERROR: Application with specified name not found: $1" 1>&2; return 1; }
 }
+
+che() {
+  # check if docker is working
+  docker ps &> /dev/null
+  if [ $? -ne 0 ]; then
+    echo "[ERROR]\tCannot connect to the Docker daemon. Is the docker daemon running on this host?" 1>&2
+    return 1
+  fi
+
+  CONTAINER="che"
+  VM="default"
+  VM_IP=$(docker-machine ip ${VM})
+  echo $VM_IP
+
+  wait_server()
+  {
+    # sleeps half a second to wait for new log to spawn
+    sleep 0.5
+    # http://superuser.com/a/548193
+    fifo=/tmp/notifyfifo.$$
+    mkfifo "${fifo}" || exit 1
+    {
+        # run tail in the background so that the shell can
+        # kill tail when notified that grep has exited
+        docker logs -f --tail=1 $CONTAINER &
+        # remember tail's PID
+        tailpid=$!
+        # wait for notification that grep has exited
+        read foo <${fifo}
+        # grep has exited, time to go
+        kill "${tailpid}"
+    } | {
+        grep -m 1 "Server startup in"
+        # notify the first pipeline stage that grep is done
+        echo >${fifo}
+    } &> /dev/null
+    # clean up
+    rm -f "${fifo}"
+  }
+
+  # container does not exist
+  RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
+  if [ $? -eq 1 ]; then
+    echo "[INFO]\t'che' container not found. Creating..."
+    docker run -d --name=che --net=host \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v /home/user/che/lib:/home/user/che/lib-copy \
+      -v /home/user/che/workspaces:/home/user/che/workspaces \
+      -v /home/user/che/tomcat/temp/local-storage:/home/user/che/tomcat/temp/local-storage \
+      -e CHE_DOCKER_MACHINE_HOST=$VM_IP \
+      codenvy/che 1> /dev/null
+      if [ $? -eq 1 ]; then return 1; fi
+    wait_server
+  fi
+  # container is not running
+  if [ "$RUNNING" = "false" ]; then
+    echo "[INFO]\t'che' container not running. Starting..."
+    docker start che 1> /dev/null
+    if [ $? -eq 1 ]; then return 1; fi
+    wait_server
+  fi
+
+  echo "[INFO]\t'che' container ready!"
+  echo "[INFO]\tOpening 'che-electron' app"
+  ELECTRON_APP_PATH=~/Dropbox/Code/che-electron/dist/eclipse-che-darwin-x64
+  open $ELECTRON_APP_PATH/eclipse-che.app --args . http://$VM_IP:8080
+}
