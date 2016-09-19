@@ -18,7 +18,8 @@ docker() {
 
 # Emulates Docker Terminal Quickstart alias using alias
 docker-qs() {
-    bash --login '/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh'
+    /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh
+    cd .
 }
 
 # cleans untagged images
@@ -73,31 +74,20 @@ docker-daemon() {
   fi
 }
 
-# # restarts specified docker machine
-# docker-restart() {
-#   DOCKER_MACHINE=/usr/local/bin/docker-machine
-#
-#   if [ -z "$1" ]; then
-#     echo "Error: Expected to get one or more machine names as arguments."
-#   else
-#     $DOCKER_MACHINE ls | grep "$1" &> /dev/null
-#     if [[ $? == 0 ]]; then
-#       # taken from qs
-#       $DOCKER_MACHINE restart $1 2> /dev/null | head -n -1
-#       # yes | $DOCKER_MACHINE regenerate-certs $1
-#       $DOCKER_MACHINE env $1 --shell=zsh | head -n -2
-#       # # if error on env_out, its because machine hasn't started yet
-#       # if [[ $? != 0 ]]; then
-#       #   echo "TESTE"
-#       #   # start machine and redo env_out
-#       #   $DOCKER_MACHINE start $1 &> /dev/null
-#       #   env_out=$($DOCKER_MACHINE env $1 --shell=zsh) &> /dev/null
-#       # fi
-#       # echo "VM Started. Exporting Docker variables."
-#       # echo "${env_out}" | head -n -2
-#       eval $($DOCKER_MACHINE env $1 --shell=zsh)
-#     else
-#       echo "Error: Machine '$1' not found."
-#     fi
-#   fi
-# }
+# restarts specified docker machine
+docker-restart() {
+  DOCKER_MACHINE=/usr/local/bin/docker-machine
+
+  if [ -z "$1" ]; then
+    echo "Error: Expected to get one or more machine names as arguments."
+  else
+    $DOCKER_MACHINE ls | grep "$1" &> /dev/null
+    if [[ $? == 0 ]]; then
+      $DOCKER_MACHINE stop $1 2> /dev/null
+      $DOCKER_MACHINE env $1 --shell=zsh | head -n -2
+      eval $($DOCKER_MACHINE env $1 --shell=zsh)
+    else
+      echo "Error: Machine '$1' not found."
+    fi
+  fi
+}

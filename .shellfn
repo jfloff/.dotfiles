@@ -121,9 +121,15 @@ che() {
     if [ $? -eq 1 ]; then return 1; fi
     wait_server
   fi
-
   echo "[INFO]\t'che' container ready!"
+
+  # open through the electron app
+  # Cannot find module 'electron-default-menu'
   echo "[INFO]\tOpening 'che-electron' app"
   ELECTRON_APP_PATH=~/Dropbox/Code/che-electron/dist/eclipse-che-darwin-x64
   open $ELECTRON_APP_PATH/eclipse-che.app --args . http://$VM_IP:8080
+
+  # uncomment if you want to open a chrome app instead
+  # echo "[INFO]\tOpening 'che' in Google Chrome"
+  # open -n -a "/Applications/Google Chrome.app" http://$VM_IP:8080
 }
