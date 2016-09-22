@@ -23,9 +23,11 @@ docker-qs() {
 
   # kind-off risky, keep track of this change each update? Alternatives?
   # ignores lines that spawn a new login shell
-  source <( sed -n "/USER_SHELL/q;p" $DOCKER_QS_SCRIPT | sed "s/--shell=bash/--shell=${USER_SHELL}/g" )
-  # run nfs after start
-  docker-machine-nfs default
+  # increase memory and disk size
+  # run nfs after create
+  source <( sed -n "/USER_SHELL/q;p" $DOCKER_QS_SCRIPT | \
+            sed '/"${DOCKER_MACHINE}" create/a docker-machine-nfs ${VM}' | \
+            sed "s/--shell=bash/--shell=${USER_SHELL}/g; s/--virtualbox-memory 2048/--virtualbox-memory 4096/g; s/--virtualbox-disk-size 204800/--virtualbox-disk-size 409600/g" )
 }
 
 # cleans untagged images
