@@ -54,6 +54,7 @@ Session.vim
 pids
 *.pid
 *.seed
+.nfs*
 
 ####################
 # Project Specific #

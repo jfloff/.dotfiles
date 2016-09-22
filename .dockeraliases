@@ -18,13 +18,18 @@ docker() {
 
 # Emulates Docker Terminal Quickstart alias using alias
 docker-qs() {
-    /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh
-    cd .
+  # ignores lines that spawn a new login shell
+  # kind-off risky, keep track of this change each update? Alternatives?
+  sed -n '/USER_SHELL/q;p' /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh | sh
+  # start nfs right after
+  docker-machine-nfs default
 }
 
 # cleans untagged images
+# cleans dangling volumes
 docker-clean() {
   for i in `docker images|grep \<none\>|awk '{print $3}'`;do docker rmi -f $i;done
+  for i in `docker volume ls -qf dangling=true`; do docker volume rm $i; done
 }
 
 # stop and remove container
@@ -40,7 +45,7 @@ docker-ip() {
 
 # purges all images and containers
 docker-purge() {
-  echo -n "Are you sure you want to purge Docker? This will delete all containers and images! [y|N] "
+  echo -n "Are you sure you want to purge Docker? This will delete all containers, volumes and images! [y|N] "
   read response
   if [[ $response =~ ^(y|yes|Y) ]];then
     #docker rm $(docker ps -a -q)
@@ -55,6 +60,12 @@ docker-purge() {
       #docker rmi $(docker images -qa)
       for i in `docker images -q|awk '{print $1}'`; do
         docker rmi -f $i
+      done
+    fi
+    # remove all volumes
+    if [[ $(docker volume ls -q) ]]; then
+      for i in `docker volume ls -q|awk '{print $1}'`; do
+        docker volume rm $i
       done
     fi
   fi
