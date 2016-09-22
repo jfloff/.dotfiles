@@ -18,10 +18,13 @@ docker() {
 
 # Emulates Docker Terminal Quickstart alias using alias
 docker-qs() {
-  # ignores lines that spawn a new login shell
+  DOCKER_QS_SCRIPT=/Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh
+  USER_SHELL="$(basename "$(dscl /Search -read /Users/${USER} UserShell | awk '{print $2}' | head -n 1 )")"
+
   # kind-off risky, keep track of this change each update? Alternatives?
-  sed -n '/USER_SHELL/q;p' /Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh | sh
-  # start nfs right after
+  # ignores lines that spawn a new login shell
+  source <( sed -n "/USER_SHELL/q;p" $DOCKER_QS_SCRIPT | sed "s/--shell=bash/--shell=${USER_SHELL}/g" )
+  # run nfs after start
   docker-machine-nfs default
 }
 
