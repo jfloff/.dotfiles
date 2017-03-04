@@ -97,7 +97,7 @@ defaults write com.googlecode.iterm2 UKCrashReporterLastCrashReportDate -int 214
 running "Don’t display the annoying prompt when quitting iTerm"
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false;ok
 
-  # opens and closes unarchiver untill the preferences are loaded
+# opens and closes untill the preferences are loaded
 if ! grep -F "New Bookmarks" ~/Library/Preferences/com.googlecode.iterm2.plist &> /dev/null; then
   open "/Applications/iTerm.app"
   # opens preferences so plist loads the profiles settings

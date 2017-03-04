@@ -66,9 +66,11 @@ antigen bundle osx
 antigen bundle common-aliases
 antigen bundle web-search
 antigen bundle extract
+antigen bundle heroku
 antigen bundle unixorn/autoupdate-antigen.zshplugin
-antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-completions src
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-history-substring-search
 
 # Load the theme.
@@ -76,6 +78,13 @@ antigen theme pygmalion
 
 # Tell antigen that you're done.
 antigen apply
+
+# from https://github.com/zsh-users/zsh-history-substring-search/issues/59
+# zsh-history-substring-search configuration
+# (put whatever configuration you want here!)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
 # run fortune on new terminal :)
 fortune

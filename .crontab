@@ -1,3 +1,4 @@
 # brew nightly updates
 0 1 * * *  brew update
 0 2 * * *  brew upgrade
+0 3 * * *  docker clean

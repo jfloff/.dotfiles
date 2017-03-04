@@ -146,7 +146,8 @@ botdone
 bot "Setting up >crontab nightly jobs<"
 ################################################
 # adds nightly cron software updates.
-# Note that this may wake you in the morning to compatibility issues so use only if you like being on the edge
+# Note that this may wake you in the morning to compatibility issues
+# so use only if you like being on the edge
 running "symlinking shell files"; filler
 pushd ~ > /dev/null 2>&1
 symlinkifne .crontab

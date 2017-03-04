@@ -1,0 +1,6 @@
+{
+  "journals": {
+    "default": "~/.journal/journal.txt",
+    "phd": "~/.journal/phd.txt",
+  }
+}

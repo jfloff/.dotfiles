@@ -3,6 +3,7 @@
 #############################################################
 
 source ~/.shellvars
+source ~/.privatevars
 source ~/.shellfn
 source ~/.shellpaths
 source ~/.shellaliases

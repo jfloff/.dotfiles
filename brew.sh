@@ -183,5 +183,11 @@ require_brew bib-tool
 require_brew npm
 require_brew jenv
 jenv enable-plugin export
+# daily jornal
+require_brew jrnl
+running "symlinking atom dotfiles"; filler
+pushd ~ > /dev/null 2>&1
+symlinkifne .jrnl_config
+popd > /dev/null 2>&1
 
 botdone

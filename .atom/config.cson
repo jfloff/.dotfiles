@@ -1,12 +1,22 @@
 "*":
   "atom-beautify":
-    _analyticsUserId: "73dc38ec-a819-4994-9643-df0154adfc62"
+    erb:
+      indent_size: 2
     general:
-      _analyticsUserId: "f2f7c99e-a8cb-4d87-974d-072b3e5e68f2"
+      _analyticsUserId: "73dc38ec-a819-4994-9643-df0154adfc62"
+    html:
+      beautify_on_save: true
+      indent_size: 2
+    java:
+      disabled: true
   "atom-text-editor[data-grammar=\"text html basic\"]:not([mini]), atom-text-editor[data-grammar~=\"jade\"]:not([mini]), atom-text-editor[data-grammar~=\"css\"]:not([mini]), atom-text-editor[data-grammar~=\"sass\"]:not([mini])":
     tab: "unset!"
   "autocomplete-plus": {}
   core:
+    customFileTypes:
+      "text.aj": [
+        "java"
+      ]
     ignoredNames: [
       ".git"
       ".hg"
@@ -16,6 +26,7 @@
       "Thumbs.db"
       "*.pyc"
     ]
+    telemetryConsent: "limited"
   editor:
     invisibles: {}
     tabType: "soft"
@@ -24,6 +35,8 @@
     userId: "7114340b-7dd6-a445-9644-56690075480c"
   "highlight-line":
     enableSelectionBorder: true
+  "markdown-preview":
+    breakOnSingleNewline: true
   tabs:
     enableVcsColoring: true
     usePreviewTabs: true
@@ -34,3 +47,6 @@
   welcome:
     showOnStartup: false
   "xml-formatter": {}
+".makefile.source":
+  "tabs-to-spaces":
+    onSave: "tabify"
