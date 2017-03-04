@@ -1,6 +1,14 @@
 {
+  "default_hour": 9, 
+  "linewrap": 79, 
+  "encrypt": false, 
+  "default_minute": 0, 
+  "tagsymbols": "@", 
+  "editor": "atom --wait", 
+  "timeformat": "%Y-%m-%d %H:%M", 
+  "highlight": true, 
   "journals": {
-    "default": "~/.journal/journal.txt",
-    "phd": "~/.journal/phd.txt",
+    "default": "~/Dropbox/Code/jrnl/journal.txt", 
+    "phd": "~/Dropbox/Code/jrnl/phd.txt"
   }
 }
