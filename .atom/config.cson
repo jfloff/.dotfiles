@@ -35,6 +35,12 @@
     userId: "7114340b-7dd6-a445-9644-56690075480c"
   "highlight-line":
     enableSelectionBorder: true
+  latex:
+    openResultAfterBuild: false
+    opener: "preview"
+    producer: "ps2pdf"
+    texPath: "/usr/local/texlive/2016basic/bin/x86_64-darwin"
+  "linter-ui-default": {}
   "markdown-preview":
     breakOnSingleNewline: true
   tabs:
