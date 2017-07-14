@@ -1,7 +1,5 @@
 #!/bin/bash
 
-alias dm="docker-machine"
-
 #########################################
 # emulates the commands below like they would natively be in docker
 # docker clean -- runs --> docker-clean
@@ -14,20 +12,6 @@ docker() {
   else
     /usr/local/bin/docker $@
   fi
-}
-
-# Emulates Docker Terminal Quickstart alias using alias
-docker-qs() {
-  DOCKER_QS_SCRIPT=/Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh
-  USER_SHELL="$(basename "$(dscl /Search -read /Users/${USER} UserShell | awk '{print $2}' | head -n 1 )")"
-
-  # kind-off risky, keep track of this change each update? Alternatives?
-  # ignores lines that spawn a new login shell
-  # increase memory and disk size
-  # run nfs after create
-  source <( sed -n "/USER_SHELL/q;p" $DOCKER_QS_SCRIPT | \
-            sed '/"${DOCKER_MACHINE}" create/a docker-machine-nfs ${VM}' | \
-            sed "s/--shell=bash/--shell=${USER_SHELL}/g; s/--virtualbox-memory 2048/--virtualbox-memory 4096/g; s/--virtualbox-disk-size 204800/--virtualbox-disk-size 409600/g" )
 }
 
 # cleans untagged images
@@ -48,62 +32,60 @@ docker-ip() {
   docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1
 }
 
+_rmcontainers() {
+  #docker rm $(docker ps -a -q)
+  if [[ $(docker ps -q) ]]; then
+    for i in `docker ps -q|awk '{print $1}'`; do
+      docker stop $i
+      docker rm -f $i
+    done
+  fi
+}
+
+_rmimages() {
+  #docker rmi $(docker images -q)
+  if [[ $(docker images -q) ]]; then
+    #docker rmi $(docker images -qa)
+    for i in `docker images -q|awk '{print $1}'`; do
+      docker rmi -f $i
+    done
+  fi
+}
+
+_rmvolumes() {
+  # remove all volumes
+  if [[ $(docker volume ls -q) ]]; then
+    for i in `docker volume ls -q|awk '{print $1}'`; do
+      docker volume rm $i
+    done
+  fi
+}
+
 # purges all images and containers
-docker-purge() {
+docker-purgei() {
+  echo -n "Are you sure you want to purge Docker images? This will delete all images and volumes! [y|N] "
+  read response
+  if [[ $response =~ ^(y|yes|Y) ]]; then
+    _rmimages
+    _rmvolumes
+  fi
+}
+
+docker-purgep() {
+  echo -n "Are you sure you want to purge Docker containers? This will delete all containers! [y|N] "
+  read response
+  if [[ $response =~ ^(y|yes|Y) ]];then
+    _rmcontainers
+  fi
+}
+
+# purges all images and containers
+docker-purge-all() {
   echo -n "Are you sure you want to purge Docker? This will delete all containers, volumes and images! [y|N] "
   read response
   if [[ $response =~ ^(y|yes|Y) ]];then
-    #docker rm $(docker ps -a -q)
-    if [[ $(docker ps -q) ]]; then
-      for i in `docker ps -q|awk '{print $1}'`; do
-        docker stop -f $i
-        docker rm -f $i
-      done
-    fi
-    #docker rmi $(docker images -q)
-    if [[ $(docker images -q) ]]; then
-      #docker rmi $(docker images -qa)
-      for i in `docker images -q|awk '{print $1}'`; do
-        docker rmi -f $i
-      done
-    fi
-    # remove all volumes
-    if [[ $(docker volume ls -q) ]]; then
-      for i in `docker volume ls -q|awk '{print $1}'`; do
-        docker volume rm $i
-      done
-    fi
-  fi
-}
-
-docker-daemon() {
-  if [ -z "$1" ]; then
-    echo "Error: Expected to get one or more machine names as arguments."
-  else
-    docker-machine ls | grep "$1" &> /dev/null
-    if [[ $? == 0 ]]; then
-      docker-machine env $1 --shell=zsh | head -n -2
-      eval $(docker-machine env $1 --shell=zsh)
-    else
-      echo "Error: Machine '$1' not found."
-    fi
-  fi
-}
-
-# restarts specified docker machine
-docker-restart() {
-  DOCKER_MACHINE=/usr/local/bin/docker-machine
-
-  if [ -z "$1" ]; then
-    echo "Error: Expected to get one or more machine names as arguments."
-  else
-    $DOCKER_MACHINE ls | grep "$1" &> /dev/null
-    if [[ $? == 0 ]]; then
-      $DOCKER_MACHINE stop $1 2> /dev/null
-      $DOCKER_MACHINE env $1 --shell=zsh | head -n -2
-      eval $($DOCKER_MACHINE env $1 --shell=zsh)
-    else
-      echo "Error: Machine '$1' not found."
-    fi
+    _rmcontainers
+    _rmimages
+    _rmvolumes
   fi
 }
