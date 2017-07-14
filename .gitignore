@@ -96,5 +96,6 @@ GitHub.sublime-settings
 
 # private variables
 .privatevars
+.privateshellaliases
 
 .texpadtmp/

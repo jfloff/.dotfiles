@@ -43,6 +43,8 @@
   "linter-ui-default": {}
   "markdown-preview":
     breakOnSingleNewline: true
+  minimap:
+    disablePythonDocLinks: true
   tabs:
     enableVcsColoring: true
     usePreviewTabs: true

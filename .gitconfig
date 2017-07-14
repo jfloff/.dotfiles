@@ -82,3 +82,5 @@
 	required = true
 [url "https://"]
 	insteadOf = git://
+[pull]
+	rebase = true
