@@ -34,8 +34,8 @@ docker-ip() {
 
 _rmcontainers() {
   #docker rm $(docker ps -a -q)
-  if [[ $(docker ps -q) ]]; then
-    for i in `docker ps -q|awk '{print $1}'`; do
+  if [[ $(docker ps -a -q) ]]; then
+    for i in `docker ps -a -q|awk '{print $1}'`; do
       docker stop $i
       docker rm -f $i
     done
