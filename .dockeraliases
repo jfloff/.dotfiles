@@ -17,14 +17,21 @@ docker() {
 # cleans untagged images
 # cleans dangling volumes
 docker-clean() {
-  for i in `docker images|grep \<none\>|awk '{print $3}'`;do docker rmi -f $i;done
+  # dependant images can be released after the original are deleted
+  # cleans all those scenarios
+  while : ; do
+    IMAGE_IDS=$(docker images | grep \<none\> | awk '{print $3}')
+    NUM_IMAGES=$(echo $IMAGE_IDS | sed '/^\s*$/d' | wc -l)
+    [[ $NUM_IMAGES != 0 ]] || break
+    printf '%s\n' "$IMAGE_IDS" | while IFS= read -r i; do docker rmi -f $i; done
+  done
   for i in `docker volume ls -qf dangling=true`; do docker volume rm $i; done
 }
 
 # stop and remove container
 docker-strm() {
-  docker stop $1
-  docker rm $1 1> /dev/null
+  docker stop $@
+  docker rm $@ 1> /dev/null
 }
 
 # get ip of container
