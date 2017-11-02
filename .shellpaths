@@ -8,3 +8,6 @@ export PATH=/usr/local/bin:$PATH
 
 # basic tex
 export PATH=/usr/texbin:$PATH
+
+# for homebrew python
+export PATH="/usr/local/opt/python/libexec/bin:$PATH"

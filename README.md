@@ -52,6 +52,6 @@ Please refer to the [Contributor Covenant](https://github.com/atomantic/dotfiles
 
 * Add VPN
 * Write a "dump" file to update config files stored. Might be usefull for:
-  * Atom packages
+  * VSCode packages
   * Latex (tlmgr) packages
   * Texpad Configurations

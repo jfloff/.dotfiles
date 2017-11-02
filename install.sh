@@ -191,7 +191,7 @@ msg "Note that some of these changes require a logout/restart to take effect."; 
 msg "You should also NOT open System Preferences. It might overwrite some of the settings."; filler
 running "Killing affected applications (so they can reboot)...."
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-  "Dock" "Finder" "Mail" "Messages" "SystemUIServer" "iCal" "Transmission" "Atom" \
+  "Dock" "Finder" "Mail" "Messages" "SystemUIServer" "iCal" "Transmission" "Visual Studio Code" \
   "The Unarchiver" "smcFanControl"; do
   killall "${app}" > /dev/null 2>&1
 done

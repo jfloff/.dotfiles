@@ -37,31 +37,10 @@ botdone
 
 
 ################################################
-bot "Setting up >Atom<"
+bot "Setting up >VSCode<"
 ################################################
 # Rememver: cask already install the shell tools
-require_cask atom
-
-# theres instances when the .atom folder is not createad right away
-if [[ ! -e ~/.atom ]]; then
-    mkdir ~/.atom
-fi
-
-running "symlinking atom dotfiles"; filler
-pushd ~ > /dev/null 2>&1
-symlinkifne .atom/config.cson
-symlinkifne .atom/init.coffee
-symlinkifne .atom/keymap.cson
-symlinkifne .atom/snippets.cson
-symlinkifne .atom/packages.cson
-symlinkifne .atom/styles.less
-popd > /dev/null 2>&1
-
-running "Installing & updating packages"; filler
-# strip packages file
-atom_packages=$(mktemp /tmp/dotfiles.atom_packages.XXXXXXXXXX)
-cat .atom/packages.cson | sed '$ d' | sed '1,1d' | sed 's/\"//g' > $atom_packages
-apm install --packages-file $atom_packages
+require_cask visual-studio-code
 
 botdone
 

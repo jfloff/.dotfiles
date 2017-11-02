@@ -15,7 +15,7 @@ export BIBINPUTS=$(pwd):~/Drive/phd/rw/
 #########################################################################
 # set brew cask default application dir
 export HOMEBREW_CASK_OPTS='--appdir=/Applications'
-# set atom as the default editor
-export EDITOR='atom --wait'
+# set code as the default editor
+export EDITOR='code --wait'
 # set antigen path
 export ADOTDIR=$HOME/.dotfiles/antigen

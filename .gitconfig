@@ -44,7 +44,7 @@
   # prevent crlf (then you will have to deal with the problem -- dos2unix, etc)
   safecrlf = true
   #editor = vim
-  editor = atom --wait
+  editor = code --wait
 
 [alias]
   # most commonly used
@@ -72,15 +72,15 @@
   default = matching
 
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 
 [hub]
   protocol = https
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
-	required = true
+    clean = git-lfs clean %f
+    smudge = git-lfs smudge %f
+    required = true
 [url "https://"]
-	insteadOf = git://
+    insteadOf = git://
 [pull]
-	rebase = true
+    rebase = true

@@ -1,4 +1,4 @@
-#######
+p#######
 # OSX #
 #######
 *.DS_Store
@@ -99,3 +99,5 @@ GitHub.sublime-settings
 .privateshellaliases
 
 .texpadtmp/
+
+.vscode
