@@ -18,14 +18,7 @@ ok; botdone
 ###############################################################################
 bot "Installing >Docker<"
 ###############################################################################
-require_cask dockertoolbox
-
-running "installing docker-machine-nfs for faster sync (https://github.com/adlogix/docker-machine-nfs)"
-if [ ! -f /usr/local/bin/docker-machine-nfs ]; then
-  sudo curl -o /usr/local/bin/docker-machine-nfs https://raw.githubusercontent.com/adlogix/docker-machine-nfs/master/docker-machine-nfs.sh && \
-  sudo chmod +x /usr/local/bin/docker-machine-nfs
-fi
-ok
+require_cask docker
 
 running "symlinking dockeraliases file"; filler
 pushd ~ > /dev/null 2>&1
